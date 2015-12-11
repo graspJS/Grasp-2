@@ -9,12 +9,14 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 var controller = require('./database/controllers.js');
+
 app.use(express.static(__dirname + '/../app'));
+
 
 app.post('/api/signup', function (request, response) {
   controller.users.signup(request, function (err, result) {
     if(err) {
-      response.send(err.detail).status(409);
+      response.status(409).send(err.detail)
     } else {
       response.sendStatus(201);
     }
@@ -30,7 +32,7 @@ app.post('/api/signin', function (request, response) {
       response.sendStatus(409);
       throw new Error("Sign in failed");
     } else {
-      response.send(result).status(201);
+      response.status(201).send(result);
       //render canvas
     }
   });
