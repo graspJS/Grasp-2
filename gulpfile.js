@@ -3,7 +3,7 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint')
  
 gulp.task('syntax check', function () {
-  return gulp.src('./app/*.js')
+  return gulp.src(['./app/*.js', './server/*js'])
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
