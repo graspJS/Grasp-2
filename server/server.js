@@ -9,11 +9,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 var controller = require('./database/controllers.js');
-// app.use(express.static(__dirname + './client'));
-app.get('/', function (request, response) {
-  console.log("in post");
-  response.send("Hello");
-});
+app.use(express.static(__dirname + '/../app'));
 
 app.post('/api/signup', function (request, response) {
   controller.users.signup(request, function (err, result) {
