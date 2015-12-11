@@ -1,4 +1,4 @@
-var db = require('./dbsetup.js'); //set up database connection
+var db = require('./connection.js'); //set up database connection
 //this is responsible for communicating with the database
 
 module.exports = {
