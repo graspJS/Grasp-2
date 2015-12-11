@@ -1,0 +1,17 @@
+<div ng-controller="CanvasCTRL">
+  <span ng-repeat="codeBlock in codeBlocks">
+    <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true">
+      <span id="keyword">{{codeBlock.name}}</span>
+    </div>
+  </span>
+
+  <div class="tempContainer">
+    <div class="dropArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
+      <div class="codeBlock" ng-repeat="codeBlock in droppedCodeBlocks" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
+        <span id="keyword">{{codeBlock.name}}</span>
+      </div>
+    </div>
+
+    <div class="code">{{code}}</div>
+  </div>
+</div>
