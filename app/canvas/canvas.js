@@ -57,7 +57,7 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     {
       type: 'array',
       name: "noNameArray",
-      expanded: false,
+      expanded: false,q
       value: undefined
     },
     {
