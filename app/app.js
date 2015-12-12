@@ -5,7 +5,8 @@ angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.view1',
   'Grasp.view2',
-  'ngRoute'
+  'ngRoute',
+  'ngMaterial'
 ])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
