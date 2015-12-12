@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 
-var db = require('./database/dbsetup.js');
+// var db = require('./database/dbsetup.js');
 
 var bodyParser = require('body-parser');
 
