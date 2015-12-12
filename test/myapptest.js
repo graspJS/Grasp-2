@@ -22,7 +22,7 @@ describe('Server connections', function () {
     });
     it("It can return a 201 response with a post request", function (done) {
         var app = server;
-        var user = { "username" : "marcus", "email" : "marcus@marcus.com", "password" : "password"};
+        var user = { "username" : "marcus", "email" : "marcus@marcus.com", "password": "password", "firstname" : "Mark", "secondname" : "Thomas"};
 
         request(app)
           .post("/api/signup")
@@ -54,7 +54,7 @@ describe('Server connections', function () {
   describe('Database test', function () {
     beforeEach(function (done) { //runs before each test on this block and seeds database
                   db('users')
-                  .insert({"username" : "marcus", "hashedpw" : db.raw( "crypt('" + 'password' + "', gen_salt('md5'))" ), "email" : "marcus@marcus.com"})
+                  .insert({"username" : "marcus", "hashedpw" : db.raw( "crypt('" + 'password' + "', gen_salt('md5'))" ), "email" : "marcus@marcus.com", "firstname" : "Mark", "secondname" : "Thomas"})
                   .then(function () {
                     done();
                   });
