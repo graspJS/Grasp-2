@@ -38,6 +38,12 @@ npm install
 cd public && bower install
 ```
 
+### Running The App
+
+npm start (for now, go to localhost:8000, and go to /app)
+brew info postgres (it will tell you what to run on the last line) then in a seperate terminal 
+psql graspdb
+
 ### Roadmap
 
 View the project roadmap [here](LINK_TO_PROJECT_ISSUES)

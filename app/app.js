@@ -13,13 +13,5 @@ angular.module('Grasp', [
       templateUrl: 'canvas/canvas.html',
       controller: 'CanvasCTRL'
     })
-    .when('/view1', {
-      templateUrl: 'view1/view1.html',
-      controller: 'View1Ctrl'
-    })
-    .when('/view2', {
-      templateUrl: 'view1/view1.html',
-      controller: 'View2Ctrl'
-    })
-    .otherwise({redirectTo: '/'});
+    .otherwise({redirectTo: '/canvas'});
 }]);
