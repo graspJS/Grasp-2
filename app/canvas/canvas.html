@@ -1,17 +1,26 @@
 <div ng-controller="CanvasCTRL">
   <span ng-repeat="codeBlock in codeBlocks">
     <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true">
-      <span id="keyword">{{codeBlock.name}}</span>
+      <span id="keyword">{{codeBlock.type}}</span>
     </div>
   </span>
 
   <div class="tempContainer">
     <div class="dropArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
-      <div class="codeBlock" ng-repeat="codeBlock in droppedCodeBlocks" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
-        <span id="keyword">{{codeBlock.name}}</span>
+      <div ng-prevent-drag="true" class="codeBlock" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
+
+        <div ng-model="codeBlock" name="codeBlock">
+          <div id="keyword">{{codeBlock.name}} = {{codeBlock.value}}</div>
+          <form ng-submit="setName(codeBlock, name, val, $event)">
+            <input ng-model="name" name="name" id="name" type="text">
+            <input ng-model="val" name="val" id="val" type="text">
+            <input type="submit">
+          </form>
+        </div>
+
       </div>
     </div>
 
-    <div class="code">{{code}}</div>
+    <div class="code"><pre>{{code}}</pre></div>
   </div>
 </div>

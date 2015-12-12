@@ -2,26 +2,52 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
 .controller('CanvasCTRL', function ($scope) {
   $scope.code = "";
+  var generateCode = function(array) {
+    // generate code from the array of codeBlocks received
+    var code = "";
 
-  $scope.codeBlocks = [{name: "var", code: "var someVariable = 0;\n\n "},
-                       {name: "function", code: "function someFunction() {  return 0; } "},
-                       {name: "object", code: "var object = { key1: \'value1\',\n key2: \'value2\'\n};\n\n "},
-                       {name: "stuff"},
-                       {name: "stuff"}];
+    for (var i = 0; i < array.length; i++) {
+      if (array[i].type === "variable") {
+        code += "var " + array[i].name + " = " + array[i].value + ";\n";
+      }
+    }
+
+    return code;
+  }
+
+  var cloneObject = function(object) {
+    var clone = {};
+
+    for (var key in object) {
+      clone[key] = object[key];
+    }
+
+    return clone;
+  }
+
+  $scope.codeBlocks = [
+    {
+      type: 'variable',
+      name: "name",
+      value: undefined
+    }
+  ];
 
   $scope.droppedCodeBlocks = [];
 
   $scope.onDrop = function(data, event) {
-    var index = $scope.droppedCodeBlocks.indexOf(data);
-    if (index == -1)
-      $scope.droppedCodeBlocks.push(data);
-    $scope.code += data.code;
+    $scope.droppedCodeBlocks.push(cloneObject(data));
+    $scope.code = generateCode($scope.droppedCodeBlocks);
   };
 
   $scope.onDrag = function(data, event) {
-    var index = $scope.droppedCodeBlocks.indexOf(data);
-    if (index > -1) {
-      $scope.droppedCodeBlocks.splice(index, 1);
-    }
+
+  }
+
+  $scope.setName = function(data, name, value, $event) {
+    $event.preventDefault();
+    data.name = name || data.name;
+    data.value = value || data.value;
+    $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 });

@@ -18,7 +18,7 @@ angular.module('Grasp', [
       controller: 'View1Ctrl'
     })
     .when('/view2', {
-      templateUrl: 'view1/view1.html',
+      templateUrl: 'view2/view2.html',
       controller: 'View2Ctrl'
     })
     .otherwise({redirectTo: '/'});
