@@ -11,7 +11,7 @@
 
         <div ng-model="codeBlock" name="codeBlock">
           <div id="keyword">{{codeBlock.name}} = {{codeBlock.value}}</div>
-          <form ng-submit="setName(codeBlock, name, val, $event)">
+          <form ng-submit="setVariable(codeBlock, name, val, $event)">
             <input ng-model="name" name="name" id="name" type="text">
             <input ng-model="val" name="val" id="val" type="text">
             <input type="submit">
