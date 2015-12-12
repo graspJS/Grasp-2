@@ -4,7 +4,6 @@
 angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.view1',
-  'Grasp.view2',
   'ngRoute',
   'ngMaterial'
 ])
@@ -17,10 +16,6 @@ angular.module('Grasp', [
     .when('/view1', {
       templateUrl: 'view1/view1.html',
       controller: 'View1Ctrl'
-    })
-    .when('/view2', {
-      templateUrl: 'view2/view2.html',
-      controller: 'View2Ctrl'
     })
     .otherwise({redirectTo: '/'});
 }]);
