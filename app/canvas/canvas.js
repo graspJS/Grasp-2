@@ -2,12 +2,11 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
 .controller('CanvasCTRL', function ($scope) {
   $scope.code = "";
-
+  $scope.isCanvasDraggable=true;
   // generates code from droppedCodeBlocks
   var generateCode = function(array) {
     // generate code from the array of codeBlocks received
     var code = "";
-
     for (var i = 0; i < array.length; i++) {
       if (array[i].type === "variable") {
         code += "var " + array[i].name + " = " + array[i].value + ";\n";
@@ -32,10 +31,10 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     }
 
     return clone;
-  }
+  };
 
   // $scope.resize = function(codeBlock) {
-  //   // var index = $scope.droppedCodeBlocks.indexOf(codeBlock);
+  //   // var index = $scope.dropgpedCodeBlocks.indexOf(codeBlock);
   //   // if (!codeBlock.expanded) {
   //   //   document.getElementsByClassName("codeBlockDropped")[index].setAttribute("style", "height: 100px;");
   //   //   codeBlock.expanded = true; 
@@ -46,31 +45,34 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     
   // }
 
+  /*
+
+  */
+
   // types of codeBlocks, such as variables, arrays, objects, and functions
   $scope.codeBlocks = [
     {
       type: 'variable',
       name: "noNameVar",
-      expanded: false,
-      value: undefined
+      value: "undefined"
     },
     {
       type: 'array',
       name: "noNameArray",
-      expanded: false,q
-      value: undefined
+      value: [],
+      push: function(data) {
+        this[1].value.push(data.value).bind(this);
+      }
     },
     {
       type: 'object',
       name: "noNameObject",
-      expanded: false,
       value: "key: value"
     },
     {
       type: 'function',
       name: "noNameFunction",
-      expanded: false,
-      value: undefined
+      value: "undefined"
     }
   ];
 
@@ -79,13 +81,19 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
   // when a codeblock is dropped, add it to array. Also regenerate code
   $scope.onDrop = function(data, event) {
-    $scope.droppedCodeBlocks.push(cloneObject(data));
-    $scope.code = generateCode($scope.droppedCodeBlocks);
+    if ($scope.isCanvasDraggable) {
+      $scope.droppedCodeBlocks.push(cloneObject(data));
+      $scope.code = generateCode($scope.droppedCodeBlocks);
+    }
   };
 
   // not sure what to do with this yet
-  $scope.onDrag = function(data, event) {
+  $scope.onDragFromCanvas = function(data, event) {
+    $scope.isCanvasDraggable = false;
+  }
 
+  $scope.onDragFromToolbox = function(data, event) {
+    $scope.isCanvasDraggable = true;
   }
 
   // setting variable values

@@ -3,8 +3,8 @@
   <!-- TOOLBOX -->
   <div class="toolbox">
     <span ng-repeat="codeBlock in codeBlocks">
-      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true">
-        <span id="keyword">{{codeBlock.type}}</span>
+      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-success="onDragFromToolbox()">
+        <span id="variableType">{{codeBlock.type}}</span>
       </div>
     </span>
   </div>
@@ -13,28 +13,42 @@
   <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
 
     <!-- CODE BLOCK NG-REPEAT CONTAINER -->
-    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
+    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type">
 
-      <!-- ACTUAL CODE BLOCK -->
-      <div class="codeBlockDropped" ng-model="codeBlock" name="codeBlock">
+      <!-- VARIABLE CODE BLOCK -->
+      <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="true" ng-drag-success="onDragFromCanvas()">
 
         <!-- CODE BLOCK NAME -->
-        <div id="keyword" ng-click="showForm = showForm ? false : true">
-          {{codeBlock.name}} <br>
+        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true">
+          {{codeBlock.name}}
+        </div>
+
+        <div id="variableValue" ng-click="showValueForm = showValueForm ? false : true">
           {{codeBlock.value}}
         </div>
 
-        <!-- CODEBLOCK FORM -->
-        <form ng-if="showForm" ng-submit="setVariable(codeBlock, name, val, $event)">
-          <input ng-model="name" name="name" id="name" type="text">
-          <input ng-model="val" name="val" id="val" type="text">
-          <input type="submit">
+        <!-- CODEBLOCK NAME FORM -->
+        <form ng-if="showNameForm" ng-submit="setVariable(codeBlock, name, val, $event)">
+          <input placeholder="Enter name..." ng-model="name" name="name" id="name" type="text">
         </form>
 
+        <form ng-if="showValueForm" ng-submit="setVariable(codeBlock, name, val, $event)">
+          <input placeholder="Enter value..." ng-model="val" name="val" id="val" type="text">
+        </form>
+      </div>
+
+      <!-- ARRAY CODE BLOCK -->
+      <div ng-switch-when="array" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped">
+        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true">
+          {{codeBlock.name}}
+        </div>
+
+        <div id="variableValue" ng-click="showValueForm = showValueForm ? false : true">
+          {{codeBlock.value}}
+        </div>
       </div>
 
     </div>
-
   </div>
 
   <!-- COMPILED CODE AREA -->
