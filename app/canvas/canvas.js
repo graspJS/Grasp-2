@@ -11,6 +11,12 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     for (var i = 0; i < array.length; i++) {
       if (array[i].type === "variable") {
         code += "var " + array[i].name + " = " + array[i].value + ";\n";
+      } else if (array[i].type === "array") {
+        code += "var " + array[i].name + " = [" + array[i].value + "];\n";
+      } else if (array[i].type === "object") {
+        code += "var " + array[i].name + " = {" + array[i].value + "};\n";
+      } else if (array[i].type === "function") {
+        code += "var " + array[i].name + " = function() {\n" + array[i].value + "\n};\n";
       }
     }
 
@@ -28,11 +34,42 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     return clone;
   }
 
+  // $scope.resize = function(codeBlock) {
+  //   // var index = $scope.droppedCodeBlocks.indexOf(codeBlock);
+  //   // if (!codeBlock.expanded) {
+  //   //   document.getElementsByClassName("codeBlockDropped")[index].setAttribute("style", "height: 100px;");
+  //   //   codeBlock.expanded = true; 
+  //   // } else {
+  //   //   document.getElementsByClassName("codeBlockDropped")[index].setAttribute("style", "height: 50px;");
+  //   //   codeBlock.expanded = false; 
+  //   // }
+    
+  // }
+
   // types of codeBlocks, such as variables, arrays, objects, and functions
   $scope.codeBlocks = [
     {
       type: 'variable',
-      name: "name",
+      name: "noNameVar",
+      expanded: false,
+      value: undefined
+    },
+    {
+      type: 'array',
+      name: "noNameArray",
+      expanded: false,q
+      value: undefined
+    },
+    {
+      type: 'object',
+      name: "noNameObject",
+      expanded: false,
+      value: "key: value"
+    },
+    {
+      type: 'function',
+      name: "noNameFunction",
+      expanded: false,
       value: undefined
     }
   ];

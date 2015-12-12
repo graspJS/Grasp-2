@@ -1,26 +1,45 @@
 <div class="container-fluid">
-  <span ng-repeat="codeBlock in codeBlocks">
-    <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true">
-      <span id="keyword">{{codeBlock.type}}</span>
-    </div>
-  </span>
 
-  <div class="tempContainer">
-    <div class="dropArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
-      <div ng-prevent-drag="true" class="codeBlock" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
+  <!-- TOOLBOX -->
+  <div class="toolbox">
+    <span ng-repeat="codeBlock in codeBlocks">
+      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true">
+        <span id="keyword">{{codeBlock.type}}</span>
+      </div>
+    </span>
+  </div>
 
-        <div ng-model="codeBlock" name="codeBlock">
-          <div id="keyword">{{codeBlock.name}} = {{codeBlock.value}}</div>
-          <form ng-submit="setVariable(codeBlock, name, val, $event)">
-            <input ng-model="name" name="name" id="name" type="text">
-            <input ng-model="val" name="val" id="val" type="text">
-            <input type="submit">
-          </form>
+  <!-- CANVAS -->
+  <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
+
+    <!-- CODE BLOCK NG-REPEAT CONTAINER -->
+    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-drag-success="onDrag($data, $event)">
+
+      <!-- ACTUAL CODE BLOCK -->
+      <div class="codeBlockDropped" ng-model="codeBlock" name="codeBlock">
+
+        <!-- CODE BLOCK NAME -->
+        <div id="keyword" ng-click="showForm = showForm ? false : true">
+          {{codeBlock.name}} <br>
+          {{codeBlock.value}}
         </div>
 
+        <!-- CODEBLOCK FORM -->
+        <form ng-if="showForm" ng-submit="setVariable(codeBlock, name, val, $event)">
+          <input ng-model="name" name="name" id="name" type="text">
+          <input ng-model="val" name="val" id="val" type="text">
+          <input type="submit">
+        </form>
+
       </div>
+
     </div>
 
-    <div class="code"><pre>{{code}}</pre></div>
   </div>
+
+  <!-- COMPILED CODE AREA -->
+  <div class="codeArea">
+    <pre id="code">{{code}}</pre>
+  </div>
+
 </div>
