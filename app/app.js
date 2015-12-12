@@ -4,8 +4,8 @@
 angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.view1',
-  'Grasp.view2',
-  'ngRoute'
+  'ngRoute',
+  'ngMaterial'
 ])
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
@@ -13,5 +13,9 @@ angular.module('Grasp', [
       templateUrl: 'canvas/canvas.html',
       controller: 'CanvasCTRL'
     })
-    .otherwise({redirectTo: '/canvas'});
+    .when('/view1', {
+      templateUrl: 'view1/view1.html',
+      controller: 'View1Ctrl'
+    })
+    .otherwise({redirectTo: '/'});
 }]);
