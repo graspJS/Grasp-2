@@ -61,7 +61,8 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       name: "noNameArray",
       value: [],
       push: function(data) {
-        this[1].value.push(data.value).bind(this);
+        console.log("this:", this);
+        this.value.push(data.value).bind(this);
       }
     },
     {
@@ -81,11 +82,14 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
   // when a codeblock is dropped, add it to array. Also regenerate code
   $scope.onDrop = function(data, event) {
-    if ($scope.isCanvasDraggable) {
-      $scope.droppedCodeBlocks.push(cloneObject(data));
-      $scope.code = generateCode($scope.droppedCodeBlocks);
-    }
+    $scope.droppedCodeBlocks.push(cloneObject(data));
+    $scope.code = generateCode($scope.droppedCodeBlocks);
   };
+
+  $scope.isFormShown = true;
+  $scope.toggleDraggable = function() {
+    $scope.isFormShown = !$scope.isFormShown;
+  }
 
   // not sure what to do with this yet
   $scope.onDragFromCanvas = function(data, event) {
