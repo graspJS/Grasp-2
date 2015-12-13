@@ -14,7 +14,7 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       } else if (array[i].type === "array") {
         code += "var " + array[i].name + " = [" + array[i].value + "];\n";
       } else if (array[i].type === "object") {
-        code += "var " + array[i].name + " = {" + array[i].value + "};\n";
+        code += "var " + array[i].name + " = {" + array[i].key + ":"+ array[i].value + "};\n";
       } else if (array[i].type === "function") {
         code += "var " + array[i].name + " = function() {\n" + array[i].value + "\n};\n";
       }
@@ -68,12 +68,26 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       push: function(data) {
         this.value.push(data.value);
         $scope.code = generateCode($scope.droppedCodeBlocks);
+      },
+      pop: function () {
+        this.value.pop();
+        $scope.code = generateCode($scope.droppedCodeBlocks);
       }
     },
     {
       type: 'object',
-      name: "noNameObject",
-      value: "key: value"
+      name: 'Object',
+      key: "key",
+      value: "value",
+      storage: {},
+      setValue: function (data) {
+        console.log(this);
+        this.value = data.name
+        this.storage.name = data.name;
+        this.storage.value = data.value;
+        $scope.code = generateCode($scope.droppedCodeBlocks);
+        console.log(this.storage);
+      }
     },
     {
       type: 'function',
@@ -116,5 +130,12 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     data.name = name || data.name;
     data.value = value || data.value;
     $scope.code = generateCode($scope.droppedCodeBlocks);
+  }
+
+  $scope.setObject = function (data, key, value, $event) {
+     $event.preventDefault();
+     data.key = key || data.key;
+     data.value = value || data.value;
+     $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 });
