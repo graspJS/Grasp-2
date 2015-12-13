@@ -3,8 +3,9 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 .controller('CanvasCTRL', function ($scope) {
   $scope.code = "";
   $scope.isCanvasDraggable=true;
+  $scope.isCodeBlockDraggable=true;
   // generates code from droppedCodeBlocks
-  var generateCode = function(array) {
+  generateCode = function(array) {
     // generate code from the array of codeBlocks received
     var code = "";
     for (var i = 0; i < array.length; i++) {
@@ -46,7 +47,6 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   // }
 
   /*
-
   */
 
   // types of codeBlocks, such as variables, arrays, objects, and functions
@@ -61,8 +61,8 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       name: "noNameArray",
       value: [],
       push: function(data) {
-        console.log("this:", this);
-        this.value.push(data.value).bind(this);
+        this.value.push(data.value);
+        $scope.code = generateCode($scope.droppedCodeBlocks);
       }
     },
     {
@@ -82,13 +82,18 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
   // when a codeblock is dropped, add it to array. Also regenerate code
   $scope.onDrop = function(data, event) {
-    $scope.droppedCodeBlocks.push(cloneObject(data));
-    $scope.code = generateCode($scope.droppedCodeBlocks);
+    if ($scope.isCanvasDraggable) {
+      $scope.droppedCodeBlocks.push(cloneObject(data));
+      $scope.code = generateCode($scope.droppedCodeBlocks);
+    }
   };
 
-  $scope.isFormShown = true;
-  $scope.toggleDraggable = function() {
-    $scope.isFormShown = !$scope.isFormShown;
+  $scope.turnOffDrag = function() {
+    $scope.isCodeBlockDraggable = false;
+  }
+
+  $scope.turnOnDrag = function() {
+    $scope.isCodeBlockDraggable = true;
   }
 
   // not sure what to do with this yet
