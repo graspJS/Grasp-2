@@ -28,7 +28,12 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     var clone = {};
 
     for (var key in object) {
-      clone[key] = object[key];
+      if (Array.isArray(object[key])) {
+        clone[key] = object[key].slice();
+      } else {
+        clone[key] = object[key];
+      }
+      
     }
 
     return clone;

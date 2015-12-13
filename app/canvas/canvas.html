@@ -38,7 +38,7 @@
       </div>
 
       <!-- ARRAY CODE BLOCK -->
-      <div ng-switch-when="array" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped">
+      <div ng-switch-when="array" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped">
         <div id="variableName" ng-click="showNameForm = showNameForm ? false : true">
           {{codeBlock.name}}
         </div>
