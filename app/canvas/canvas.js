@@ -14,7 +14,8 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       } else if (array[i].type === "array") {
         code += "var " + array[i].name + " = [" + array[i].value + "];\n";
       } else if (array[i].type === "object") {
-        code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
+        code+= "var " + array[i].name + " = " + JSON.stringify(array[i].storage) + "\n";
+        // code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
       } else if (array[i].type === "function") {
         code += "var " + array[i].name + " = function() {\n" + array[i].value + "\n};\n";
       }
@@ -33,7 +34,6 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       } else {
         clone[key] = object[key];
       }
-      
     }
 
     return clone;
@@ -66,7 +66,12 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       name: "noNameArray",
       value: [],
       push: function(data) {
-        this.value.push(data.value);
+        if (data.storage !== undefined) {
+          this.value.push(data.storage);
+        } else {
+          this.value.push(data.value);
+        }
+        
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       pop: function () {
@@ -101,12 +106,18 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
         setKey: function (key) {
           this.key = key;
           $scope.code = generateCode($scope.droppedCodeBlocks);
+        },
+        addKeyValue: function(key, value) {
+          console.log(key, ": ", value);
+          this.storage[key] = value;
+          $scope.code = generateCode($scope.droppedCodeBlocks);
         }
     },
     {
       type: 'function',
       name: "noNameFunction",
-      value: "undefined"
+      value: "undefined",
+      definition: ""
     }
   ];
 
@@ -116,6 +127,9 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   // when a codeblock is dropped, add it to array. Also regenerate code
   $scope.onDrop = function(data, event) {
     if ($scope.isCanvasDraggable) {
+      if (data.storage !== undefined) {
+        data.storage = cloneObject(data.storage);
+      }
       $scope.droppedCodeBlocks.push(cloneObject(data));
       $scope.code = generateCode($scope.droppedCodeBlocks);
     }
@@ -137,6 +151,27 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   $scope.onDragFromToolbox = function(data, event) {
     $scope.isCanvasDraggable = true;
   };
+
+  $scope.promptKey = function (data, context) {
+    for( var prop in data) {
+      if (prop === context.key) {
+        data[prompt("Enter new key")] = data[prop];
+        delete data[prop];
+      }
+    }
+     $scope.code = generateCode($scope.droppedCodeBlocks);
+  }
+
+    $scope.promptValue = function (data, context) {
+      console.log(context)
+    for( var prop in data) {
+      if (prop === context.key) {
+        var newVal = prompt("Enter new value");
+         data[prop] = newVal;
+      }
+    }
+     $scope.code = generateCode($scope.droppedCodeBlocks);
+  }
 
   // setting variable values
   $scope.setVariable = function(data, name, value, $event) {

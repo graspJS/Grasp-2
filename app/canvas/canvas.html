@@ -50,18 +50,25 @@
 
         <!-- object -->
         <div ng-switch-when="object" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
-          <div id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; turnOnDrag()">
-            {{codeBlock.key}}
+          <div id="objectName">
+            <div>{{codeBlock.name}}</div><div id="addKeyValue" ng-click="addKeyValueForm = addKeyValueForm ? false : true">+</div>
           </div>
-          <div id="objectValue" ng-click="showValueForm = showValueForm ? false : true">
-            {{codeBlock.value}}
+          <!-- NG-REPEAT OF KEY-VALUE PAIRS -->
+          <div ng-repeat="(key, value) in codeBlock.storage">
+            <span id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; promptKey(codeBlock.storage, this)">{{key}}:</span><span id="objectValue" ng-click="showValueForm = showValueForm ? false : true; promptValue(codeBlock.storage, this)">{{value}}</span>
           </div>
           <form ng-if="showKeyForm" ng-submit="codeBlock.setKey(key)">
-            <input placeholder = "Enter object key.." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
+            <input placeholder = "Enter key name..." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
           </form>
            <form ng-if="showValueForm" ng-submit="codeBlock.setValue(value, true)">
             <input placeholder = "Enter object value.." ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag()">
           </form>
+          <form ng-if="addKeyValueForm" ng-submit="codeBlock.addKeyValue(key, value); turnOnDrag()">
+            <input placeholder = "Enter key" ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
+            <input placeholder = "Enter value" ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag()">
+            <input type="submit">
+          </form>
+        </div>
         </div>
       </div>
 
