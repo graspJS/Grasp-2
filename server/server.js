@@ -16,7 +16,7 @@ app.use(express.static(__dirname + '/../app'));
 app.post('/api/signup', function (request, response) {
   controller.users.signup(request, function (err, result) {
     if(err) {
-      response.status(409).send(err.detail)
+      response.status(409).send(err.detail);
     } else {
       response.sendStatus(201);
     }

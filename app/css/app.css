@@ -83,6 +83,32 @@
   background-color: #e5ffe5;
 }
 
+#objectValue {
+  font-family: "Verdana";
+  font-weight: bold;
+  width: 100px;
+  font-size: 12px;
+  background-color: #66ccff;
+  padding: 5px 5px 5px 5px;
+  text-align: center;
+  margin: 10px;
+}
+
+#objectKey {
+  position: relative;
+  padding-left: 5px;
+  top: -5px;
+  left: -5px;
+  width: 150px;
+  text-align: left;
+  font-weight: bold;
+  background-color: #e5ffe5;
+}
+
+#popArray {
+  text-align: right;
+}
+
 .codeArea {
   position: absolute;
   background: black;
