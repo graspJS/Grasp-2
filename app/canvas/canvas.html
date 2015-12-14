@@ -16,7 +16,7 @@
     <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type">
 
       <!-- VARIABLE CODE BLOCK -->
-     <li> <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas()">
+     <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas()">
 
         <!-- CODE BLOCK NAME -->
         <div id="variableName" ng-click="showNameForm = showNameForm ? false : true; turnOnDrag()">
@@ -35,7 +35,7 @@
         <form ng-if="showValueForm" ng-submit="setVariable(codeBlock, name, val, $event)">
           <input placeholder="Enter value..." ng-model="val" name="val" id="val" type="text" ng-click="turnOffDrag()">
         </form>
-      </div></li>
+      </div>
 
       <!-- ARRAY CODE BLOCK -->
       <div ng-switch-when="array" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
@@ -48,13 +48,20 @@
         </div><div id="popArray" ng-click="codeBlock.pop()">Pop!</div>
       </div>
 
-        <div ng-switch-when="object" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
-          <div id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true">
+        <!-- object -->
+        <div ng-switch-when="object" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
+          <div id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; turnOnDrag()">
             {{codeBlock.key}}
           </div>
-          <div id="objectValue" ng-click="showKeyForm = showKeyForm ? false : true">
+          <div id="objectValue" ng-click="showValueForm = showValueForm ? false : true">
             {{codeBlock.value}}
           </div>
+          <form ng-if="showKeyForm" ng-submit="codeBlock.setKey(key)">
+            <input placeholder = "Enter object key.." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
+          </form>
+           <form ng-if="showValueForm" ng-submit="codeBlock.setValue(value, true)">
+            <input placeholder = "Enter object value.." ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag()">
+          </form>
         </div>
       </div>
 

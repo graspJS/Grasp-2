@@ -14,14 +14,14 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       } else if (array[i].type === "array") {
         code += "var " + array[i].name + " = [" + array[i].value + "];\n";
       } else if (array[i].type === "object") {
-        code += "var " + array[i].name + " = {" + array[i].key + ":"+ array[i].value + "};\n";
+        code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
       } else if (array[i].type === "function") {
         code += "var " + array[i].name + " = function() {\n" + array[i].value + "\n};\n";
       }
     }
 
     return code;
-  }
+  };
 
   // clone object
   var cloneObject = function(object) {
@@ -80,14 +80,28 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       key: "key",
       value: "value",
       storage: {},
-      setValue: function (data) {
-        console.log(this);
-        this.value = data.name
-        this.storage.name = data.name;
-        this.storage.value = data.value;
-        $scope.code = generateCode($scope.droppedCodeBlocks);
-        console.log(this.storage);
-      }
+        setValue: function (data, byInput) {
+          if (!byInput) {
+            if(data.type === "object") {
+              this.value = data.storage;
+              $scope.code = generateCode($scope.droppedCodeBlocks);
+            } else {
+                this.value = data.value;
+                this.storage.name = data.name;
+                this.storage.value = data.value;
+                $scope.code = generateCode($scope.droppedCodeBlocks);
+                console.log(this.storage);
+              }
+          } else {
+            this.value = data;
+            this.storage.value = data;
+            $scope.code = generateCode($scope.droppedCodeBlocks);
+          }
+        },
+        setKey: function (key) {
+          this.key = key;
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        }
     },
     {
       type: 'function',
@@ -109,20 +123,20 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
   $scope.turnOffDrag = function() {
     $scope.isCodeBlockDraggable = false;
-  }
+  };
 
   $scope.turnOnDrag = function() {
     $scope.isCodeBlockDraggable = true;
-  }
+  };
 
   // not sure what to do with this yet
   $scope.onDragFromCanvas = function(data, event) {
     $scope.isCanvasDraggable = false;
-  }
+  };
 
   $scope.onDragFromToolbox = function(data, event) {
     $scope.isCanvasDraggable = true;
-  }
+  };
 
   // setting variable values
   $scope.setVariable = function(data, name, value, $event) {
@@ -130,12 +144,5 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     data.name = name || data.name;
     data.value = value || data.value;
     $scope.code = generateCode($scope.droppedCodeBlocks);
-  }
-
-  $scope.setObject = function (data, key, value, $event) {
-     $event.preventDefault();
-     data.key = key || data.key;
-     data.value = value || data.value;
-     $scope.code = generateCode($scope.droppedCodeBlocks);
-  }
+  };
 });
