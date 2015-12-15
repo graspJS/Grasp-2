@@ -145,6 +145,9 @@
 }
 
 #trashbin {
-  float: right;
+  position: absolute;
+  left: 1250px;
+  top: 385px;
   height: 100px;
+  z-index: 8888
 }

@@ -184,9 +184,10 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   }
 
   $scope.deleteCodeblock = function (data) {
+    console.log("data",data)
     var index = $scope.droppedCodeBlocks.indexOf(data);
-
-    $scope.droppedCodeBlocks.splice($scope.droppedCodeBlocks, 1);
+    console.log(index);
+    $scope.droppedCodeBlocks.splice(index, 1);
     $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 
