@@ -55,7 +55,7 @@
   position: absolute;
   top: 70px; 
   left: 150px;
-  width: 100%;
+  width: 85%;
   height: 500px;
   background-color: #e6e6e6;
 }
@@ -142,4 +142,12 @@
 
 #addKeyValue {
   float: right;
+}
+
+#trashbin {
+  position: absolute;
+  left: 1250px;
+  top: 385px;
+  height: 100px;
+  z-index: 8888
 }

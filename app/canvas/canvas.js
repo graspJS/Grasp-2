@@ -17,7 +17,16 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
         code+= "var " + array[i].name + " = " + JSON.stringify(array[i].storage) + "\n";
         // code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
       } else if (array[i].type === "function") {
-        code += "var " + array[i].name + " = function() {\n" + array[i].value + "\n};\n";
+        var arguments = "";
+        for (var j = 0; j < array[i].parameters.length; j++) {
+          if (j === array[i].parameters.length-1) {
+            arguments += array[i].parameters[j];
+          } else {
+            arguments += array[i].parameters[j] + ",";
+          }
+          
+        }
+        code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].value + "\n};\n";
       }
     }
 
@@ -114,10 +123,22 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
         }
     },
     {
-      type: 'function',
-      name: "noNameFunction",
-      value: "undefined",
-      definition: ""
+      type: 'add()',
+      name: "add()",
+      parameters: [],
+      definition: "var total = 0;\nfor (var i = 0; i < arguments.length; i++) {\n  total += arguments[i];\n  }\nreturn total;\n",
+      addParam: function(data) {
+        this.parameters.push(data.value);
+        $scope.code = generateCode($scope.droppedCodeBlocks);
+      },
+      executeAdd: function () {
+        var total = 0;
+        for(var i = 0; i < this.parameters.length; i++) {
+          total += Number(this.parameters[i]);
+        }
+        console.log("in here")
+        alert(total)
+      }
     }
   ];
 
@@ -162,15 +183,22 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
      $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 
+  $scope.deleteCodeblock = function (data) {
+    console.log("data",data)
+    var index = $scope.droppedCodeBlocks.indexOf(data);
+    console.log(index);
+    $scope.droppedCodeBlocks.splice(index, 1);
+    $scope.code = generateCode($scope.droppedCodeBlocks);
+  }
+
     $scope.promptValue = function (data, context) {
-      console.log(context)
     for( var prop in data) {
       if (prop === context.key) {
         var newVal = prompt("Enter new value");
          data[prop] = newVal;
       }
     }
-     $scope.code = generateCode($scope.droppedCodeBlocks);
+    $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 
   // setting variable values
