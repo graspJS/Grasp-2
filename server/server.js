@@ -18,7 +18,8 @@ app.post('/api/signup', function (request, response) {
     if(err) {
       response.status(409).send(err.detail);
     } else {
-      response.sendStatus(201);
+      console.log("result", result);
+      response.status(201).send(result);
     }
   });
 });
@@ -37,6 +38,17 @@ app.post('/api/signin', function (request, response) {
     }
   });
 });
+
+app.get('/api/signedin', function (request, response) {
+  controller.users.checkAuth(request, function (err, result) {
+    if (err) {
+      response.sendStatus(409);
+      throw new Error("Sign in failed");
+    } else {
+      response.sendStatus(200);
+    }
+  })
+})
 
 app.listen(4000, function () {"listening on 3000";});
 
