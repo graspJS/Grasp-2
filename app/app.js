@@ -3,7 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('Grasp', [
   'Grasp.Canvas',
-  'Grasp.view1',
+  'Grasp.Auth',
   'ngRoute',
   'ngMaterial'
 ])
@@ -13,9 +13,9 @@ angular.module('Grasp', [
       templateUrl: 'canvas/canvas.html',
       controller: 'CanvasCTRL'
     })
-    .when('/view1', {
-      templateUrl: 'view1/view1.html',
-      controller: 'View1Ctrl'
+    .when('/auth', {
+      templateUrl: 'auth/auth.html',
+      controller: 'AuthCTRL'
     })
     .otherwise({redirectTo: '/'});
 }]);
