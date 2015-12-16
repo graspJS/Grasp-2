@@ -4,10 +4,10 @@ var db = require('./connection.js'); //set up database connection
 module.exports = {
   users: {
      signin: function (request, callback) {
-      db('users').
-      where( 'username', request.body.username ).
+      db('users')
+      .whereRaw('LOWER(username) LIKE ?', '%'+request.body.username.toLowerCase()+'%').
       andWhere({
-        hashedpw: db.raw( "crypt('"+ request.body.password + "', hashedpw)")
+        hashedpw: db.raw( "crypt('" + request.body.password + "', hashedpw)")
       })
       .select()
       .then(function (res) {
@@ -16,7 +16,6 @@ module.exports = {
       .catch(function (error){
       callback(error, null);
     });
-    
       },
       signup: function (request, callback) {
           db('users').insert( {username: request.body.username,

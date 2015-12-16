@@ -1,14 +1,14 @@
 var express = require('express');
 var app = express();
 
-// var db = require('./database/dbsetup.js');
+var db = require('./database/dbsetup.js');
 
 var bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-// var controller = require('./database/controllers.js');
+var controller = require('./database/controllers.js');
 
 app.use(express.static(__dirname + '/../app'));
 
