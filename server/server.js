@@ -16,9 +16,18 @@ app.use(express.static(__dirname + '/../app'));
 
 // SOCKETS =======================================
 io.sockets.on('connection', function(socket) {
-  socket.on('addMessage', function(data) {
-    socket.emit('onMessageAdded', data);
+  socket.on('addBlock', function(data) {
+    socket.emit('onBlockAdded', data);
   });
+  socket.on('deleteBlock', function(data) {
+    socket.emit('onBlockDelete', data); 
+  })
+  var lastPosition = null; 
+  socket.emit('update_position', lastPosition);
+  socket.on('receivePosition', function(data) {
+    lastPosition = data; 
+    socket.emit('updatePosition', data);
+  }); 
 });
 
 // API ============================================

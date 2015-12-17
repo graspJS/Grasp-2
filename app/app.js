@@ -13,14 +13,14 @@ angular.module('Grasp', [
   $routeProvider
     .when('/canvas', {
       templateUrl: 'canvas/canvas.html',
-      controller: 'CanvasCTRL',
+      controller: 'CanvasCTRL'
       // authenticate: true
     })
     .when('/auth', {
       templateUrl: 'auth/auth.html',
       controller: 'AuthCTRL'
     })
-    .otherwise({redirectTo: '/auth'});
+    .otherwise({redirectTo: '/canvas'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {

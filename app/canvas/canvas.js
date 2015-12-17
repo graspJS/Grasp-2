@@ -1,6 +1,6 @@
 angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
 
-.controller('CanvasCTRL', function ($scope) {
+.controller('CanvasCTRL', function ($scope, socket) {
   $scope.code = "";
   $scope.isCanvasDraggable=true;
   $scope.isCodeBlockDraggable=true;
@@ -209,16 +209,14 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
     }
   ];
 
-  // OICE
-  // Communication out loud
-  // Do Toy Problems on Whiteboard
-  // Find interview Questions on Student Wiki and practice out loud
-  // If you freeze, switch it up. Step back and look at the big picture, or try simpler cases
-
   // stores the codeblocks dropped in canvas
   $scope.droppedCodeBlocks = [];
 
-  // when a codeblock is dropped, add it to array. Also regenerate code
+  // ON BLOCK DROP ====================================
+  // When a codeblock is dropped, add it to array. Also regenerate code
+  socket.on('onBlockAdded', function(data) {
+    $scope.droppedCodeBlocks.push(cloneObject(data));
+  }); 
   $scope.onDrop = function(data, event) {
     if ($scope.isCanvasDraggable) {
       if (data.storage !== undefined) {
@@ -226,6 +224,7 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
       }
       $scope.droppedCodeBlocks.push(cloneObject(data));
       $scope.code = generateCode($scope.droppedCodeBlocks);
+      socket.emit('addBlock', cloneObject(data));
     }
   };
 
@@ -256,12 +255,15 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
      $scope.code = generateCode($scope.droppedCodeBlocks);
   }
 
+  // ON DELETE BLOCK ===================================
+  socket.on('onBlockDelete', function(data) {
+    $scope.droppedCodeBlocks.splice(data, 1);
+  }); 
   $scope.deleteCodeblock = function (data) {
-    console.log("data",data)
     var index = $scope.droppedCodeBlocks.indexOf(data);
-    console.log(index);
     $scope.droppedCodeBlocks.splice(index, 1);
     $scope.code = generateCode($scope.droppedCodeBlocks);
+    socket.emit('deleteBlock', index); 
   }
 
     $scope.promptValue = function (data, context) {
