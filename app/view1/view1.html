@@ -1,2 +1,9 @@
-
-
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <a class="brand" href="#">AngularJS CollabBoard</a>
+      <button id="createButton" ng-click="addMessage('fuck')" class="btn btn-info pull-right">Add Message</button>
+    </div>
+</div>
+  <div ng-repeat="message in messages track by $index">
+    {{message}}
+  </div>

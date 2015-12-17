@@ -4,6 +4,8 @@
 angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.Auth',
+  'Grasp.view1',
+  'Canvas.socket',
   'ngRoute',
   'ngMaterial'
 ])
@@ -12,15 +14,14 @@ angular.module('Grasp', [
     .when('/canvas', {
       templateUrl: 'canvas/canvas.html',
       controller: 'CanvasCTRL',
-      authenticate: true
+      // authenticate: true
     })
     .when('/auth', {
       templateUrl: 'auth/auth.html',
       controller: 'AuthCTRL'
     })
-    .otherwise({redirectTo: 'auth/'});
+    .otherwise({redirectTo: '/auth'});
     $httpProvider.interceptors.push('AttachTokens');
-
 }])
 .factory('AttachTokens', function ($window) {
   // this is an $httpInterceptor

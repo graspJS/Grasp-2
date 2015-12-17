@@ -1,18 +1,27 @@
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 var db = require('./database/dbsetup.js');
 
 var bodyParser = require('body-parser');
 
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 var controller = require('./database/controllers.js');
 
 app.use(express.static(__dirname + '/../app'));
 
+// SOCKETS =======================================
+io.sockets.on('connection', function(socket) {
+  socket.on('addMessage', function(data) {
+    socket.emit('onMessageAdded', data);
+  });
+});
 
+// API ============================================
 app.post('/api/signup', function (request, response) {
   controller.users.signup(request, function (err, result) {
     if(err) {
@@ -39,17 +48,8 @@ app.post('/api/signin', function (request, response) {
   });
 });
 
-app.get('/api/signedin', function (request, response) {
-  controller.users.checkAuth(request, function (err, result) {
-    if (err) {
-      response.sendStatus(409);
-      throw new Error("Sign in failed");
-    } else {
-      response.sendStatus(200);
-    }
-  })
-})
-
-app.listen(4000, function () {"listening on 3000";});
+http.listen(3000, function() {
+  console.log('listening on 3000');
+});
 
 module.exports = app;
