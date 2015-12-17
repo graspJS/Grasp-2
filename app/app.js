@@ -7,7 +7,8 @@ angular.module('Grasp', [
   'Grasp.view1',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial'
+  'ngMaterial',
+  'Grasp.Choice'
 ])
 .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
   $routeProvider
@@ -16,11 +17,20 @@ angular.module('Grasp', [
       controller: 'CanvasCTRL'
       // authenticate: true
     })
-    .when('/auth', {
-      templateUrl: 'auth/auth.html',
+    .when('/signin', {
+      templateUrl: 'auth/signin.html',
       controller: 'AuthCTRL'
     })
-    .otherwise({redirectTo: '/canvas'});
+    .when('/signup', {
+      templateUrl: 'auth/signup.html',
+      controller: 'AuthCTRL'
+    })
+    .when('/choice', {
+      templateUrl: 'choice/choice.html',
+      controller: 'ChoiceCTRL',
+      authenticate: true
+    })
+    .otherwise({redirectTo: 'signin/'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {
@@ -50,7 +60,7 @@ angular.module('Grasp', [
   // if it's not valid, we then redirect back to signin/signup
   $rootScope.$on('$routeChangeStart', function (evt, next, current) {
     if (next.$$route && next.$$route.authenticate && !Auth.isAuth()) {
-      $location.path('/auth');
+      $location.path('/signin');
     }
   });
 });

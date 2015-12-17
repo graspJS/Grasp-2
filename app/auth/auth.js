@@ -12,11 +12,11 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (token) {
          $window.localStorage.setItem('com.grasp', token);
         // console.log("This is the token", token);
-        $location.path('/canvas');
+        $location.path('/choice');
       })
       .catch(function (error) {
         console.error(error);
-        $location.path('/auth');
+        $location.path('/signin');
       });
     };
 
@@ -25,7 +25,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (res) {
     var token = res.data.token;
         $window.localStorage.setItem('com.grasp', token);
-        $location.path('/canvas');
+        $location.path('/choice');
       })
       .catch(function (error) {
         console.error(error);
@@ -79,7 +79,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
       console.log("woooo");
     })
     .catch(function (error) {
-      $location.path('/auth')
+      $location.path('/signin')
     })
     // return !!$window.localStorage.getItem('com.grasp');
   };
@@ -91,17 +91,21 @@ angular.module('Grasp.Auth', ['ngRoute'])
       //       return object;
       //     }
       //   }
-      $location.path('/auth');
+      $location.path('/signin');
       // return attach;
     };
 
     var loggedIn = function () {
     $rootScope.$on('$routeChangeStart', function (evt, next, current) {
-        if(next.$$route.templateUrl === "auth/auth.html") {
+        if(next.$$route.templateUrl === "auth/signin.html") {
           if(!!$window.localStorage.getItem('com.grasp')) {
-            $location.path('/canvas');
+            $location.path('/choice');
+            }
+          } else if(next.$$route.templateUrl === "auth/signup.html") {
+            if(!!$window.localStorage.getItem('com.grasp')) {
+              $location.path('/choice');
+            }
           }
-        }
         })
     }
   return {
