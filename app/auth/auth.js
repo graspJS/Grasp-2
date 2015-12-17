@@ -12,7 +12,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (token) {
          $window.localStorage.setItem('com.grasp', token);
         // console.log("This is the token", token);
-        $location.path('/canvas');
+        $location.path('/choice');
       })
       .catch(function (error) {
         console.error(error);
@@ -25,7 +25,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (res) {
     var token = res.data.token;
         $window.localStorage.setItem('com.grasp', token);
-        $location.path('/canvas');
+        $location.path('/choice');
       })
       .catch(function (error) {
         console.error(error);
@@ -99,7 +99,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     $rootScope.$on('$routeChangeStart', function (evt, next, current) {
         if(next.$$route.templateUrl === "auth/auth.html") {
           if(!!$window.localStorage.getItem('com.grasp')) {
-            $location.path('/canvas');
+            $location.path('/choice');
           }
         }
         })
