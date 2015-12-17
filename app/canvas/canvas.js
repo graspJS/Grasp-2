@@ -21,13 +21,16 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         code += "var " + array[i].name + " = [" + array[i].value + "];\n";
       } else if (array[i].type === "object") {
         code+= "var " + array[i].name + " = " + JSON.stringify(array[i].storage) + "\n";
-        // code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
       } else if (array[i].type === "function") {
         var arguments = array[i].parameters.join(", ");
-        code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].definition + "\n};\n";
+        if (array[i].name === "Math.max" || array[i].name === "Math.min") {
+          code += array[i].name + "(" + arguments + ");\n";
+        } else {
+          code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].definition + "\n};\n";
+        }
+        
       }
     }
-
     return code;
   };
 
@@ -76,6 +79,22 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
       pop: function () {
         this.value.pop();
         $scope.code = generateCode($scope.droppedCodeBlocks);
+      },
+      indexOf: function () {
+        var valTofind = prompt("Enter the value you wish to find.");
+        if (!isNaN(Number(valTofind))) {
+          valTofind = Number(valTofind);
+        }
+
+        alert(this.value.indexOf(valTofind));
+      },
+      slice: function () {
+        var sliceNum = prompt("How many elements do you want to slice?");
+        var sliceArr = cloneObject($scope.codeBlocks[1]);
+        sliceArr.value = this.value.slice(sliceNum);
+        sliceArr.name = "SlicedArray"
+        $scope.droppedCodeBlocks.push(sliceArr);
+        $scope.code = generateCode($scope.droppedCodeBlocks);
       }
     },
     {
@@ -109,6 +128,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         addKeyValue: function(key, value) {
           console.log(key, ": ", value);
           this.storage[key] = value;
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        },
+        objectKeys: function () {
+          var keysArr = cloneObject($scope.codeBlocks[1]);
+          keysArr.name = "Keys of " + this.name;
+          keysArr.value = Object.keys(this.storage);
+          $scope.droppedCodeBlocks.push(keysArr);
           $scope.code = generateCode($scope.droppedCodeBlocks);
         }
     },
@@ -211,13 +237,69 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     {
       type: "loop",
       name: "for-loop",
-      parameters: [],
+      parameters: {count: 0, array: [], behavior: ""},
+      addParam: function(data) {
+        if (data.type === "variable") {
+          this.parameters["count"] = data.value;
+        } else if (data.type === "array") {
+          this.parameters[data.name] = data.value;
+        } else if (data.type === "function") {
+          this.parameters["behavior"] = data.execute;
+        }
+      },
       execute: function() {
         var count = this.parameters[0];
         var array = this.parameters[1].slice();
         for (count; count < array.length; count++) {
           this.parameters[2]();
         }
+      }
+    },
+    {
+      type: 'function',
+      name: "Math.max",
+      parameters: [],
+      addParam: function (data) {
+        if(isNaN(data.value)) {
+          alert("Math.max may only take numbers!")
+        } else {
+          this.parameters.push(data.value)
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        }
+      },
+      execute: function () {
+        if(this.parameters.length < 2) {
+          return "Math.max must take at least two arguments";
+        } else {
+          return Math.max.apply(null, this.parameters);
+        }
+      },
+      alertAnswer: function() {
+        alert(this.execute());
+      }
+    },
+    {
+      type: "function",
+      name: "Math.min",
+      parameters: [],
+      addParam: function (data) {
+        if(isNaN(data.value)) {
+          alert("Math.min may only take numbers!")
+          return;
+        } else {
+          this.parameters.push(data.value)
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        }
+      },
+      execute: function () {
+        if(this.parameters.length < 2) {
+          return "Math.max must take at least two arguments";
+        } else {
+          return Math.min.apply(null, this.parameters);
+        }
+      },
+      alertAnswer: function() {
+        alert(this.execute());
       }
     }
   ];
@@ -254,10 +336,11 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCanvasDraggable = false;
   };
 
-  $scope.onDragFromToolbox = function(data, event) {
+  $scope.onDragFromToolbox = function(event) {
     $scope.isCanvasDraggable = true;
   };
 
+<<<<<<< d1fe63fefcd007c8604776aa8b0a046388fa45f3
   socket.on('updatePosition', function(data) {
     console.log(data.position.x)
     document.getElementById(data.type).style.left = data.position.x + "px"; 
@@ -280,6 +363,11 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     }; 
     socket.emit('changePosition', obj); 
   }; 
+=======
+  $scope.moving = function(event) {
+    console.log("tx: ", event.tx, "ty: ", event.ty);
+  }
+>>>>>>> improved canvas and worked on ng-drag-move to prepare for emitting x and y values of dragged code block
 
   $scope.promptKey = function (data, context) {
     for( var prop in data) {
@@ -313,8 +401,8 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   }
 
   // setting variable values
-  $scope.setVariable = function(data, name, value, $event) {
-    $event.preventDefault();
+  $scope.setVariable = function(data, name, value, event) {
+    event.preventDefault();
     data.name = name || data.name;
     data.value = value || data.value;
     $scope.code = generateCode($scope.droppedCodeBlocks);
