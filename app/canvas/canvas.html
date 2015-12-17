@@ -2,8 +2,8 @@
 <div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
   <!-- TOOLBOX -->
   <div class="toolbox">
-    <span ng-repeat="codeBlock in codeBlocks">
-      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-success="onDragFromToolbox()">
+    <span ng-repeat="codeBlock in codeBlocks" >
+      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-move="onDragFromToolbox(); moving($event, codeBlock)" ng-attr-id="{{codeBlock.type}}">
         <span id="variableType">{{codeBlock.type}}</span>
       </div>
     </span>

@@ -27,10 +27,10 @@ angular.module('Grasp', [
     })
     .when('/choice', {
       templateUrl: 'choice/choice.html',
-      controller: 'ChoiceCTRL',
-      authenticate: true
+      controller: 'ChoiceCTRL'
+      // authenticate: true
     })
-    .otherwise({redirectTo: 'signin/'});
+    .otherwise({redirectTo: '/canvas'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {

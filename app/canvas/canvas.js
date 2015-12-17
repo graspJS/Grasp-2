@@ -1,4 +1,4 @@
-angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
+angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
 
 .controller('CanvasCTRL', function ($scope, socket) {
   $scope.code = "";
@@ -215,6 +215,7 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   // ON BLOCK DROP ====================================
   // When a codeblock is dropped, add it to array. Also regenerate code
   socket.on('onBlockAdded', function(data) {
+    console.log('fuck jeff');
     $scope.droppedCodeBlocks.push(cloneObject(data));
   }); 
   $scope.onDrop = function(data, event) {
@@ -244,6 +245,14 @@ angular.module('Grasp.Canvas', ['ngDraggable', 'ngRoute'])
   $scope.onDragFromToolbox = function(data, event) {
     $scope.isCanvasDraggable = true;
   };
+
+  socket.on('updatePosition', function(data) {
+    document.getElementById('') 
+  })
+  $scope.moving = function(event, id) {
+    console.log(event, id);
+    socket.emit('changePosition', event); 
+  }; 
 
   $scope.promptKey = function (data, context) {
     for( var prop in data) {

@@ -17,15 +17,15 @@ app.use(express.static(__dirname + '/../app'));
 // SOCKETS =======================================
 io.sockets.on('connection', function(socket) {
   socket.on('addBlock', function(data) {
-    socket.emit('onBlockAdded', data);
+    socket.broadcast.emit('onBlockAdded', data);
   });
   socket.on('deleteBlock', function(data) {
-    socket.emit('onBlockDelete', data); 
+    socket.broadcast.emit('onBlockDelete', data); 
   })
   var lastPosition = null; 
-  socket.emit('update_position', lastPosition);
-  socket.on('receivePosition', function(data) {
-    lastPosition = data; 
+  // socket.broadcast.emit('upDatePosition', lastPosition);
+  socket.on('changePosition', function(data) {
+    // lastPosition = data; 
     socket.emit('updatePosition', data);
   }); 
 });
