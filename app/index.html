@@ -36,16 +36,15 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-          <li><a href="#/canvas">Link</a></li>
+          <li class="active"><a href="#/canvas">Canvas <span class="sr-only">(current)</span></a></li>
+          <li><a href="#/view1">View1</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
+          <li><a href="#">Logout</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
-
   <!-- ANGULAR CONTENT INJECTION --> 
   <div ng-view></div>
   <!-- In production use:
@@ -65,5 +64,8 @@
   <script src="view1/view1.js"></script>
   <script src="auth/auth.js"></script>
 
+  <!-- SOCKET IO --> 
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="socket.js"></script>
 </body>
 </html>

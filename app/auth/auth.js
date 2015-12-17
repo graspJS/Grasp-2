@@ -97,7 +97,6 @@ angular.module('Grasp.Auth', ['ngRoute'])
 
     var loggedIn = function () {
     $rootScope.$on('$routeChangeStart', function (evt, next, current) {
-      console.log(next.$$route.templateUrl)
         if(next.$$route.templateUrl === "auth/auth.html") {
           if(!!$window.localStorage.getItem('com.grasp')) {
             $location.path('/canvas');
