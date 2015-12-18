@@ -246,8 +246,11 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCanvasDraggable = true;
   };
 
-  socket.on('updatePosition', function(event, type) {
-    document.getElementById('') 
+  socket.on('updatePosition', function(data) {
+    console.log(data.position.x)
+    document.getElementById(data.type).style.left = data.position.x + "px"; 
+    document.getElementById(data.type).style.top = data.position.y + "px"; 
+
   })
   
   var typeArray = []; 
@@ -255,12 +258,15 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     typeArray = []; 
   } 
 
-  $scope.moving1 = function(type) {  
+  $scope.moving1 = function(type) {
     typeArray.push(type);
   };
   $scope.moving = function(event) {
-    console.log(typeArray[0]);
-    socket.emit('changePosition', event, typeArray[0]); 
+    var obj = {
+      position: {x:event.x, y:event.y},
+      type: typeArray[0]
+    }; 
+    socket.emit('changePosition', obj); 
   }; 
 
   $scope.promptKey = function (data, context) {

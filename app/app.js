@@ -4,7 +4,7 @@
 angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.Auth',
-  'Grasp.view1',
+  'Grasp.chat',
   'Canvas.socket',
   'ngRoute',
   'ngMaterial',
@@ -29,6 +29,10 @@ angular.module('Grasp', [
       templateUrl: 'choice/choice.html',
       controller: 'ChoiceCTRL'
       // authenticate: true
+    })
+    .when('/chat', {
+      templateUrl: 'view1/view1.html',
+      controller: 'ChatCTRL'
     })
     .otherwise({redirectTo: '/canvas'});
     $httpProvider.interceptors.push('AttachTokens');

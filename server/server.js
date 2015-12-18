@@ -22,11 +22,14 @@ io.sockets.on('connection', function(socket) {
   socket.on('deleteBlock', function(data) {
     socket.broadcast.emit('onBlockDelete', data); 
   })
-  var lastPosition = null; 
+  // var lastPosition = null; 
   // socket.broadcast.emit('upDatePosition', lastPosition);
-  socket.on('changePosition', function(event, type) {
+  socket.on('changePosition', function(data) {
     // lastPosition = data; 
-    socket.emit('updatePosition', event, type);
+    socket.emit('updatePosition', data);
+  }); 
+  socket.on('addMessage', function(data) {
+    socket.emit('onMessageAdded', data); 
   }); 
 });
 
