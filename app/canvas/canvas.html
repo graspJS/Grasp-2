@@ -1,10 +1,17 @@
 <div class="container-fluid">
-<div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
+
+  <div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
   <!-- TOOLBOX -->
   <div class="toolbox">
-    <span ng-repeat="codeBlock in codeBlocks" >
-      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}">
-        <span id="variableType">{{codeBlock.type}}</span>
+
+    <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
+      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}" ng-drag-success="onDragSuccess($event)">
+        <span ng-switch-when="function" id="variableType">{{codeBlock.name}}</span>
+        <span ng-switch-when="variable" id="variableType">{{codeBlock.type}}</span>
+        <span ng-switch-when="object" id="variableType">{{codeBlock.type}}</span>
+        <span ng-switch-when="array" id="variableType">{{codeBlock.type}}</span>
+        <span ng-switch-when="loop" id="variableType">{{codeBlock.name}}</span>
+
       </div>
     </span>
   </div>
@@ -15,11 +22,11 @@
     <!-- CODE BLOCK NG-REPEAT CONTAINER -->
     <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type">
 
-      <!-- VARIABLE CODE BLOCK -->
-     <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas()">
+      <!-- VARIABLE CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
+      <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas(); moving($event)">
 
         <!-- CODE BLOCK NAME -->
-        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true; turnOnDrag()">
+        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true; turnOnDrag(); moving($event)">
           {{codeBlock.name}}
         </div>
 
@@ -29,73 +36,73 @@
 
         <!-- CODEBLOCK NAME FORM -->
         <form ng-if="showNameForm" ng-submit="setVariable(codeBlock, name, val, $event)">
-          <input placeholder="Enter name..." ng-model="name" name="name" id="name" type="text" ng-click="turnOffDrag()">
+          <input placeholder="Enter name..." ng-model="name" name="name" id="name" type="text" ng-click="turnOffDrag(); moving($event)">
         </form>
 
         <form ng-if="showValueForm" ng-submit="setVariable(codeBlock, name, val, $event)">
-          <input placeholder="Enter value..." ng-model="val" name="val" id="val" type="text" ng-click="turnOffDrag()">
+          <input placeholder="Enter value..." ng-model="val" name="val" id="val" type="text" ng-click="turnOffDrag(); moving($event)">
         </form>
       </div>
 
-      <!-- ARRAY CODE BLOCK -->
-      <div ng-switch-when="array" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
+      <!-- ARRAY CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
+      <div ng-switch-when="array" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
+        <!-- ARRAY CODE BLOCK NAME -->
         <div id="variableName" ng-click="showNameForm = showNameForm ? false : true">
           {{codeBlock.name}}
         </div>
 
+        <!-- ARRAY CODE BLOCK CONTENT -->
         <div id="variableValue" ng-click="showValueForm = showValueForm ? false : true">
-          {{codeBlock.value}}
-        </div><div id="popArray" ng-click="codeBlock.pop()">Pop!</div>
+          [{{codeBlock.value.join(", ")}}]
+        </div>
+        <div id="popArray" ng-click="codeBlock.pop()">pop</div>
+        <div id="popArray" ng-click="codeBlock.indexOf()">indexOf</div>
+        <div id="popArray" ng-click="codeBlock.slice()">slice</div>
       </div>
 
-        <!-- OBJECT CODE BLOCK -->
-        <div ng-switch-when="object" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
-          <div id="objectName">
-            <div>{{codeBlock.name}}</div><div id="addKeyValue" ng-click="addKeyValueForm = addKeyValueForm ? false : true">+</div>
-          </div>
-          <!-- NG-REPEAT OF KEY-VALUE PAIRS -->
-          <div ng-repeat="(key, value) in codeBlock.storage">
-            <span id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; promptKey(codeBlock.storage, this)">{{key}}:</span><span id="objectValue" ng-click="showValueForm = showValueForm ? false : true; promptValue(codeBlock.storage, this)">{{value}}</span>
-          </div>
-          <form ng-if="showKeyForm" ng-submit="codeBlock.setKey(key)">
-            <input placeholder = "Enter key name..." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
-          </form>
-           <form ng-if="showValueForm" ng-submit="codeBlock.setValue(value, true)">
-            <input placeholder = "Enter object value.." ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag()">
-          </form>
-          <form ng-if="addKeyValueForm" ng-submit="codeBlock.addKeyValue(key, value); turnOnDrag()">
-            <input placeholder = "Enter key" ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag()">
-            <input placeholder = "Enter value" ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag()">
-            <input type="submit">
-          </form>
+      <!-- OBJECT CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
+      <div ng-switch-when="object" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
+        <!-- OBJECT CODE BLOCK NAME -->
+        <div id="objectName">
+          <div>{{codeBlock.name}}</div><div id="addKeyValue" ng-click="addKeyValueForm = addKeyValueForm ? false : true">+</div>
         </div>
 
-        <!-- ADD METHOD CODE BLOCK -->
-        <div ng-switch-when="add()" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
-          <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div> function (
-          {{codeBlock.parameters.join(", ")}}
-          )
-          <div ng-if="showDefinition">
-            <div><pre>{{codeBlock.definition}}</pre></div>
-            <span ng-click="codeBlock.execute()">Run function!</span>
-          </div>
+        <!-- OBJECT CODE BLOCK CONTENT -->
+        <!-- NG-REPEAT OF KEY-VALUE PAIRS -->
+        <div ng-repeat="(key, value) in codeBlock.storage">
+          <span id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; promptKey(codeBlock.storage, this)">{{key}}:</span><span id="objectValue" ng-click="showValueForm = showValueForm ? false : true; promptValue(codeBlock.storage, this)">{{value}}</span>
         </div>
-
-        <!-- SUBTRACT METHOD CODE BLOCK -->
-        <div ng-switch-when="subtract()" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas()">
-          <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div> function (
-          {{codeBlock.parameters.join(", ")}}
-          )
-          <div ng-if="showDefinition">
-            <div><pre>{{codeBlock.definition}}</pre></div>
-            <span ng-click="codeBlock.execute()">Run function!</span>
-          </div>
-        </div>
-
+        <form ng-if="showKeyForm" ng-submit="codeBlock.setKey(key)">
+          <input placeholder = "Enter key name..." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag(); moving($event)">
+        </form>
+         <form ng-if="showValueForm" ng-submit="codeBlock.setValue(value, true)">
+          <input placeholder = "Enter object value.." ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag(); moving($event)">
+        </form>
+        <form ng-if="addKeyValueForm" ng-submit="codeBlock.addKeyValue(key, value); turnOnDrag()">
+          <input placeholder = "Enter key" ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag(); moving($event)">
+          <input placeholder = "Enter value" ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag(); moving($event)">
+          <input type="submit">
+        </form>
+        <div ng-click="codeBlock.objectKeys()">objectKeys</div>
       </div>
 
-      <div><img ng-click="emptyCanvas()" ng-drop="true" ng-drop-success="deleteCodeblock($data)"src="../images/trash.png" id="trashbin"></div>
+      <!-- FUNCTION CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
+      <div ng-switch-when="function" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
+        <!-- OBJECT CODE BLOCK NAME -->
+        <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div>
 
+        <!-- FUNCTION CODE BLOCK CONTENT -->
+        function ({{codeBlock.parameters.join(", ")}})
+        <div ng-if="showDefinition">
+          <div><pre>{{codeBlock.definition}}</pre></div>
+          <span ng-click="codeBlock.alertAnswer()">Run function!</span>
+        </div>
+      </div>
+
+      <!-- FOR-LOOP CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
+      <div ng-switch-when="loop" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
+        <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div>
+         <div>for (int i = {{codeBlock.parameters[0]}}; i < {{codeBlock.parameters[1]}}; i++)</div>
       </div>
 
     </div>

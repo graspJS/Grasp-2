@@ -21,32 +21,16 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         code += "var " + array[i].name + " = [" + array[i].value + "];\n";
       } else if (array[i].type === "object") {
         code+= "var " + array[i].name + " = " + JSON.stringify(array[i].storage) + "\n";
-        // code += "var " + array[i].name + " = {" + array[i].key + ":"+ JSON.stringify(array[i].value) + "};\n";
-      } else if (array[i].type === "add()") {
-        var arguments = "";
-        for (var j = 0; j < array[i].parameters.length; j++) {
-          if (j === array[i].parameters.length-1) {
-            arguments += array[i].parameters[j];
-          } else {
-            arguments += array[i].parameters[j] + ",";
-          }
-          
+      } else if (array[i].type === "function") {
+        var arguments = array[i].parameters.join(", ");
+        if (array[i].name === "Math.max" || array[i].name === "Math.min") {
+          code += array[i].name + "(" + arguments + ");\n";
+        } else {
+          code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].definition + "\n};\n";
         }
-        code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].definition + "\n};\n";
-      } else if (array[i].type === "subtract()") {
-        var arguments = "";
-        for (var j = 0; j < array[i].parameters.length; j++) {
-          if (j === array[i].parameters.length-1) {
-            arguments += array[i].parameters[j];
-          } else {
-            arguments += array[i].parameters[j] + ",";
-          }
-          
-        }
-        code += "var " + array[i].name + " = function(" + arguments + ") {\n" + array[i].definition + "\n};\n";
+        
       }
     }
-
     return code;
   };
 
@@ -65,21 +49,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     return clone;
   };
 
-  // $scope.resize = function(codeBlock) {
-  //   // var index = $scope.dropgpedCodeBlocks.indexOf(codeBlock);
-  //   // if (!codeBlock.expanded) {
-  //   //   document.getElementsByClassName("codeBlockDropped")[index].setAttribute("style", "height: 100px;");
-  //   //   codeBlock.expanded = true; 
-  //   // } else {
-  //   //   document.getElementsByClassName("codeBlockDropped")[index].setAttribute("style", "height: 50px;");
-  //   //   codeBlock.expanded = false; 
-  //   // }
-    
-  // }
-
-  /*
-  */
-
   // types of codeBlocks, such as variables, arrays, objects, and functions
   $scope.codeBlocks = [
     {
@@ -94,14 +63,37 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
       push: function(data) {
         if (data.storage !== undefined) {
           this.value.push(data.storage);
+        } else if (data.type === "function") {
+          this.value.push(data.execute());
         } else {
-          this.value.push(data.value);
+          if (isNaN(Number(data.value))) {
+            this.value.push(data.value);
+          } else {
+            this.value.push(Number(data.value));
+          }
+          
         }
         
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       pop: function () {
         this.value.pop();
+        $scope.code = generateCode($scope.droppedCodeBlocks);
+      },
+      indexOf: function () {
+        var valTofind = prompt("Enter the value you wish to find.");
+        if (!isNaN(Number(valTofind))) {
+          valTofind = Number(valTofind);
+        }
+
+        alert(this.value.indexOf(valTofind));
+      },
+      slice: function () {
+        var sliceNum = prompt("How many elements do you want to slice?");
+        var sliceArr = cloneObject($scope.codeBlocks[1]);
+        sliceArr.value = this.value.slice(sliceNum);
+        sliceArr.name = "SlicedArray"
+        $scope.droppedCodeBlocks.push(sliceArr);
         $scope.code = generateCode($scope.droppedCodeBlocks);
       }
     },
@@ -121,7 +113,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
                 this.storage.name = data.name;
                 this.storage.value = data.value;
                 $scope.code = generateCode($scope.droppedCodeBlocks);
-                console.log(this.storage);
               }
           } else {
             this.value = data;
@@ -134,18 +125,28 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           $scope.code = generateCode($scope.droppedCodeBlocks);
         },
         addKeyValue: function(key, value) {
-          console.log(key, ": ", value);
           this.storage[key] = value;
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        },
+        objectKeys: function () {
+          var keysArr = cloneObject($scope.codeBlocks[1]);
+          keysArr.name = "Keys of " + this.name;
+          keysArr.value = Object.keys(this.storage);
+          $scope.droppedCodeBlocks.push(keysArr);
           $scope.code = generateCode($scope.droppedCodeBlocks);
         }
     },
     {
-      type: 'add()',
-      name: "add()",
+      type: 'function',
+      name: "add",
       parameters: [],
-      definition: "var total = 0;\nfor (var i = 0; i < arguments.length; i++) {\n  total += arguments[i];\n  }\nreturn total;\n",
+      definition: "  var total = 0;\n  for (var i = 0; i < arguments.length; i++) {\n    total += arguments[i];\n    }\n  return total;\n",
       addParam: function(data) {
-        this.parameters.push(data.value);
+        if (data.type === "function") {
+          this.parameters.push(data.execute());
+        } else {
+          this.parameters.push(data.value);
+        }
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
@@ -153,16 +154,23 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         for(var i = 0; i < this.parameters.length; i++) {
           total += Number(this.parameters[i]);
         }
-        alert(total)
+        return total;
+      },
+      alertAnswer: function() {
+        alert(this.execute());
       }
     },
     {
-      type: "subtract()",
-      name: "subtract()" ,
+      type: "function",
+      name: "subtract",
       parameters: [],
-      definition: "  var total = 0;\n  for (var i = 0; i < arguments.length; i++) {\n    total -= arguments[i];\n    }\n  return total;\n",
+      definition: "  var total = this.parameters[0];\n  for (var i = 1; i < arguments.length; i++) {\n    total -= arguments[i];\n    }\n  return total;\n",
       addParam: function(data) {
-        this.parameters.push(data.value);
+        if (data.type === "function") {
+          this.parameters.push(data.execute());
+        } else {
+          this.parameters.push(data.value);
+        }
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
@@ -170,41 +178,126 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         for(var i = 1; i < this.parameters.length; i++) {
           total -= Number(this.parameters[i]);
         }
-        alert(total)
+        return total;
+      },
+      alertAnswer: function() {
+        alert(this.execute());
       }
     },
     {
-      type: "multiply()",
-      name: "subtract()" ,
+      type: "function",
+      name: "multiply" ,
       parameters: [],
-      definition: "  var total = 0;\n  for (var i = 0; i < arguments.length; i++) {\n    total -= arguments[i];\n    }\n  return total;\n",
+      definition: "  var total = this.parameters[0];\n  for (var i = 1; i < arguments.length; i++) {\n    total *= arguments[i];\n    }\n  return total;\n",
       addParam: function(data) {
-        this.parameters.push(data.value);
+        if (data.type === "function") {
+          this.parameters.push(data.execute());
+        } else {
+          this.parameters.push(data.value);
+        }
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = this.parameters[0];
         for(var i = 1; i < this.parameters.length; i++) {
-          total -= Number(this.parameters[i]);
+          total *= Number(this.parameters[i]);
         }
-        alert(total)
+        return total;
+      },
+      alertAnswer: function() {
+        alert(this.execute());
       }
     },
     {
-      type: "divide()",
-      name: "subtract()" ,
+      type: "function",
+      name: "divide" ,
       parameters: [],
-      definition: "var total = 0;\nfor (var i = 0; i < arguments.length; i++) {\n  total -= arguments[i];\n  }\nreturn total;\n",
+      definition: "  var total = this.parameters[0];\n  for (var i = 1; i < arguments.length; i++) {\n    total /= arguments[i];\n    }\n  return total;\n",
       addParam: function(data) {
-        this.parameters.push(data.value);
+        if (data.type === "function") {
+          this.parameters.push(data.execute());
+        } else {
+          this.parameters.push(data.value);
+        }
         $scope.code = generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = this.parameters[0];
         for(var i = 1; i < this.parameters.length; i++) {
-          total -= Number(this.parameters[i]);
+          total /= Number(this.parameters[i]);
         }
-        alert(total)
+        return total;
+      },
+      alertAnswer: function() {
+        alert(this.execute());
+      }
+    },
+    {
+      type: "loop",
+      name: "for-loop",
+      parameters: {count: 0, array: [], behavior: ""},
+      addParam: function(data) {
+        if (data.type === "variable") {
+          this.parameters["count"] = data.value;
+        } else if (data.type === "array") {
+          this.parameters[data.name] = data.value;
+        } else if (data.type === "function") {
+          this.parameters["behavior"] = data.execute;
+        }
+      },
+      execute: function() {
+        var count = this.parameters[0];
+        var array = this.parameters[1].slice();
+        for (count; count < array.length; count++) {
+          this.parameters[2]();
+        }
+      }
+    },
+    {
+      type: 'function',
+      name: "Math.max",
+      parameters: [],
+      addParam: function (data) {
+        if(isNaN(data.value)) {
+          alert("Math.max may only take numbers!")
+        } else {
+          this.parameters.push(data.value)
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        }
+      },
+      execute: function () {
+        if(this.parameters.length < 2) {
+          return "Math.max must take at least two arguments";
+        } else {
+          return Math.max.apply(null, this.parameters);
+        }
+      },
+      alertAnswer: function() {
+        alert(this.execute());
+      }
+    },
+    {
+      type: "function",
+      name: "Math.min",
+      parameters: [],
+      addParam: function (data) {
+        if(isNaN(data.value)) {
+          alert("Math.min may only take numbers!")
+          return;
+        } else {
+          this.parameters.push(data.value)
+          $scope.code = generateCode($scope.droppedCodeBlocks);
+        }
+      },
+      execute: function () {
+        if(this.parameters.length < 2) {
+          return "Math.max must take at least two arguments";
+        } else {
+          return Math.min.apply(null, this.parameters);
+        }
+      },
+      alertAnswer: function() {
+        alert(this.execute());
       }
     }
   ];
@@ -215,7 +308,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   // ON BLOCK DROP ====================================
   // When a codeblock is dropped, add it to array. Also regenerate code
   socket.on('onBlockAdded', function(data) {
-    console.log('fuck jeff');
     $scope.droppedCodeBlocks.push(cloneObject(data));
   }); 
   $scope.onDrop = function(data, event) {
@@ -237,37 +329,55 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCodeBlockDraggable = true;
   };
 
-  // not sure what to do with this yet
   $scope.onDragFromCanvas = function(data, event) {
     $scope.isCanvasDraggable = false;
   };
 
-  $scope.onDragFromToolbox = function(data, event) {
+  $scope.onDragFromToolbox = function(event) {
     $scope.isCanvasDraggable = true;
   };
 
   socket.on('updatePosition', function(data) {
-    console.log(data.position.x)
-    document.getElementById(data.type).style.left = data.position.x + "px"; 
-    document.getElementById(data.type).style.top = data.position.y + "px"; 
+    var element = angular.element(document.getElementById(data.type));
 
+    if (data.isDragging) {
+      element.css({
+        transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        'z-index': 99999,
+        '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        '-ms-transform': 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')'
+      });
+    } else {
+      element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
+    }
   })
   
-  var typeArray = []; 
+  var typeArray = undefined; 
   $scope.typeArray = function() {
-    typeArray = []; 
+    typeArray = undefined; 
   } 
 
   $scope.moving1 = function(type) {
-    typeArray.push(type);
+    if (typeArray === undefined) {
+      typeArray = type;
+    }
   };
   $scope.moving = function(event) {
     var obj = {
-      position: {x:event.x, y:event.y},
-      type: typeArray[0]
+      isDragging: true,
+      position: {x:event.tx, y:event.ty},
+      type: typeArray
     }; 
     socket.emit('changePosition', obj); 
-  }; 
+  };
+
+  $scope.onDragSuccess = function(event) {
+    var obj = {
+      isDragging: false,
+      type: typeArray
+    };
+    socket.emit('changePosition', obj);
+  }
 
   $scope.promptKey = function (data, context) {
     for( var prop in data) {
@@ -301,8 +411,8 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   }
 
   // setting variable values
-  $scope.setVariable = function(data, name, value, $event) {
-    $event.preventDefault();
+  $scope.setVariable = function(data, name, value, event) {
+    event.preventDefault();
     data.name = name || data.name;
     data.value = value || data.value;
     $scope.code = generateCode($scope.droppedCodeBlocks);

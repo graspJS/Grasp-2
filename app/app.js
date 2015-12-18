@@ -4,7 +4,7 @@
 angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.Auth',
-  'Grasp.chat',
+  // 'Grasp.chat',
   'Canvas.socket',
   'ngRoute',
   'ngMaterial',
@@ -30,6 +30,7 @@ angular.module('Grasp', [
       controller: 'ChatCTRL'
     })
     .otherwise({redirectTo: '/canvas'});
+//     .otherwise({redirectTo: '/signin'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {
