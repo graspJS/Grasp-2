@@ -2,15 +2,15 @@
 <div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
   <!-- TOOLBOX -->
   <div class="toolbox">
-    <span ng-repeat="codeBlock in codeBlocks">
-      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-success="onDragFromToolbox()">
+    <span ng-repeat="codeBlock in codeBlocks" >
+      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}">
         <span id="variableType">{{codeBlock.type}}</span>
       </div>
     </span>
   </div>
 
   <!-- CANVAS -->
-  <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event)">
+  <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event); typeArray()">
 
     <!-- CODE BLOCK NG-REPEAT CONTAINER -->
     <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type">

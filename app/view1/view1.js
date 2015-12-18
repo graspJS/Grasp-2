@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('Grasp.view1', ['ngRoute'])
+angular.module('Grasp.chat', ['ngRoute'])
 
-.controller('View1Ctrl', function($scope, socket) {
+.controller('ChatCTRL', function($scope, socket) {
   $scope.messages = [];
 
   socket.on('onMessageAdded', function(data) {
