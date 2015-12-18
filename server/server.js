@@ -47,13 +47,15 @@ app.post('/api/signup', function (request, response) {
 
 app.post('/api/signin', function (request, response) {
     controller.users.signin(request, function (err, result) {
-    if(err) {
+      console.log("Back in controller", result === null)
+      if(result === null) {
+        response.sendStatus(409);
+        throw new Error("Sign in failed");
+      } else if(err) {
       console.log(err);
       response.send(err.detail).status(409);
-    } else if (result.length === 0) {
-      response.sendStatus(409);
-      throw new Error("Sign in failed");
     } else {
+      console.log("in here")
       response.status(201).send(result);
       //render canvas
     }

@@ -27,8 +27,7 @@ describe('Server connections', function () {
         request(app)
           .post("/api/signup")
           .send(user)
-          .expect(201)
-          .expect("Created", done);
+          .expect(201, done);
     });
   });
 
