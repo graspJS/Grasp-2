@@ -339,10 +339,16 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   };
 
   socket.on('updatePosition', function(data) {
-    console.log(data.position.x)
-    document.getElementById(data.type).style.left = data.position.x + "px"; 
-    document.getElementById(data.type).style.top = data.position.y + "px"; 
-
+    document.getElementById(data.type).style.transform = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)'; 
+    document.getElementById(data.type).style.zIndex = 99999;
+    document.getElementById(data.type).style.webkitTransform = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)'; 
+    document.getElementById(data.type).style.msTransform = 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')';
+    /*
+    transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
+                            'z-index': 99999,
+                            '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
+                            '-ms-transform': 'matrix(1, 0, 0, 1, ' + x + ', ' + y + ')'
+    */
   })
   
   var typeArray = []; 
@@ -355,7 +361,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   };
   $scope.moving = function(event) {
     var obj = {
-      position: {x:event.x, y:event.y},
+      position: {x:event.tx, y:event.ty},
       type: typeArray[0]
     }; 
     socket.emit('changePosition', obj); 
