@@ -3,7 +3,6 @@
   <div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
   <!-- TOOLBOX -->
   <div class="toolbox">
-<<<<<<< d1fe63fefcd007c8604776aa8b0a046388fa45f3
 
     <span ng-repeat="codeBlock in codeBlocks" >
       <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}">
@@ -13,8 +12,12 @@
       <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-success="onDragFromToolbox()">
 =======
     <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
+<<<<<<< a740d05edd77e536cef8bfec4f5ed75a732375f8
       <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-move="onDragFromToolbox($event); moving($event)">
 >>>>>>> improved canvas and worked on ng-drag-move to prepare for emitting x and y values of dragged code block
+=======
+      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving($event, codeBlock.type)" ng-drag-move="onDragFromToolbox($event); moving($event)" id="codeBlock.type">
+>>>>>>> building more features
         <span ng-switch-when="function" id="variableType">{{codeBlock.name}}</span>
         <span ng-switch-when="variable" id="variableType">{{codeBlock.type}}</span>
         <span ng-switch-when="object" id="variableType">{{codeBlock.type}}</span>

@@ -1,7 +1,7 @@
 angular.module('Canvas.socket', [])
 
 .factory('socket', function ($rootScope) {
-  var socket = io.connect();
+  var socket = io.connect("http://localhost:3000");
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {  

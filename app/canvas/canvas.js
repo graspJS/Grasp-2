@@ -113,7 +113,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
                 this.storage.name = data.name;
                 this.storage.value = data.value;
                 $scope.code = generateCode($scope.droppedCodeBlocks);
-                console.log(this.storage);
               }
           } else {
             this.value = data;
@@ -126,7 +125,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           $scope.code = generateCode($scope.droppedCodeBlocks);
         },
         addKeyValue: function(key, value) {
-          console.log(key, ": ", value);
           this.storage[key] = value;
           $scope.code = generateCode($scope.droppedCodeBlocks);
         },
@@ -340,6 +338,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCanvasDraggable = true;
   };
 
+<<<<<<< a740d05edd77e536cef8bfec4f5ed75a732375f8
 <<<<<<< d1fe63fefcd007c8604776aa8b0a046388fa45f3
   socket.on('updatePosition', function(data) {
     console.log(data.position.x)
@@ -366,6 +365,10 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
 =======
   $scope.moving = function(event) {
     console.log("tx: ", event.tx, "ty: ", event.ty);
+=======
+  $scope.moving = function(event, data) {
+    // console.log(data);
+>>>>>>> building more features
   }
 >>>>>>> improved canvas and worked on ng-drag-move to prepare for emitting x and y values of dragged code block
 
