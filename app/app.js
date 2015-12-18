@@ -25,11 +25,6 @@ angular.module('Grasp', [
       templateUrl: 'auth/signup.html',
       controller: 'AuthCTRL'
     })
-    .when('/choice', {
-      templateUrl: 'choice/choice.html',
-      controller: 'ChoiceCTRL'
-      // authenticate: true
-    })
     .when('/chat', {
       templateUrl: 'view1/view1.html',
       controller: 'ChatCTRL'

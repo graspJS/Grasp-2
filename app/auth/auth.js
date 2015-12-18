@@ -12,7 +12,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (token) {
          $window.localStorage.setItem('com.grasp', token);
         // console.log("This is the token", token);
-        $location.path('/choice');
+        $location.path('/canvas');
       })
       .catch(function (error) {
         console.error(error);
@@ -25,7 +25,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (res) {
     var token = res.data.token;
         $window.localStorage.setItem('com.grasp', token);
-        $location.path('/choice');
+        $location.path('/canvas');
       })
       .catch(function (error) {
         console.error(error);
@@ -50,9 +50,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
       data: user
     })
     .then(function (resp) {
-      console.log("resp", resp.data[0].token);
       return resp.data[0].token;
-      console.log("woooo");
     });
   };
 
@@ -64,7 +62,6 @@ angular.module('Grasp.Auth', ['ngRoute'])
       data: user
     })
     .then(function (resp) {
-      console.log("resp",resp)
       return resp;
     });
   };
@@ -75,8 +72,6 @@ angular.module('Grasp.Auth', ['ngRoute'])
       url: '/api/signedin'
     })
     .then(function (resp) {
-      console.log("resp", resp)
-      console.log("woooo");
     })
     .catch(function (error) {
       $location.path('/signin')
