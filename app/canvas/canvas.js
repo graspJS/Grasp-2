@@ -338,8 +338,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCanvasDraggable = true;
   };
 
-<<<<<<< a740d05edd77e536cef8bfec4f5ed75a732375f8
-<<<<<<< d1fe63fefcd007c8604776aa8b0a046388fa45f3
   socket.on('updatePosition', function(data) {
     console.log(data.position.x)
     document.getElementById(data.type).style.left = data.position.x + "px"; 
@@ -361,16 +359,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
       type: typeArray[0]
     }; 
     socket.emit('changePosition', obj); 
-  }; 
-=======
-  $scope.moving = function(event) {
-    console.log("tx: ", event.tx, "ty: ", event.ty);
-=======
-  $scope.moving = function(event, data) {
-    // console.log(data);
->>>>>>> building more features
-  }
->>>>>>> improved canvas and worked on ng-drag-move to prepare for emitting x and y values of dragged code block
+  };
 
   $scope.promptKey = function (data, context) {
     for( var prop in data) {
