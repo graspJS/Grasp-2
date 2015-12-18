@@ -4,25 +4,13 @@
   <!-- TOOLBOX -->
   <div class="toolbox">
 
-    <span ng-repeat="codeBlock in codeBlocks" >
-      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}">
-        <span id="variableType">{{codeBlock.type}}</span>
-
-<!--     <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
-      <div class="codeBlock" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-success="onDragFromToolbox()">
-=======
     <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
-<<<<<<< a740d05edd77e536cef8bfec4f5ed75a732375f8
-      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-move="onDragFromToolbox($event); moving($event)">
->>>>>>> improved canvas and worked on ng-drag-move to prepare for emitting x and y values of dragged code block
-=======
-      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving($event, codeBlock.type)" ng-drag-move="onDragFromToolbox($event); moving($event)" id="codeBlock.type">
->>>>>>> building more features
+      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}" ng-drag-success="onDragSuccess($event)">
         <span ng-switch-when="function" id="variableType">{{codeBlock.name}}</span>
         <span ng-switch-when="variable" id="variableType">{{codeBlock.type}}</span>
         <span ng-switch-when="object" id="variableType">{{codeBlock.type}}</span>
         <span ng-switch-when="array" id="variableType">{{codeBlock.type}}</span>
-        <span ng-switch-when="loop" id="variableType">{{codeBlock.name}}</span> -->
+        <span ng-switch-when="loop" id="variableType">{{codeBlock.name}}</span>
 
       </div>
     </span>

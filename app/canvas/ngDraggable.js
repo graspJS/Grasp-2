@@ -23,7 +23,6 @@ angular.module("ngDraggable", [])
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                console.log(element);
                 scope.value = attrs.ngDrag;
                 var offset,_centerAnchor=false,_mx,_my,_tx,_ty,_mrx,_mry;
                 var _hasTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;

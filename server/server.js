@@ -26,7 +26,7 @@ io.sockets.on('connection', function(socket) {
   // socket.broadcast.emit('upDatePosition', lastPosition);
   socket.on('changePosition', function(data) {
     // lastPosition = data; 
-    socket.emit('updatePosition', data);
+    socket.broadcast.emit('updatePosition', data);
   }); 
   socket.on('addMessage', function(data) {
     socket.emit('onMessageAdded', data); 

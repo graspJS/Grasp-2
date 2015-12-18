@@ -308,7 +308,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   // ON BLOCK DROP ====================================
   // When a codeblock is dropped, add it to array. Also regenerate code
   socket.on('onBlockAdded', function(data) {
-    console.log('fuck jeff');
     $scope.droppedCodeBlocks.push(cloneObject(data));
   }); 
   $scope.onDrop = function(data, event) {
@@ -339,33 +338,46 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   };
 
   socket.on('updatePosition', function(data) {
-    document.getElementById(data.type).style.transform = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)'; 
-    document.getElementById(data.type).style.zIndex = 99999;
-    document.getElementById(data.type).style.webkitTransform = 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)'; 
-    document.getElementById(data.type).style.msTransform = 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')';
-    /*
-    transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
-                            'z-index': 99999,
-                            '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + x + ', ' + y + ', 0, 1)',
-                            '-ms-transform': 'matrix(1, 0, 0, 1, ' + x + ', ' + y + ')'
-    */
+    var element = angular.element(document.getElementById(data.type));
+
+    if (data.isDragging) {
+      element.css({
+        transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        'z-index': 99999,
+        '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        '-ms-transform': 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')'
+      });
+    } else {
+      element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
+    }
   })
   
-  var typeArray = []; 
+  var typeArray = undefined; 
   $scope.typeArray = function() {
-    typeArray = []; 
+    typeArray = undefined; 
   } 
 
   $scope.moving1 = function(type) {
-    typeArray.push(type);
+    if (typeArray === undefined) {
+      typeArray = type;
+    }
   };
   $scope.moving = function(event) {
     var obj = {
+      isDragging: true,
       position: {x:event.tx, y:event.ty},
-      type: typeArray[0]
+      type: typeArray
     }; 
     socket.emit('changePosition', obj); 
   };
+
+  $scope.onDragSuccess = function(event) {
+    var obj = {
+      isDragging: false,
+      type: typeArray
+    };
+    socket.emit('changePosition', obj);
+  }
 
   $scope.promptKey = function (data, context) {
     for( var prop in data) {
