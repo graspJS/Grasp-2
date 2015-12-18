@@ -24,9 +24,9 @@ io.sockets.on('connection', function(socket) {
   })
   var lastPosition = null; 
   // socket.broadcast.emit('upDatePosition', lastPosition);
-  socket.on('changePosition', function(data) {
+  socket.on('changePosition', function(event, type) {
     // lastPosition = data; 
-    socket.emit('updatePosition', data);
+    socket.emit('updatePosition', event, type);
   }); 
 });
 

@@ -246,12 +246,21 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     $scope.isCanvasDraggable = true;
   };
 
-  socket.on('updatePosition', function(data) {
+  socket.on('updatePosition', function(event, type) {
     document.getElementById('') 
   })
-  $scope.moving = function(event, id) {
-    console.log(event, id);
-    socket.emit('changePosition', event); 
+  
+  var typeArray = []; 
+  $scope.typeArray = function() {
+    typeArray = []; 
+  } 
+
+  $scope.moving1 = function(type) {  
+    typeArray.push(type);
+  };
+  $scope.moving = function(event) {
+    console.log(typeArray[0]);
+    socket.emit('changePosition', event, typeArray[0]); 
   }; 
 
   $scope.promptKey = function (data, context) {
