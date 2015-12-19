@@ -16,6 +16,8 @@ var controller = require('./database/controllers.js');
 
 app.use(express.static(__dirname + '/../app'));
 
+var usernames = {}; 
+var rooms = ['room1', 'room2', 'room3']; 
 // SOCKETS =======================================
 io.sockets.on('connection', function(socket) {
   socketConfig(socket);

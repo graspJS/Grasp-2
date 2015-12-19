@@ -3,9 +3,11 @@
 angular.module('Grasp.chat', ['ngRoute'])
 
 .controller('ChatCTRL', function($scope, socket) {
+  $scope.usernames = []; 
   $scope.messages = [];
 
-  socket.on('onMessageAdded', function(data) {
+  socket.on('updatechat', function(username, data) {
+    $scope.usernames.push(username);
     $scope.messages.push(data);
   }); 
 
