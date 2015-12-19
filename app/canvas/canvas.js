@@ -4,6 +4,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   $scope.code = "";
   $scope.isCanvasDraggable=true;
   $scope.isCodeBlockDraggable=true;
+  var typeArray = undefined; 
 
   $scope.runCode = function() {
     var codeStr = $scope.code.split('\n').join("");
@@ -352,7 +353,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     }
   })
   
-  var typeArray = undefined; 
   $scope.typeArray = function() {
     typeArray = undefined; 
   } 

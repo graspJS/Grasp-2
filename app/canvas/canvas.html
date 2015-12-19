@@ -20,7 +20,9 @@
   <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event); typeArray()">
 
     <!-- CODE BLOCK NG-REPEAT CONTAINER -->
-    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type">
+    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type" ng-drag-start="moving1(codeBlock.name)" ng-drag-success="onDragSuccess($event)">
+
+      <div ng-attr-id="codeBlock.name">
 
       <!-- VARIABLE CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
       <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas(); moving($event)">
@@ -104,6 +106,8 @@
         <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div>
          <div>for (int i = {{codeBlock.parameters[0]}}; i < {{codeBlock.parameters[1]}}; i++)</div>
       </div>
+
+    </div>
 
     </div>
 
