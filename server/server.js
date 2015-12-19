@@ -16,12 +16,9 @@ app.use(express.static(__dirname + '/../app'));
 
 // SOCKETS =======================================
 io.sockets.on('connection', function(socket) {
-  socket.on('addBlock', function(data) {
-    socket.broadcast.emit('onBlockAdded', data);
+  socket.on('canvasChange', function(data) {
+    socket.broadcast.emit('onCanvasChange', data);
   });
-  socket.on('deleteBlock', function(data) {
-    socket.broadcast.emit('onBlockDelete', data); 
-  })
   // var lastPosition = null; 
   // socket.broadcast.emit('upDatePosition', lastPosition);
   socket.on('changePosition', function(data) {

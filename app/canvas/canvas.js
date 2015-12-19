@@ -4,6 +4,9 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
   $scope.code = "";
   $scope.isCanvasDraggable=true;
   $scope.isCodeBlockDraggable=true;
+  var typeArray = undefined;
+  // stores the codeblocks dropped in canvas
+  $scope.droppedCodeBlocks = [];
 
   $scope.runCode = function() {
     var codeStr = $scope.code.split('\n').join("");
@@ -31,6 +34,8 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         
       }
     }
+    socket.emit('canvasChange', $scope.droppedCodeBlocks);
+    $scope.code = code;
     return code;
   };
 
@@ -74,11 +79,11 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           
         }
         
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       pop: function () {
         this.value.pop();
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       indexOf: function () {
         var valTofind = prompt("Enter the value you wish to find.");
@@ -94,7 +99,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         sliceArr.value = this.value.slice(sliceNum);
         sliceArr.name = "SlicedArray"
         $scope.droppedCodeBlocks.push(sliceArr);
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       }
     },
     {
@@ -107,33 +112,31 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           if (!byInput) {
             if(data.type === "object") {
               this.value = data.storage;
-              $scope.code = generateCode($scope.droppedCodeBlocks);
             } else {
                 this.value = data.value;
                 this.storage.name = data.name;
                 this.storage.value = data.value;
-                $scope.code = generateCode($scope.droppedCodeBlocks);
               }
           } else {
             this.value = data;
             this.storage.value = data;
-            $scope.code = generateCode($scope.droppedCodeBlocks);
           }
+          generateCode($scope.droppedCodeBlocks);
         },
         setKey: function (key) {
           this.key = key;
-          $scope.code = generateCode($scope.droppedCodeBlocks);
+          generateCode($scope.droppedCodeBlocks);
         },
         addKeyValue: function(key, value) {
           this.storage[key] = value;
-          $scope.code = generateCode($scope.droppedCodeBlocks);
+          generateCode($scope.droppedCodeBlocks);
         },
         objectKeys: function () {
           var keysArr = cloneObject($scope.codeBlocks[1]);
           keysArr.name = "Keys of " + this.name;
           keysArr.value = Object.keys(this.storage);
           $scope.droppedCodeBlocks.push(keysArr);
-          $scope.code = generateCode($scope.droppedCodeBlocks);
+          generateCode($scope.droppedCodeBlocks);
         }
     },
     {
@@ -147,7 +150,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         } else {
           this.parameters.push(data.value);
         }
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = 0;
@@ -171,7 +174,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         } else {
           this.parameters.push(data.value);
         }
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = this.parameters[0];
@@ -195,7 +198,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         } else {
           this.parameters.push(data.value);
         }
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = this.parameters[0];
@@ -219,7 +222,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         } else {
           this.parameters.push(data.value);
         }
-        $scope.code = generateCode($scope.droppedCodeBlocks);
+        generateCode($scope.droppedCodeBlocks);
       },
       execute: function () {
         var total = this.parameters[0];
@@ -244,6 +247,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         } else if (data.type === "function") {
           this.parameters["behavior"] = data.execute;
         }
+        generateCode($scope.droppedCodeBlocks);
       },
       execute: function() {
         var count = this.parameters[0];
@@ -262,7 +266,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           alert("Math.max may only take numbers!")
         } else {
           this.parameters.push(data.value)
-          $scope.code = generateCode($scope.droppedCodeBlocks);
+          generateCode($scope.droppedCodeBlocks);
         }
       },
       execute: function () {
@@ -286,7 +290,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
           return;
         } else {
           this.parameters.push(data.value)
-          $scope.code = generateCode($scope.droppedCodeBlocks);
+          generateCode($scope.droppedCodeBlocks);
         }
       },
       execute: function () {
@@ -302,22 +306,21 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     }
   ];
 
-  // stores the codeblocks dropped in canvas
-  $scope.droppedCodeBlocks = [];
+  // ON ANY CHANGE IN CANVAS
+  socket.on('onCanvasChange', function(data) {
+    $scope.droppedCodeBlocks = data;
+  });
 
   // ON BLOCK DROP ====================================
   // When a codeblock is dropped, add it to array. Also regenerate code
-  socket.on('onBlockAdded', function(data) {
-    $scope.droppedCodeBlocks.push(cloneObject(data));
-  }); 
   $scope.onDrop = function(data, event) {
     if ($scope.isCanvasDraggable) {
       if (data.storage !== undefined) {
         data.storage = cloneObject(data.storage);
       }
       $scope.droppedCodeBlocks.push(cloneObject(data));
-      $scope.code = generateCode($scope.droppedCodeBlocks);
-      socket.emit('addBlock', cloneObject(data));
+      generateCode($scope.droppedCodeBlocks);
+      socket.emit('canvasChange', $scope.droppedCodeBlocks);
     }
   };
 
@@ -352,7 +355,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     }
   })
   
-  var typeArray = undefined; 
   $scope.typeArray = function() {
     typeArray = undefined; 
   } 
@@ -386,18 +388,15 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
         delete data[prop];
       }
     }
-     $scope.code = generateCode($scope.droppedCodeBlocks);
+     generateCode($scope.droppedCodeBlocks);
   }
 
   // ON DELETE BLOCK ===================================
-  socket.on('onBlockDelete', function(data) {
-    $scope.droppedCodeBlocks.splice(data, 1);
-  }); 
   $scope.deleteCodeblock = function (data) {
     var index = $scope.droppedCodeBlocks.indexOf(data);
     $scope.droppedCodeBlocks.splice(index, 1);
-    $scope.code = generateCode($scope.droppedCodeBlocks);
-    socket.emit('deleteBlock', index); 
+    generateCode($scope.droppedCodeBlocks);
+    socket.emit('canvasChange', $scope.droppedCodeBlocks);
   }
 
     $scope.promptValue = function (data, context) {
@@ -407,7 +406,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
          data[prop] = newVal;
       }
     }
-    $scope.code = generateCode($scope.droppedCodeBlocks);
+    generateCode($scope.droppedCodeBlocks);
   }
 
   // setting variable values
@@ -415,6 +414,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
     event.preventDefault();
     data.name = name || data.name;
     data.value = value || data.value;
-    $scope.code = generateCode($scope.droppedCodeBlocks);
+    generateCode($scope.droppedCodeBlocks);
   };
 });

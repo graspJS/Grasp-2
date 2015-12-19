@@ -164,3 +164,8 @@ background-blend-mode: screen;
   height: 100px;
   z-index: 8888
 }
+
+#trashbinIMG {
+  height: 100%;
+  width: 100%;
+}
