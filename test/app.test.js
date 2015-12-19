@@ -1,12 +1,18 @@
+var assert = require("chai").assert;
+var expect = chai.expect;
+
 describe('Code blocks', function () {
 
-    describe('sorting the list of users', function() {
-      it('sorts in descending order by default', function() {
-        var users = ['jack', 'igor', 'jeff'];
-        var sorted = sortUsers(users);
-        expect(sorted).toEqual(['jeff', 'jack', 'igor']);
-    });
+describe('test describe', function() {
+  it('test it', function() {
+    // expect(true).to.be(true);
+    assert.deepEqual(true, true);
   });
+   it('test it2', function() {
+    // expect(true).to.be(true);
+    expect('foo').to.be.a('string')
+  });
+});
     // var Person;
     // beforeEach(module('Joy'));
     // beforeEach(inject(function (_Person_) {

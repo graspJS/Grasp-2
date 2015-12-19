@@ -5,32 +5,42 @@ module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    // basePath: '',
 
-
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
-
+    // // frameworks to use
+    // // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['jasmine','mocha', 'chai', 'browserify'],
+    plugins : [
+        'karma-browserify',
+        'karma-mocha',
+        'karma-chai',
+        'karma-chrome-launcher',
+        'karma-jasmine'
+    ],
 
     // list of files / patterns to load in the browser
     files: [
-      'bower_components/angular/angular.js',
+      'app/bower_components/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      './test/app.test.js',
-      './app/app.js'
+      'test/app.test.js',
+      'app/app.js'
     ],
 
 
     // list of files to exclude
     exclude: [
-      ''''
+      ''
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        'test/app.test.js': [ 'browserify' ]
+    },
+     browserify: {
+      debug: true,
+      transform: [ 'brfs' ]
     },
 
 
@@ -41,7 +51,7 @@ module.exports = function(config) {
 
 
     // web server port
-    port: 9876,
+    port: 3000,
 
 
     // enable / disable colors in the output (reporters and logs)
@@ -59,12 +69,12 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
+    singleRun: true,
 
     // Concurrency level
     // how many browser should be started simultanous
