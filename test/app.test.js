@@ -1,14 +1,12 @@
 var assert = require("chai").assert;
 var expect = chai.expect;
-
 var module = angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.Auth',
   // 'Grasp.chat',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial',
-  'Grasp.Choice'
+  'ngMaterial'
 ]);
 
 describe('Code blocks', function () {
