@@ -24,6 +24,9 @@ describe('Code blocks', function () {
             it('should drop code blocks in to droppedCodeBlocks', inject(function ($controller){
                 var scope = {};
                 ctrl = $controller('CanvasCTRL', { $scope: scope });
+                var array = scope.codeBlocks[1];
+                scope.droppedCodeBlocks.push(array);
+                expect(scope.droppedCodeBlocks.length).to.deep.equal(1);
             }))
         });
   //  it('test it2', function() {
