@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var socketConfig = require('./socket-config');
-
 var io = require('socket.io')(http);
 
 var db = require('./database/dbsetup.js');
@@ -18,7 +17,8 @@ app.use(express.static(__dirname + '/../app'));
 
 var usernames = {}; 
 var rooms = ['room1', 'room2', 'room3']; 
-// SOCKETS =======================================
+
+// SOCKET LISTENERS =======================================
 io.sockets.on('connection', function(socket) {
   socketConfig(socket);
 });

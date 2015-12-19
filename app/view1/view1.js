@@ -6,8 +6,8 @@ angular.module('Grasp.chat', ['ngRoute'])
   $scope.usernames = []; 
   $scope.messages = [];
 
-  socket.on('updatechat', function(username, data) {
-    $scope.usernames.push(username);
+  socket.on('onMessageAdded', function(data) {
+    // $scope.usernames.push(username);
     $scope.messages.push(data);
   }); 
 
