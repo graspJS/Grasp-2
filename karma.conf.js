@@ -20,13 +20,21 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/bower_components/angular/angular.js',
+      'node_modules/angular/angular.js',
       'node_modules/angular-mocks/angular-mocks.js',
-      'test/app.test.js',
-      'app/app.js'
+      'app/app.js',
+      'app/bower_components/angular-route/angular-route.js',
+      'app/bower_components/angular-material/angular-material.js',
+      'app/bower_components/angular-animate/angular-animate.js',
+      'app/bower_components/angular-aria/angular-aria.js',
+      'https://cdn.socket.io/socket.io-1.3.7.js',
+      'app/canvas/canvas.js',
+      'app/canvas/ngDraggable.js',
+      'app/auth/auth.js',
+      'app/choice/choice.js',
+      'app/socket.js',
+      'test/app.test.js'
     ],
-
-
     // list of files to exclude
     exclude: [
       ''

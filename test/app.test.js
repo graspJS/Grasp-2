@@ -1,17 +1,40 @@
 var assert = require("chai").assert;
 var expect = chai.expect;
 
-describe('Code blocks', function () {
+var module = angular.module('Grasp', [
+  'Grasp.Canvas',
+  'Grasp.Auth',
+  // 'Grasp.chat',
+  'Canvas.socket',
+  'ngRoute',
+  'ngMaterial',
+  'Grasp.Choice'
+])
 
-describe('test describe', function() {
-  it('test it', function() {
-    // expect(true).to.be(true);
-    assert.deepEqual(true, true);
-  });
-   it('test it2', function() {
-    // expect(true).to.be(true);
-    expect('foo').to.be.a('string')
-  });
+describe('Code blocks', function () {
+    beforeEach(angular.mock.module('Grasp'));
+        describe('test describe', function() {
+            it('codeBlocks list should be 10', inject(function ($controller) {
+            var scope = {},
+            ctrl = $controller('CanvasCTRL', { $scope: scope });
+            expect(scope.codeBlocks.length).to.deep.equal(10);
+
+            }));
+
+            it('should drop code blocks in to droppedCodeBlocks', inject(function ($controller){
+                var scope = {};
+                ctrl = $controller('CanvasCTRL', { $scope: scope });
+            }))
+        });
+  //  it('test it2', function() {
+  //   // expect(true).to.be(true);
+  //   expect('foo').to.be.a('string')
+  // });
+  //   it('sorts in descending order by default', function() {
+  //       var users = ['jack', 'igor', 'jeff'];
+  //       var sorted = sortUsers(users);
+  //   expect(sorted).toEqual(['jeff', 'jack', 'igor']);
+  // });
 });
     // var Person;
     // beforeEach(module('Joy'));
@@ -24,5 +47,3 @@ describe('test describe', function() {
     //         expect(new Person('Ben')).to.have.property('name', 'Ben');
     //     });
     // });
-
-});
