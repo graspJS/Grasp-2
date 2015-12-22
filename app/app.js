@@ -7,7 +7,8 @@ angular.module('Grasp', [
   'Grasp.chat',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial'
+  'ngMaterial',
+  'ngPopup'
 ])
 .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
   $routeProvider

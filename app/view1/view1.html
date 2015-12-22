@@ -1,6 +1,8 @@
-<ul id="messages" ng-repeat="message in messages track by $index">
-  <ul>{{message}}</ul>
-</ul>
-<form action="">
-  <input id="m" autocomplete="off" ng-model="text"/><button ng-click="addMessage(text)">Send</button>
-</form>
+<div ng-controller="ChatCTRL">
+  <ul id="messages" ng-repeat="message in messages track by $index">
+    <ul>{{message}}</ul>
+  </ul>
+  <form action="">
+    <input id="m" autocomplete="off" ng-model="text"/><button ng-click="addMessage(text)">Send</button>
+  </form>
+</div>
