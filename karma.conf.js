@@ -31,7 +31,6 @@ module.exports = function(config) {
       'app/canvas/canvas.js',
       'app/canvas/ngDraggable.js',
       'app/auth/auth.js',
-      'app/choice/choice.js',
       'app/socket.js',
       'test/app.test.js'
     ],
