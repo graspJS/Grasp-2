@@ -55,7 +55,7 @@ module.exports = function(socket) {
   // });
 
   socket.on('addMessage', function(data) {
-    console.log(data)
+    console.log("data....",data)
     socket.emit('onMessageAdded', data); 
   }); 
 }; 

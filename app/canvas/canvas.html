@@ -3,7 +3,9 @@
   <div ng-controller="AuthCTRL" ng-click="signout()">Signout</div>
   <!-- TOOLBOX -->
   <div class="toolbox">
-  <ng-pop-up option="ngPopupOption"></ng-pop-up>
+  <div ng-controller="ChatCTRL">
+    <ng-pop-up option="ngPopupOption"></ng-pop-up>
+  </div>
 
     <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
       <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}" ng-drag-success="onDragSuccess($event)">

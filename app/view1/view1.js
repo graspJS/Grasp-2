@@ -17,6 +17,7 @@ angular.module('Grasp.chat', ['ngRoute'])
     }
   }
   socket.on('onMessageAdded', function(data) {
+    console.log("In onMessageAdded", data)
     // $scope.usernames.push(username);
     $scope.messages.push(data);
   }); 
