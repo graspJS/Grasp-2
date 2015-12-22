@@ -2,7 +2,7 @@ var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
-// var karma = require('gulp-karma');
+
 var Server = require('karma').Server;
  
 gulp.task('syntax check', function () {
@@ -24,11 +24,11 @@ gulp.task('server tests', function () {
     });
 });
 
-gulp.task('Client side tests', function (done) {
+gulp.task('test', function (done) {
   new Server({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
   }, done).start();
 });
 
-gulp.task('default', ['syntax check', 'server tests', 'Client side tests']);
+gulp.task('default', ['syntax check', 'server tests', 'test']);
