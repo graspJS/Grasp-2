@@ -124,7 +124,7 @@ describe('Code blocks', function () {
               expect(scope.droppedCodeBlocks[2].execute()).to.deep.equal(2);
             }));
 
-            it('Should call a function on the reult of a dropped function', inject(function ($controller){
+            it('Should add the result of a dropped function in to another functions params', inject(function ($controller){
               var scope = {};
               ctrl = $controller('CanvasCTRL', { $scope: scope });
               var variable = scope.codeBlocks[0];
