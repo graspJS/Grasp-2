@@ -11,6 +11,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     Auth.signin($scope.loginUser)
     .then(function (token) {
          $window.localStorage.setItem('com.grasp', token);
+         $window.localStorage.setItem('username', $scope.loginUser.username);
         // console.log("This is the token", token);
         $location.path('/canvas');
       })
@@ -25,6 +26,8 @@ angular.module('Grasp.Auth', ['ngRoute'])
     .then(function (res) {
     var token = res.data.token;
         $window.localStorage.setItem('com.grasp', token);
+         $window.localStorage.setItem('username', $scope.signUpUser.username);
+
         $location.path('/canvas');
       })
       .catch(function (error) {
@@ -37,6 +40,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
   };
 
   $scope.signout = function () {
+    $window.localStorage.removeItem('username')
     Auth.signout();
    };
 

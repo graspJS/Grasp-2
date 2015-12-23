@@ -1,7 +1,10 @@
+
 <div ng-controller="ChatCTRL">
+<div id="chatbox">>
   <ul id="messages" ng-repeat="message in messages track by $index">
     <ul>{{message}}</ul>
   </ul>
+</div>
   <form action="">
     <input id="m" autocomplete="off" ng-model="text"/><button ng-click="addMessage(text)">Send</button>
   </form>

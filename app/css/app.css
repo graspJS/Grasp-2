@@ -169,3 +169,21 @@ background-blend-mode: screen;
   height: 100%;
   width: 100%;
 }
+
+#messages {
+  overflow: auto;
+}
+.ng-scope {
+  overflow: auto;
+}
+
+#chatbox {
+    font-family:tahoma;
+    font-size:12px;
+    color:black;
+    border: 1px teal solid;
+    height: 225px;
+    width: 400px;
+    overflow: scroll;
+    float:left;
+}

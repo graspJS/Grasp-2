@@ -2,22 +2,24 @@
 
 angular.module('Grasp.chat', ['ngRoute'])
 
-.controller('ChatCTRL', function($scope, socket) {
-  $scope.usernames = []; 
-  $scope.messages = [];
+.controller('ChatCTRL', function($scope, socket, $window) {
   $scope.ngPopupOption = {
     template:' ',
     templateUrl:"view1/view1.html",
+    resizable:true,
     draggable: true,
     width: 300,
     height: 300,
     position:{
       top:200,
       left:200
-    }
+    },
+    title : "Grasp teacher and student chat",
   }
+  $scope.username = $window.localStorage.getItem('username');
+  $scope.usernames = []; 
+  $scope.messages = [];
   socket.on('onMessageAdded', function(data) {
-    console.log("In onMessageAdded", data)
     // $scope.usernames.push(username);
     $scope.messages.push(data);
   }); 
@@ -28,7 +30,9 @@ angular.module('Grasp.chat', ['ngRoute'])
       title: 'New Message',
       body: 'Pending'
     }
+    message = $scope.username + " : " + message
     $scope.messages.push(message);
+    document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
     socket.emit('addMessage', message);
   }
 });
