@@ -33,6 +33,7 @@ angular.module('Grasp.chat', ['ngRoute'])
     message = $scope.username + " : " + message
     $scope.messages.push(message);
     document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+    document.getElementById("m").value = "";
     socket.emit('addMessage', message);
   }
 });

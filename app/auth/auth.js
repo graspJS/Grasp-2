@@ -24,9 +24,9 @@ angular.module('Grasp.Auth', ['ngRoute'])
   $scope.signup = function () {
     Auth.signup($scope.signUpUser)
     .then(function (res) {
-    var token = res.data.token;
-        $window.localStorage.setItem('com.grasp', token);
-         $window.localStorage.setItem('username', $scope.signUpUser.username);
+      var token = res.data.token;
+      $window.localStorage.setItem('com.grasp', token);
+      $window.localStorage.setItem('username', $scope.signUpUser.username);
 
         $location.path('/canvas');
       })

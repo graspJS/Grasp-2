@@ -173,9 +173,6 @@ background-blend-mode: screen;
 #messages {
   overflow: auto;
 }
-.ng-scope {
-  overflow: auto;
-}
 
 #chatbox {
     font-family:tahoma;
@@ -187,3 +184,4 @@ background-blend-mode: screen;
     overflow: scroll;
     float:left;
 }
+
