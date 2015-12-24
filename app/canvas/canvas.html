@@ -1,155 +1,184 @@
-<!-- HEADER --> 
-<div ng-controller="HeaderCTRL">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Grasp</a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#/canvas">Canvas <span class="sr-only">(current)</span></a></li>
-          <li><a href ng-if="!isTeacher && !isStudent" ng-click="teacher()">Connect as Teacher</a></li>
-          <li><a ng-if="isTeacher" ng-click="disconnect()">Disconnect as Teacher</a></li>
-          <li><a href ng-if="!isStudent && !isTeacher" ng-click="student()">Connect as Student</a></li>
-          <li><a ng-if="isStudent" ng-click="disconnect()">Disconnect as Student</a></li>
+<section id="container" >
+  <!--header start-->
+  <header class="header black-bg">
+    <!--logo start-->
+    <a href="#/canvas" class="logo"><b>GRASP</b></a>
+    <!--logo end-->
+    <!--navbar--> 
+  <div class="nav notify-row" id="top_menu">
+    <!--  notification start -->
+    <ul class="nav top-menu">
+      <!-- settings start -->
+      <li class="dropdown" uib-dropdown>
+        <a uib-dropdown-toggle class="dropdown-toggle" href="#">
+          <i class="fa fa-tasks"></i>
+          <span class="badge bg-theme">4</span>
+        </a>
+          <ul class="dropdown-menu extended tasks-bar">
+            <div class="notify-arrow notify-arrow-green"></div>
+              <li>
+                <p class="green">Teach</p>
+              </li>
+              <li>
+                <a href="index.html#">
+                  <div class="task-info">
+                    <div class="desc">Waiting Students</div>
+                    <div class="percent">40%</div>
+                  </div>
+                  <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                      <span class="sr-only">40% Complete (success)</span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            <li class="external">
+              <a ng-click="teacher()">I want to teach!</a>
+            </li>
+          </ul>
+      </li>
+      <!-- settings end -->
+      <!-- inbox dropdown start-->
+      <li id="header_inbox_bar" class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+          <i class="fa fa-envelope-o"></i>
+          <span class="badge bg-theme">5</span>
+        </a>
+        <ul class="dropdown-menu extended inbox">
+          <div class="notify-arrow notify-arrow-green"></div>
+            <li>
+                <p class="green">You have 5 new messages</p>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Zac Snider</span>
+                    <span class="time">Just now</span>
+                    </span>
+                    <span class="message">
+                        Hi mate, how is everything?
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-divya.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Divya Manian</span>
+                    <span class="time">40 mins.</span>
+                    </span>
+                    <span class="message">
+                     Hi, I need your help with this.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-danro.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Dan Rogers</span>
+                    <span class="time">2 hrs.</span>
+                    </span>
+                    <span class="message">
+                        Love your new Dashboard.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-sherman.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Dj Sherman</span>
+                    <span class="time">4 hrs.</span>
+                    </span>
+                    <span class="message">
+                        Please, answer asap.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">See all messages</a>
+            </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="signout()">Logout</a></li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-</div>
-
-<div class="container-fluid">
-  <!-- TOOLBOX -->
-  <div class="toolbox">
-  <div ng-controller="ChatCTRL">
-    <ng-pop-up option="ngPopupOption"></ng-pop-up>
+      </li>
+      <!-- inbox dropdown end -->
+    </ul>
+        <!--  notification end -->
   </div>
-
-    <span ng-repeat="codeBlock in codeBlocks" ng-switch="codeBlock.type">
-      <div class="codeBlock" ng-drop="true" ng-drag="true" ng-drag-data="codeBlock" data-allow-transform="true" ng-drag-start="moving1(codeBlock.type)" ng-drag-move="onDragFromToolbox(); moving($event)" ng-attr-id="{{codeBlock.type}}" ng-drag-success="onDragSuccess($event)">
-        <span ng-switch-when="function" id="variableType">{{codeBlock.name}}</span>
-        <span ng-switch-when="variable" id="variableType">{{codeBlock.type}}</span>
-        <span ng-switch-when="object" id="variableType">{{codeBlock.type}}</span>
-        <span ng-switch-when="array" id="variableType">{{codeBlock.type}}</span>
-        <span ng-switch-when="loop" id="variableType">{{codeBlock.name}}</span>
-
-      </div>
-    </span>
+  <div class="top-menu">
+    <ul class="nav pull-right top-menu">
+      <li><a class="logout" ng-click="logout()">Logout</a></li>
+    </ul>
   </div>
+</header>
+<!-- header end -->
 
-  <!-- CANVAS -->
-  <div class="canvasArea" ng-drop="true" ng-drop-success="onDrop($data, $event); typeArray()">
 
-    <!-- CODE BLOCK NG-REPEAT CONTAINER -->
-    <div ng-prevent-drag="true" ng-repeat="codeBlock in droppedCodeBlocks track by $index" ng-drag="true" ng-drag-data="codeBlock" ng-switch="codeBlock.type" ng-drag-start="moving1(codeBlock.name)" ng-drag-success="onDragSuccess($event)">
+  <!-- TOOLBOX start -->
+  <div>
+      <div id="sidebar"  class="toolboxArea">
 
-      <div ng-attr-id="codeBlock.name">
+          <!-- TOOLBOX start-->
+          <div ng-repeat="codeBlock in codeBlocks">
 
-      <!-- VARIABLE CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
-      <div ng-switch-when="variable" class="codeBlockDropped" ng-model="codeBlock" name="codeBlock" ng-drag-data="codeBlock" ng-drag="isCodeBlockDraggable" ng-drag-success="onDragFromCanvas(); moving($event)">
+              <!-- CODEBLOCK start -->
+              <div class="toolboxBlock" ng-drag="true">
 
-        <!-- CODE BLOCK NAME -->
-        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true; turnOnDrag(); moving($event)">
-          {{codeBlock.name}}
-        </div>
-
-        <div id="variableValue" ng-click="showValueForm = showValueForm ? false : true; turnOnDrag()">
-          {{codeBlock.value}}
-        </div>
-
-        <!-- CODEBLOCK NAME FORM -->
-        <form ng-if="showNameForm" ng-submit="setVariable(codeBlock, name, val, $event)">
-          <input placeholder="Enter name..." ng-model="name" name="name" id="name" type="text" ng-click="turnOffDrag(); moving($event)">
-        </form>
-
-        <form ng-if="showValueForm" ng-submit="setVariable(codeBlock, name, val, $event)">
-          <input placeholder="Enter value..." ng-model="val" name="val" id="val" type="text" ng-click="turnOffDrag(); moving($event)">
-        </form>
+                <div>{{codeBlock.type}}</div>
+               
+              </div>
+              <!-- CODEBLOCK end -->
+          </div>
+          <!-- TOOLBOX menu end-->
       </div>
+  </div>
+  <!--TOOLBOX end-->
 
-      <!-- ARRAY CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
-      <div ng-switch-when="array" ng-drag="true" ng-drop="true" ng-drop-success="codeBlock.push($data)" ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
-        <!-- ARRAY CODE BLOCK NAME -->
-        <div id="variableName" ng-click="showNameForm = showNameForm ? false : true">
-          {{codeBlock.name}}
+
+  <!-- CANVAS start -->
+  <div class="canvasArea" id="main-content">
+
+    <!-- ng-repeat container of CANVAS -->
+    <div ng-repeat="row in blockMatrix">
+
+      <!-- a row -->
+      <div class="canvasRow" ng-drop="true" ng-drop-success="onCanvasDrop($data, row)">
+
+        <!-- ng-repeat container of row -->
+        <div ng-repeat="canvasBlock in row track by $index">
+
+          <!-- a code block -->
+          <div class="canvasBlock">
+            <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">#</div>
+            <div id="canvasBlockName">asdfasd</div>
+            
+            <!-- drop down menu of code block -->
+            <div id="dropDownMenu" ng-if="showDropDownMenu">
+
+              <div ng-click="showBlockEditor = showBlockEditor ? false : true; showShit = false">Edit Block</div>
+              <div ng-if="showBlockEditor" id="blockEditor">
+                Name: <br>
+                <input id="canvasBlockNameInput" placeholder="{{canvasBlock.name}}"><br><br>
+                Value: <br>
+                <input id="canvasBlockContentInput" placeholder="{{canvasBlock.content}}"><br><br>
+              </div>
+
+              <div ng-click="deleteBlock(row, canvasBlock)">Delete Block</div>
+             
+            </div>
+
+          </div>
+          
         </div>
 
-        <!-- ARRAY CODE BLOCK CONTENT -->
-        <div id="variableValue" ng-click="showValueForm = showValueForm ? false : true">
-          [{{codeBlock.value.join(", ")}}]
-        </div>
-        <div id="popArray" ng-click="codeBlock.pop()">pop</div>
-        <div id="popArray" ng-click="codeBlock.indexOf()">indexOf</div>
-        <div id="popArray" ng-click="codeBlock.slice()">slice</div>
-      </div>
-
-      <!-- OBJECT CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
-      <div ng-switch-when="object" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.setValue($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
-        <!-- OBJECT CODE BLOCK NAME -->
-        <div id="objectName">
-          <div>{{codeBlock.name}}</div><div id="addKeyValue" ng-click="addKeyValueForm = addKeyValueForm ? false : true">+</div>
-        </div>
-
-        <!-- OBJECT CODE BLOCK CONTENT -->
-        <!-- NG-REPEAT OF KEY-VALUE PAIRS -->
-        <div ng-repeat="(key, value) in codeBlock.storage">
-          <span id="objectKey" ng-click="showKeyForm = showKeyForm ? false : true; promptKey(codeBlock.storage, this)">{{key}}:</span><span id="objectValue" ng-click="showValueForm = showValueForm ? false : true; promptValue(codeBlock.storage, this)">{{value}}</span>
-        </div>
-        <form ng-if="showKeyForm" ng-submit="codeBlock.setKey(key)">
-          <input placeholder = "Enter key name..." ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag(); moving($event)">
-        </form>
-         <form ng-if="showValueForm" ng-submit="codeBlock.setValue(value, true)">
-          <input placeholder = "Enter object value.." ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag(); moving($event)">
-        </form>
-        <form ng-if="addKeyValueForm" ng-submit="codeBlock.addKeyValue(key, value); turnOnDrag()">
-          <input placeholder = "Enter key" ng-model="key" name="key" id="key" type="text" ng-click="turnOffDrag(); moving($event)">
-          <input placeholder = "Enter value" ng-model="value" name="value" id="value" type="text" ng-click="turnOffDrag(); moving($event)">
-          <input type="submit">
-        </form>
-        <div ng-click="codeBlock.objectKeys()">objectKeys</div>
-      </div>
-
-      <!-- FUNCTION CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
-      <div ng-switch-when="function" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
-        <!-- OBJECT CODE BLOCK NAME -->
-        <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div>
-
-        <!-- FUNCTION CODE BLOCK CONTENT -->
-        function ({{codeBlock.parameters.join(", ")}})
-        <div ng-if="showDefinition">
-          <div><pre>{{codeBlock.definition}}</pre></div>
-          <span ng-click="codeBlock.alertAnswer()">Run function!</span>
-        </div>
-      </div>
-
-      <!-- FOR-LOOP CODE BLOCK ////////////////////////////////////////////////////////////////////////////////////// -->
-      <div ng-switch-when="loop" ng-drag="isCodeBlockDraggable" ng-drop="isCodeBlockDraggable" ng-drop-success="codeBlock.addParam($data)" ng-model="codeBlock" name="codeBlock"  ng-drag-data="codeBlock" class="codeBlockDropped" ng-drag-success="onDragFromCanvas(); moving($event)">
-        <div id="objectName" ng-click="showDefinition = showDefinition ? false : true">{{codeBlock.name}}</div>
-         <div>for (int i = {{codeBlock.parameters[0]}}; i < {{codeBlock.parameters[1]}}; i++)</div>
       </div>
 
     </div>
 
-    </div>
-
-    <!-- <img id="trashbin" src="../images/trash.png"> -->
-
   </div>
+  <!--CANVAS END-->
 
-  <!-- COMPILED CODE AREA -->
-  <div class="codeArea">
-    <pre id="code">{{code}}</pre>
-  </div>
-</div>
+</section>
+
+

@@ -185,3 +185,6 @@ background-blend-mode: screen;
     float:left;
 }
 
+[ng-drop].drag-enter {
+  background-color: gray;
+}
