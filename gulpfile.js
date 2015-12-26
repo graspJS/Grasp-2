@@ -4,6 +4,7 @@ var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 
 var Server = require('karma').Server;
+var git = require('gulp-git');
  
 gulp.task('syntax check', function () {
   return gulp.src(['./app/*.js', './server/*js'])
@@ -24,11 +25,16 @@ gulp.task('server tests', function () {
     });
 });
 
-gulp.task('test', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
+// gulp.task('test', function (done) {
+//   new Server({
+//     configFile: __dirname + '/karma.conf.js',
+//     singleRun: true
+//   }, done).start();
+// });
+
+gulp.task('add', function(){
+  return gulp.src(['./app/*.js', './server/*js', './*.js', './*.json'])
+    .pipe(git.add({args: '.'}));
 });
 
-gulp.task('default', ['syntax check', 'server tests', 'test']);
+gulp.task('default', ['syntax check', 'server tests', 'add']);
