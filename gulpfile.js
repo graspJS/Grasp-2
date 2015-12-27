@@ -83,7 +83,6 @@ gulp.task('karma-tests', function (done) {
         browsers: ['Chrome'],
         frameworks: ['jasmine','mocha', 'chai', 'browserify'],
         colors: false
-        // files: filePath.karmaFiles.src
     }, done);
 });
 
