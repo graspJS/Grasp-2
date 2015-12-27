@@ -37,7 +37,7 @@ app.post('/api/signup', function (request, response) {
 
 app.post('/api/signin', function (request, response) {
     controller.users.signin(request, function (err, result) {
-      console.log("Back in controller", result === null)
+      console.log("Back in controller", result === null);
       if(result === null) {
         response.sendStatus(409);
         throw new Error("Sign in failed");
@@ -45,12 +45,13 @@ app.post('/api/signin', function (request, response) {
       console.log(err);
       response.send(err.detail).status(409);
     } else {
-      console.log("in here")
       response.status(201).send(result);
       //render canvas
     }
   });
 });
+
+// (}
 
 app.get('/api/signedin', function (request, response) {
   controller.users.checkAuth(request, function (err, result) {
@@ -60,8 +61,8 @@ app.get('/api/signedin', function (request, response) {
     } else {
       response.sendStatus(200);
     }
-  })
-})
+  });
+});
 
 http.listen(3000, function() {
   console.log('listening on 3000');

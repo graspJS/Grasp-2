@@ -1,18 +1,59 @@
+"use strict";
 var gulp = require('gulp');
+var watch = require('gulp-watch');
 
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 
+// This will keeps pipes working after error event
+var plumber = require('gulp-plumber');
+
+// Used in linting custom reporter
+var map = require('map-stream');
+var events = require('events');
+var notify = require('gulp-notify');
+var emmitter = new events.EventEmitter();
+var path = require('path');
 var Server = require('karma').Server;
 var git = require('gulp-git');
- 
-gulp.task('syntax check', function () {
-  return gulp.src(['./app/*.js', './server/*js'])
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
+
+// Custom linting reporter used for error notify
+var jsHintErrorReporter = map(function (file, cb) {
+  if (!file.jshint.success) {
+    file.jshint.results.forEach(function (err) {
+      if (err) {
+        //console.log(err);
+
+        // Error message
+        var msg = [
+          path.basename(file.path),
+          'Line: ' + err.error.line,
+          'Reason: ' + err.error.reason
+        ];
+
+        // Emit this error event
+        emmitter.emit('error', new Error(msg.join('\n')));
+
+      }
+    });
+
+  }
+  cb(null, file);
 });
 
+
+
+gulp.task('lint', function () {
+  gulp.src(['./app/*.js', './server/*js'])
+    .pipe(plumber())
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish')) // Console output
+    .pipe(jsHintErrorReporter) // If error pop up a notify alert
+    .on('error', notify.onError(function (error) {
+      return error.message;
+    }));
+
+});
 
 gulp.task('server tests', function () {
   return gulp.src('test/myapptest.js')
@@ -37,4 +78,10 @@ gulp.task('add', function(){
     .pipe(git.add({args: '.'}));
 });
 
-gulp.task('default', ['syntax check', 'server tests', 'add']);
+gulp.task('commit', function(){
+  return gulp.src(['./app/*.js', './server/*js', './*.js', './*.json'])
+    .pipe(git.commit(['initial commit', 'gulp commit message']));
+});
+
+
+gulp.task('default', ['lint', 'server tests', 'add', 'commit']);
