@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: 
-  - __Scrum Master__: 
-  - __Development Team Members__: 
+  - __Product Owner__: Jeff Campecino, Will Henshaw
+  - __Scrum Master__: Abel Wang
+  - __Development Team Members__: Abel Wang, Jeff Campecino, Will Henshaw
 
 ## Table of Contents
 
@@ -20,15 +20,32 @@
 
 ## Usage
 
-> Some usage instructions
+Visit our page, currently hosted on AWS http://ec2-52-35-254-62.us-west-2.compute.amazonaws.com:3000/
+
+## Technologies Used
+
+- [Angular](https://angularjs.org)
+- [Node](https://nodejs.org/)
+- [Socket.IO](www.socket.io/)
+- [Express](http://expressjs.com/)
+- [Postgres](www.postgresql.org)
+- [Knex](http://knexjs.org/) 
+- [AWS Deployment](https://aws.amazon.com/)
+- [Mocha](https://mochajs.org)
+- [Karma](karma-runner.github.io)
+
+
 
 ## Requirements
 
-- Node 0.1x.x
+- [Node 0.10.x](https://nodejs.org/en/download/)
+- [Postgres](http://exponential.io/blog/2015/02/21/install-postgresql-on-mac-os-x-via-brew/)
 
 ## Development
 
 ### Installing Dependencies
+
+Fork and clone the repository from GitHub
 
 From within the root directory:
 
