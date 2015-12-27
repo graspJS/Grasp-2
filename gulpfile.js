@@ -56,6 +56,7 @@ gulp.task('lint', function () {
 
 });
 
+//runs server and DB tests
 gulp.task('server-tests', function () {
   return gulp.src('test/myapptest.js')
     .pipe(mocha())
@@ -64,6 +65,7 @@ gulp.task('server-tests', function () {
     });
 });
 
+//runs client side tests
 gulp.task('karma-tests', function () {
     karma.start({
         configFile: __dirname + '/karma.conf.js',
@@ -74,11 +76,13 @@ gulp.task('karma-tests', function () {
     });
 });
 
+//Adds changed files
 gulp.task('add', function(){
   return gulp.src(['./app/*.js', './server/*js', './*.js', './*.json'])
     .pipe(git.add({args: '.'}));
 });
 
+//commits changed files
 gulp.task('commit', function(){
   return gulp.src(['./app/*.js', './server/*js', './*.js', './*.json'])
     .pipe(git.commit(['initial commit', 'gulp commit message']));
