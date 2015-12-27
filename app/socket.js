@@ -19,7 +19,7 @@ angular.module('Canvas.socket', [])
             callback.apply(socket, args);
           }
         });
-      })
+      });
     }
   };
 });
