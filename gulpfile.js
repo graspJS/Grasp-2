@@ -74,7 +74,7 @@ gulp.task('server-tests', function () {
 //   }, done).start();
 // });
 
-gulp.task('karma-tests', function (done) {
+gulp.task('karma-tests', function () {
     karma.start({
         //Weirdly, karma barfs if you don't specify a config file,
         //even if it's not needed due to passing options here.
@@ -83,7 +83,7 @@ gulp.task('karma-tests', function (done) {
         browsers: ['Chrome'],
         frameworks: ['jasmine','mocha', 'chai', 'browserify'],
         colors: false
-    }, done);
+    });
 });
 
 gulp.task('add', function(){
