@@ -61,10 +61,7 @@ gulp.task('server-tests', function () {
     .pipe(mocha())
     .once('error', function () {
       process.exit(1);
-    })
-    // .once('end', function () {
-    //   process.exit();
-    // });
+    });
 });
 
 gulp.task('karma-tests', function () {
@@ -74,7 +71,7 @@ gulp.task('karma-tests', function () {
         browsers: ['Chrome'],
         frameworks: ['jasmine','mocha', 'chai', 'browserify'],
         colors: false
-    })
+    });
 });
 
 gulp.task('add', function(){
