@@ -6,7 +6,8 @@ var module = angular.module('Grasp', [
   // 'Grasp.chat',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial'
+  'ngMaterial',
+  'ngPopup'
 ]);
 
 describe('Code blocks', function () {

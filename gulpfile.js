@@ -67,23 +67,14 @@ gulp.task('server-tests', function () {
     // });
 });
 
-// gulp.task('test', function (done) {
-//   new Server({
-//     configFile: __dirname + '/karma.conf.js',
-//     singleRun: true
-//   }, done).start();
-// });
-
 gulp.task('karma-tests', function () {
     karma.start({
-        //Weirdly, karma barfs if you don't specify a config file,
-        //even if it's not needed due to passing options here.
         configFile: __dirname + '/karma.conf.js',
         singleRun: true,
         browsers: ['Chrome'],
         frameworks: ['jasmine','mocha', 'chai', 'browserify'],
         colors: false
-    });
+    })
 });
 
 gulp.task('add', function(){
