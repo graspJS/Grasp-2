@@ -27,6 +27,7 @@ module.exports = function(config) {
       'app/bower_components/angular-material/angular-material.js',
       'app/bower_components/angular-animate/angular-animate.js',
       'app/bower_components/angular-aria/angular-aria.js',
+      'app/bower_components/ngPopup/dist/ngPopup.js',
       'https://cdn.socket.io/socket.io-1.3.7.js',
       'app/canvas/canvas.js',
       'app/canvas/ngDraggable.js',

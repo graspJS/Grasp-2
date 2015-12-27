@@ -84,4 +84,4 @@ gulp.task('commit', function(){
 });
 
 
-gulp.task('default', ['lint', 'server tests', 'add', 'commit']);
+gulp.task('default', ['lint', 'server tests', 'test', 'add', 'commit']);
