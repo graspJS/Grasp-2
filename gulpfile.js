@@ -62,9 +62,9 @@ gulp.task('server-tests', function () {
     .once('error', function () {
       process.exit(1);
     })
-    .once('end', function () {
-      process.exit();
-    });
+    // .once('end', function () {
+    //   process.exit();
+    // });
 });
 
 // gulp.task('test', function (done) {
