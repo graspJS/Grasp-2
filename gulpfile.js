@@ -7,6 +7,7 @@ var mocha = require('gulp-mocha');
 
 // This will keeps pipes working after error event
 var plumber = require('gulp-plumber');
+var karma = require('karma').server;
 
 // Used in linting custom reporter
 var map = require('map-stream');
@@ -55,7 +56,7 @@ gulp.task('lint', function () {
 
 });
 
-gulp.task('server tests', function () {
+gulp.task('server-tests', function () {
   return gulp.src('test/myapptest.js')
     .pipe(mocha())
     .once('error', function () {
@@ -66,11 +67,24 @@ gulp.task('server tests', function () {
     });
 });
 
-gulp.task('test', function (done) {
-  new Server({
-    configFile: __dirname + '/karma.conf.js',
-    singleRun: true
-  }, done).start();
+// gulp.task('test', function (done) {
+//   new Server({
+//     configFile: __dirname + '/karma.conf.js',
+//     singleRun: true
+//   }, done).start();
+// });
+
+gulp.task('karma-tests', function (done) {
+    karma.start({
+        //Weirdly, karma barfs if you don't specify a config file,
+        //even if it's not needed due to passing options here.
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true,
+        browsers: ['Chrome'],
+        frameworks: ['jasmine','mocha', 'chai', 'browserify'],
+        colors: false
+        // files: filePath.karmaFiles.src
+    }, done);
 });
 
 gulp.task('add', function(){
@@ -84,4 +98,4 @@ gulp.task('commit', function(){
 });
 
 
-gulp.task('default', ['lint', 'server tests', 'test', 'add', 'commit']);
+gulp.task('default', ['lint', 'karma-tests', 'add', 'commit']);
