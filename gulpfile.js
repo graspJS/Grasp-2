@@ -97,4 +97,4 @@ gulp.task('commit', function(){
 });
 
 
-gulp.task('default', ['lint', 'karma-tests', 'add', 'commit']);
+gulp.task('default', ['lint', 'karma-tests', 'server-tests', 'add', 'commit']);
