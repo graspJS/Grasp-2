@@ -1,8 +1,8 @@
 //sets up database connection
 var pg = require('knex')({
-  client: 'pg',
+  client:'pg',
   connection: {
-    host     :  'localhost',
+    host:'localhost',
     user     : 'postgres',
     password : 'password',
     database : 'graspdb',
@@ -10,6 +10,5 @@ var pg = require('knex')({
   },
   searchPath: 'knex,public'
 });
-
 
 module.exports = pg;

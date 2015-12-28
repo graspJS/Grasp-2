@@ -1,4 +1,5 @@
 module.exports = function(socket) {
+  // Canvas 
   socket.on('canvasChange', function(data) {
     socket.broadcast.emit('onCanvasChange', data);
   }); 
@@ -53,7 +54,16 @@ module.exports = function(socket) {
   //   socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
   //   socket.leave(socket.room);
   // });
+  // Chat
+  var users = {};
+  var sockets = {};
+  // Register client with server
+  socket.on('init', function(username) {
+    users[username] = socket.id; 
+    // Store reference to socket
+    sockets[socket.id] = { username: username, socket: socket};
 
+  })
   socket.on('addMessage', function(data) {
     socket.broadcast.emit('onMessageAdded', data); 
   }); 

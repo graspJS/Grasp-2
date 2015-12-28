@@ -15,9 +15,6 @@ var controller = require('./database/controllers.js');
 
 app.use(express.static(__dirname + '/../app'));
 
-var usernames = {}; 
-var rooms = ['room1', 'room2', 'room3']; 
-
 // SOCKET LISTENERS =======================================
 io.sockets.on('connection', function(socket) {
   socketConfig(socket);
@@ -36,12 +33,12 @@ app.post('/api/signup', function (request, response) {
 });
 
 app.post('/api/signin', function (request, response) {
-    controller.users.signin(request, function (err, result) {
-      console.log("Back in controller", result === null);
-      if(result === null) {
-        response.sendStatus(409);
-        throw new Error("Sign in failed");
-      } else if(err) {
+  controller.users.signin(request, function (err, result) {
+    console.log("Back in controller", result === null);
+    if(result === null) {
+      response.sendStatus(409);
+      throw new Error("Sign in failed");
+    } else if(err) {
       console.log(err);
       response.send(err.detail).status(409);
     } else {
@@ -50,8 +47,6 @@ app.post('/api/signin', function (request, response) {
     }
   });
 });
-
-// (}
 
 app.get('/api/signedin', function (request, response) {
   controller.users.checkAuth(request, function (err, result) {

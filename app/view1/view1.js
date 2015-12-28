@@ -14,7 +14,7 @@ angular.module('Grasp.chat', ['ngRoute'])
       top:200,
       left:200
     },
-    title : "Grasp teacher and student chat",
+    title : "Chat",
   }
   $scope.username = $window.localStorage.getItem('username');
   $scope.usernames = []; 

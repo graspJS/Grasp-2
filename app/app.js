@@ -14,8 +14,8 @@ angular.module('Grasp', [
   $routeProvider
     .when('/canvas', {
       templateUrl: 'canvas/canvas.html',
-      controller: 'CanvasCTRL'
-      // authenticate: true
+      controller: 'CanvasCTRL',
+      authenticate: true
     })
     .when('/signin', {
       templateUrl: 'auth/signin.html',
@@ -29,7 +29,7 @@ angular.module('Grasp', [
       templateUrl: 'view1/view1.html',
       controller: 'ChatCTRL'
     })
-    .otherwise({redirectTo: '/canvas'});
+    .otherwise({redirectTo: '/signin'});
 //     .otherwise({redirectTo: '/signin'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
