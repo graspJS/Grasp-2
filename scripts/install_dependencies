@@ -1,0 +1,3 @@
+sudo npm install -g nodemon
+sudo npm install forever -g
+sudo npm install
