@@ -1,4 +1,5 @@
 #!/bin/bash
 sudo npm install -g nodemon
 sudo npm install forever -g
+cd ..
 sudo npm install
