@@ -1,10 +1,12 @@
+var persist = require('./server'); 
+
 module.exports = function(socket) {
   // Canvas 
   socket.on('canvasChange', function(data) {
-    socket.broadcast.emit('onCanvasChange', data);
+    socket.broadcast.to(socket.room).emit('onCanvasChange', data);
   }); 
   socket.on('changePosition', function(data) {
-    socket.broadcast.emit('updatePosition', data);
+    socket.broadcast.to(socket.room).emit('updatePosition', data);
   }); 
 
   // // Chat events 
@@ -54,17 +56,56 @@ module.exports = function(socket) {
   //   socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
   //   socket.leave(socket.room);
   // });
+  // PRIVATE SESSIONS ===================================================================
+  // Student
+  socket.on('addStudent', function(data) {
+    if (data.user !== null) {
+      if (persist.students.length > 0) {
+        var room = persist.students.splice(0, 1); 
+        console.log("there is a student", room)
+      } else {
+        persist.teachers.push(data.user);
+        console.log(persist.teachers)
+        var room = data.user; 
+        console.log("no students", room)
+      }
+      socket.room = room; 
+      socket.join(room);
+    } else {
+      console.log("username was null");
+      return; 
+    }
+  });
+  // Teacher
+  socket.on('addTeacher', function(data) {
+    if (data.user !== null) {
+      console.log(persist.teachers)
+      if (persist.teachers.length > 0) {
+        var room = persist.teachers[0]; 
+        console.log("there is teacher", room)
+      } else {
+        persist.students.push(data.user);
+        var room = data.user; 
+        console.log("no teachers", room)
+      }
+      socket.room = room; 
+      socket.join(room);
+    } else {
+      console.log("username was null");
+      return; 
+    }
+  });
   // Chat
-  var users = {};
-  var sockets = {};
-  // Register client with server
-  socket.on('init', function(username) {
-    users[username] = socket.id; 
-    // Store reference to socket
-    sockets[socket.id] = { username: username, socket: socket};
+  // var users = {};
+  // var sockets = {};
+  // // Register client with server
+  // socket.on('init', function(username) {
+  //   users[username] = socket.id; 
+  //   // Store reference to socket
+  //   sockets[socket.id] = { username: username, socket: socket};
 
-  })
+  // })
   socket.on('addMessage', function(data) {
-    socket.broadcast.emit('onMessageAdded', data); 
+    socket.broadcast.to(socket.room).emit('onMessageAdded', data); 
   }); 
 }; 

@@ -5,6 +5,7 @@ angular.module('Grasp', [
   'Grasp.Canvas',
   'Grasp.Auth',
   'Grasp.chat',
+  'Grasp.header',
   'Canvas.socket',
   'ngRoute',
   'ngMaterial',
@@ -14,8 +15,8 @@ angular.module('Grasp', [
   $routeProvider
     .when('/canvas', {
       templateUrl: 'canvas/canvas.html',
-      controller: 'CanvasCTRL',
-      authenticate: true
+      controller: 'CanvasCTRL'
+      // authenticate: true
     })
     .when('/signin', {
       templateUrl: 'auth/signin.html',
@@ -25,12 +26,11 @@ angular.module('Grasp', [
       templateUrl: 'auth/signup.html',
       controller: 'AuthCTRL'
     })
-    .when('/chat', {
-      templateUrl: 'view1/view1.html',
-      controller: 'ChatCTRL'
+    .when('/header', {
+      templateUrl: 'header/header.html',
+      controller: 'HeaderCTRL'
     })
-    .otherwise({redirectTo: '/signin'});
-//     .otherwise({redirectTo: '/signin'});
+    .otherwise({redirectTo: '/header'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {

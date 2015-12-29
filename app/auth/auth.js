@@ -93,11 +93,11 @@ angular.module('Grasp.Auth', ['ngRoute'])
   $rootScope.$on('$routeChangeStart', function (evt, next, current) {
       if(next.$$route.templateUrl === "auth/signin.html") {
         if(!!$window.localStorage.getItem('com.grasp')) {
-          $location.path('/choice');
+          $location.path('/canvas');
           }
         } else if(next.$$route.templateUrl === "auth/signup.html") {
           if(!!$window.localStorage.getItem('com.grasp')) {
-            $location.path('/choice');
+            $location.path('/canvas');
           }
         }
       })
@@ -109,7 +109,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
     signout: signout,
     loggedIn: loggedIn
   };
-})
-.run(function ($rootScope, $location, Auth){
-  Auth.loggedIn();
 });
+// .run(function ($rootScope, $location, Auth){
+//   Auth.loggedIn();
+// });

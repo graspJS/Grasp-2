@@ -1,21 +1,44 @@
+// App 
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+// Sockets & RabbitMQ
 var socketConfig = require('./socket-config');
 var io = require('socket.io')(http);
+var amqp = require('amqp');
+var rabbitMQ = amqp.createConnection({host: 'localhost'});
 
+// Database
 var db = require('./database/dbsetup.js');
+var controller = require('./database/controllers.js');
 
+// Bodyparser
 var bodyParser = require('body-parser');
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var controller = require('./database/controllers.js');
-
+// Serve client-side files
 app.use(express.static(__dirname + '/../app'));
 
 // SOCKET LISTENERS =======================================
+// rabbitMQ.on('ready', function() {
+//   console.log('Connected to RabbitMQ');
+//   io.sockets.on('connection', function (socket) {
+//     console.log('Socket connected: ' + socket.id);
+//     rabbitMQ.queue('offer', { autoDelete: false, durable: false, exclusive: false }, function(q) {    
+//       q.bind('#'); // Catch all messages    
+//       q.subscribe(function (message) {
+//         console.log(message);
+//         socket.emit('addMessage', message); 
+//         // //socket.broadcast.to(obj.id).emit('message', obj);
+//         // io.sockets.in(obj.id).emit('message', obj);
+//       });
+//     });
+//   });
+// });
+exports.teachers = []; 
+exports.students = [];
+
 io.sockets.on('connection', function(socket) {
   socketConfig(socket);
 });

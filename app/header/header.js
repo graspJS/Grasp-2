@@ -1,39 +1,35 @@
 'use strict';
 
-angular.module('Grasp.header', ['ngRoute'])
+angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
 
-.controller('HeaderCTRL', function($scope, socket, $window) {
-  $scope.queue = []; 
-
-  $scope.addStudent = function() {
-    Queue.enqueue(); 
-  }; 
-
-  $scope.newTeacher = function() {
-    Queue.dequeue()
-    .then(function(data) {
-      // Connect teacher to student with sockets
-    })
-  }
-
+.controller('HeaderCTRL', function($scope, Choice, socket, $window) {
+  $scope.isCollapsed = false; 
+  
+  $scope.teacher = function () {
+    Choice.teacher();
+  };
+  $scope.student = function () {
+    Choice.student(); 
+  };
 })
-.factory('Queue', function() {
-  var studentQueue = {
-    oldestIndex: 1;
-    newestIndex: 1; 
-    storage: {}; 
+.factory('Choice', function ($http, $location, socket, $window) {
+  var data = {
+    user: $window.localStorage.getItem('username'),
+    isTeacher: $window.localStorage.getItem('isTeacher')
+  };  
+
+  var student = function () {
+    $window.localStorage.setItem('isTeacher', false);
+    socket.emit('addStudent', data); 
   }; 
 
-  var size = function() {
-    return studentQueue.newestIndex - studentQueue.oldestIndex; 
+  var teacher = function () {
+    $window.localStorage.setItem('isTeacher', true);
+    socket.emit('addTeacher', data); 
   }; 
 
-  var enqueue = function(data) {
-    studentQueue[studentQueue.newestIndex] = data; 
-    studentQueue.newestIndex++; 
+  return {
+    student: student,
+    teacher: teacher
   }; 
-
-  var dequeue = function() {
-    if ()
-  }
 }); 
