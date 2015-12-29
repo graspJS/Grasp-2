@@ -2,5 +2,6 @@
 source /home/ec2-user/.bash_profile
 cd /home/ec2-user/myApp
 npm install
+bower install
 forever stopall
 forever start server/server.js
