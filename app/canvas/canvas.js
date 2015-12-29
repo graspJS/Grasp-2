@@ -1,20 +1,28 @@
-angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPopup'])
+angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
 
 .controller('CanvasCTRL', function ($scope, socket, CanvasFactory) {
-  // are canvas blocks draggable?
   $scope.isCanvasDraggable = false;
-
-  // are blocks droppable on canvas?
   $scope.isCanvasDroppable = true;
 
   // code generated from the combination of blocks on canvas
   $scope.code = "";
 
   // blocks available for user
-  $scope.codeBlocks = [1,2,3,4,5];
+  $scope.codeBlocks = CanvasFactory.codeBlocks;
 
   // storage for blocks currently on the canvas arranged in a matrix
-  $scope.blockMatrix = [[],[],[],[],[],[],[],[],[],[]];
+  $scope.blockMatrix = CanvasFactory.matrix;
+
+  // remove a block from the canvas
+  $scope.deleteBlock = function (row, block) {
+    var index = row.indexOf(block);
+    row.splice(index, 1);
+  }
+
+  // edite a block's attributes
+  $scope.editBlock = function() {
+    
+  }
 
   // handles any drop events on canvas
   $scope.onCanvasDrop = function(codeBlock, row) {
@@ -34,24 +42,81 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     }
   };
 
-  $scope.toggleCanvasDroppable = function() {
-    console.log("FIRE");
-    $scope.isCanvasDroppable = !$scope.isCanvasDroppable;
-  }
-
 })
 
+// ------------------- CANVAS FACTORY ------------------- 
 .factory('CanvasFactory', function() {
   // blocks available for user
-  var codeBlocks = [];
+  var codeBlocks = [
+                      {
+                        type: 'number',
+                        tag: '#',
+                        name: 'no-name-number',
+                        content: 0
+                      },
+                      {
+                        type: 'string',
+                        tag: '~',
+                        name: 'no-name-string',
+                        content: '-- empty string --'
+                      },
+                      {
+                        type: 'array',
+                        tag: '[]',
+                        name: 'no-name-array',
+                        content: []
+                      },
+                      {
+                        type: 'object',
+                        tag: '{}',
+                        name: 'no-name-object',
+                        content: {}
+                      },
+                      {
+                        type: 'loop',
+                        tag: 'O',
+                        name: 'loop',
+                      }
+                   ];
 
   // converts codeBlock into javascript code in the form of string
   var generateCode = function(matrix) {
     console.log("works");
   };
 
+  var matrix = [
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  [],
+                  []
+               ];
+
   return {
     codeBlocks: codeBlocks,
-    generateCode: generateCode
+    generateCode: generateCode,
+    matrix: matrix
   };
 });

@@ -8,8 +8,8 @@ angular.module('Grasp', [
   'Grasp.header',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial',
-  'ngPopup'
+  'ngMaterial'
+  // 'ngPopup'
 ])
 .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
   $routeProvider
