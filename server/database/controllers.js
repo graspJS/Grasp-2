@@ -17,10 +17,10 @@ module.exports = {
         res[0].token = token;
         callback(null, res);
       })
-      .catch(function (error){
-      callback(error, null);
-    });
-      },
+      .catch(function (error) {
+        callback(error, null);
+      });
+    },
       signup: function (request, callback) {
           db('users').insert( {username: request.body.username,
           firstname: request.body.firstname,

@@ -5,7 +5,7 @@ angular.module('Grasp.chat', ['ngRoute'])
 .controller('ChatCTRL', function($scope, socket, $window) {
   $scope.ngPopupOption = {
     template:' ',
-    templateUrl:"view1/view1.html",
+    templateUrl:"chat/chat.html",
     resizable:true,
     draggable: true,
     width: 300,
@@ -14,7 +14,7 @@ angular.module('Grasp.chat', ['ngRoute'])
       top:200,
       left:200
     },
-    title : "Grasp teacher and student chat",
+    title : "Chat",
   }
   $scope.username = $window.localStorage.getItem('username');
   $scope.usernames = []; 
@@ -30,7 +30,7 @@ angular.module('Grasp.chat', ['ngRoute'])
       title: 'New Message',
       body: 'Pending'
     }
-    message = $scope.username + " : " + message
+    message = $scope.username + " : " + message; 
     $scope.messages.push(message);
     document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
     document.getElementById("m").value = "";
