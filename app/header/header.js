@@ -2,9 +2,7 @@
 
 angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
 
-.controller('HeaderCTRL', function($scope, Choice, socket, $window) {
-  $scope.isCollapsed = false; 
-  
+.controller('HeaderCTRL', function($scope, Choice, socket, $window) {  
   $scope.teacher = function () {
     Choice.teacher();
   };
