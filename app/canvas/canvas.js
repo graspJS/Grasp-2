@@ -19,22 +19,12 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     row.splice(index, 1);
   }
 
-  // edite a block's attributes
-  $scope.editBlock = function() {
-    
-  }
-
   // handles any drop events on canvas
   $scope.onCanvasDrop = function(codeBlock, row) {
     // add codeBlock at row
+    
     row.push(codeBlock);
-
-    // remove any empty rows to avoid wasted space in the matrix
-    // for (var i = $scope.blockMatrix.length-1; i >= 0; i--) {
-    //   if ($scope.blockMatrix[i].length === 0) {
-    //     $scope.blockMatrix.splice(i, 1);
-    //   }
-    // }
+    $scope.isCanvasDroppable = true;
 
     // add an extra empty row to the matrix if last row contains a codeBlock
     if ($scope.blockMatrix[$scope.blockMatrix.length-1].length > 0) {
@@ -52,30 +42,46 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         type: 'number',
                         tag: '#',
                         name: 'no-name-number',
-                        content: 0
+                        content: 0,
+                        generateUniqueID: function() {
+                          return this.name + this.content + "";
+                        }
                       },
                       {
                         type: 'string',
                         tag: '~',
                         name: 'no-name-string',
-                        content: '-- empty string --'
+                        content: '-- empty string --',
+                        generateUniqueID: function() {
+                          return this.name + this.content + "";
+                        }
                       },
                       {
                         type: 'array',
                         tag: '[]',
                         name: 'no-name-array',
-                        content: []
+                        content: [],
+                        generateUniqueID: function() {
+                          return this.name + this.content + "";
+                        }
                       },
                       {
                         type: 'object',
                         tag: '{}',
                         name: 'no-name-object',
-                        content: {}
+                        content: {},
+                        generateUniqueID: function() {
+                          return this.name + this.content + "";
+                        }
                       },
                       {
                         type: 'loop',
                         tag: 'O',
                         name: 'loop',
+                        content: [[],[],[],[],[]],
+                        generateUniqueID: function() {
+                          return this.name + this.content + "";
+                        }
                       }
                    ];
 

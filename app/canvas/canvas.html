@@ -1,9 +1,6 @@
 <section id="container" >
   <!--header start-->
-  <div ng-controller="ChatCTRL">
-    <ng-pop-up option="ngPopupOption"></ng-pop-up>
-  </div>
-  <header ng-controller="HeaderCTRL" class="header black-bg">
+  <header class="header black-bg">
     <!--logo start-->
     <a href="#/canvas" class="logo"><b>GRASP</b></a>
     <!--logo end-->
@@ -36,40 +33,74 @@
                 </a>
               </li>
             <li class="external">
-              <a ng-if="!isTeacher && !isStudent" ng-click="teacher()">I want to teach!</a>
-              <a ng-if="isTeacher" ng-click="leave()">Disconnect as Teacher</a> 
+              <a ng-click="teacher()">I want to teach!</a>
             </li>
           </ul>
       </li>
       <!-- settings end -->
-      <li class="dropdown" uib-dropdown>
-        <a uib-dropdown-toggle class="dropdown-toggle" href="#">
-          <i class="fa fa-tasks"></i>
-          <span class="badge bg-theme">4</span>
+      <!-- inbox dropdown start-->
+      <li id="header_inbox_bar" class="dropdown">
+        <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
+          <i class="fa fa-envelope-o"></i>
+          <span class="badge bg-theme">5</span>
         </a>
-          <ul class="dropdown-menu extended tasks-bar">
-            <div class="notify-arrow notify-arrow-green"></div>
-              <li>
-                <p class="green">Learn</p>
-              </li>
-              <li>
-                <a href="index.html#">
-                  <div class="task-info">
-                    <div class="desc">Available Teachers</div>
-                    <div class="percent">80%</div>
-                  </div>
-                  <div class="progress progress-striped">
-                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                      <span class="sr-only">40% Complete (success)</span>
-                    </div>
-                  </div>
-                </a>
-              </li>
-            <li class="external">
-              <a ng-if="!isStudent && !isTeacher" ng-click="student()">I want to learn!</a>
-              <a ng-if="isStudent" ng-click="leave()">Disconnect as Student</a>
+        <ul class="dropdown-menu extended inbox">
+          <div class="notify-arrow notify-arrow-green"></div>
+            <li>
+                <p class="green">You have 5 new messages</p>
             </li>
-          </ul>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-zac.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Zac Snider</span>
+                    <span class="time">Just now</span>
+                    </span>
+                    <span class="message">
+                        Hi mate, how is everything?
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-divya.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Divya Manian</span>
+                    <span class="time">40 mins.</span>
+                    </span>
+                    <span class="message">
+                     Hi, I need your help with this.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-danro.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Dan Rogers</span>
+                    <span class="time">2 hrs.</span>
+                    </span>
+                    <span class="message">
+                        Love your new Dashboard.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">
+                    <span class="photo"><img alt="avatar" src="assets/img/ui-sherman.jpg"></span>
+                    <span class="subject">
+                    <span class="from">Dj Sherman</span>
+                    <span class="time">4 hrs.</span>
+                    </span>
+                    <span class="message">
+                        Please, answer asap.
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="index.html#">See all messages</a>
+            </li>
+        </ul>
       </li>
       <!-- inbox dropdown end -->
     </ul>
@@ -83,72 +114,71 @@
 </header>
 <!-- header end -->
 
+  <!-- CANVAS & TOOLBOX CONTAINER -->
+  <div ng-controller="CanvasCTRL">
 
-  <!-- TOOLBOX start -->
-  <div>
-      <div id="sidebar"  class="toolboxArea">
-          <p class="centered">
-          <a href="profile.html"><img src="css/hand-flight.jpg" class="img-circle" width="80"></a>
-          </p>
-          <!-- TOOLBOX start-->
-          <div ng-repeat="codeBlock in codeBlocks">
+    <p class="centered">
+      <a href="profile.html"><img src="css/hand-flight.jpg" class="img-circle" width="80"></a>
+    </p>
 
-              <!-- CODEBLOCK start -->
-              <div class="toolboxBlock" ng-drag="true">
+    <!-- TOOLBOX start -->
+    <div id="sidebar"  class="toolboxArea">
 
-                <div>{{codeBlock.type}}</div>
-               
-              </div>
-              <!-- CODEBLOCK end -->
-          </div>
-          <!-- TOOLBOX menu end-->
-      </div>
-  </div>
-  <!--TOOLBOX end-->
+        <!-- TOOLBOX start-->
+        <div ng-repeat="codeBlock in codeBlocks">
 
+            <!-- CODEBLOCK start -->
+            <div class="toolboxBlock" ng-drag="true" ng-drag-data="codeBlock">
 
-  <!-- CANVAS start -->
-  <div class="canvasArea" id="main-content">
-
-    <!-- ng-repeat container of CANVAS -->
-    <div ng-repeat="row in blockMatrix">
-
-      <!-- a row -->
-      <div class="canvasRow" ng-drop="true" ng-drop-success="onCanvasDrop($data, row)">
-
-        <!-- ng-repeat container of row -->
-        <div ng-repeat="canvasBlock in row track by $index">
-
-          <!-- a code block -->
-          <div class="canvasBlock">
-            <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">#</div>
-            <div id="canvasBlockName">asdfasd</div>
-            
-            <!-- drop down menu of code block -->
-            <div id="dropDownMenu" ng-if="showDropDownMenu">
-
-              <div ng-click="showBlockEditor = showBlockEditor ? false : true; showShit = false">Edit Block</div>
-              <div ng-if="showBlockEditor" id="blockEditor">
-                Name: <br>
-                <input id="canvasBlockNameInput" placeholder="{{canvasBlock.name}}"><br><br>
-                Value: <br>
-                <input id="canvasBlockContentInput" placeholder="{{canvasBlock.content}}"><br><br>
-              </div>
-
-              <div ng-click="deleteBlock(row, canvasBlock)">Delete Block</div>
+              <div>{{codeBlock.type}}</div>
              
             </div>
+            <!-- CODEBLOCK end -->
+        </div>
+        <!-- TOOLBOX menu end-->
+    </div>
+    <!--TOOLBOX end-->
 
+
+    <!-- CANVAS start -->
+    <div class="canvasArea" id="main-content">
+
+      <!-- ng-repeat container of CANVAS -->
+      <div ng-repeat="row in blockMatrix">
+
+        <!-- a row -->
+        <div class="canvasRow" ng-drop="true" ng-drop-success="onCanvasDrop($data, row)">
+
+          <!-- ng-repeat container of row -->
+          <div ng-repeat="canvasBlock in row track by $index" >
+
+            <!-- code block start -->
+            <div class="canvasBlock" id="{{canvasBlock.generateUniqueID()}}">
+              <div id="canvasBlockTag" ng-click="showBlockDropDownMenu = showBlockDropDownMenu ? false : true">{{canvasBlock.tag}}</div>
+              <div id="canvasBlockName">{{canvasBlock.name}}</div>
+              
+              <!-- drop down menu of code block -->
+              <div id="blockDropDownMenu" ng-if="showBlockDropDownMenu" ng-switch="canvasBlock.type">
+
+                <!-- standard block options -->
+                <div id="blockOption">Info</div>
+                <div id="blockOption">Modify</div>
+                <div id="blockOption">Delete</div>
+               
+              </div>
+
+            </div>
+            <!-- code block end -->
+            
           </div>
-          
+
         </div>
 
       </div>
 
     </div>
-
+    <!--CANVAS END-->
   </div>
-  <!--CANVAS END-->
 
 </section>
 
