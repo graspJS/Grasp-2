@@ -8,8 +8,7 @@ angular.module('Grasp', [
   'Grasp.header',
   'Canvas.socket',
   'ngRoute',
-  'ngMaterial'
-  // 'ngPopup'
+  'ngPopup'
 ])
 .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
   $routeProvider
@@ -26,11 +25,7 @@ angular.module('Grasp', [
       templateUrl: 'auth/signup.html',
       controller: 'AuthCTRL'
     })
-    .when('/header', {
-      templateUrl: 'header/header.html',
-      controller: 'HeaderCTRL'
-    })
-    .otherwise({redirectTo: '/header'});
+    .otherwise({redirectTo: '/canvas'});
     $httpProvider.interceptors.push('AttachTokens');
 }])
 .factory('AttachTokens', function ($window) {

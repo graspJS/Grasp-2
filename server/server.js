@@ -40,8 +40,8 @@ exports.teachers = [];
 exports.students = [];
 
 io.sockets.on('connection', function(socket) {
+  socket.rooms = Array.prototype.slice.call(socket.rooms); 
   socketConfig(socket);
-  console.log(Object.getOwnPropertyNames(socket.rooms))
 });
 
 // API ============================================

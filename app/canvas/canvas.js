@@ -1,4 +1,4 @@
-angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute'])
+angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPopup'])
 
 .controller('CanvasCTRL', function ($scope, socket, CanvasFactory) {
   $scope.isCanvasDraggable = false;
