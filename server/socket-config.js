@@ -1,7 +1,7 @@
 var persist = require('./server'); 
 
 module.exports = function(socket) {
-  // Canvas 
+  // CANVAS ===================================================== 
   socket.on('canvasChange', function(data) {
     socket.broadcast.to(socket.room).emit('onCanvasChange', data);
   }); 
@@ -9,102 +9,65 @@ module.exports = function(socket) {
     socket.broadcast.to(socket.room).emit('updatePosition', data);
   }); 
 
-  // // Chat events 
-  // // when the client emits 'adduser', this listens and executes
-  // client.on('adduser', function(username){
-  //   // store the username in the socket session for this client
-  //   socket.username = username;
-  //   // store the room name in the socket session for this client
-  //   socket.room = 'room1';
-  //   // add the client's username to the global list
-  //   usernames[username] = username;
-  //   // send client to room 1
-  //   socket.join('room1');
-  //   // echo to client they've connected
-  //   socket.emit('updatechat', 'SERVER', 'you have connected to room1');
-  //   // echo to room 1 that a person has connected to their room
-  //   socket.broadcast.to('room1').emit('updatechat', 'SERVER', username + ' has connected to this room');
-  //   socket.emit('updaterooms', rooms, 'room1');
-  // });
-
-  // // when the client emits 'sendchat', this listens and executes
-  // client.on('sendchat', function (data) {
-  //   // we tell the client to execute 'updatechat' with 2 parameters
-  //   io.sockets.in(socket.room).emit('updatechat', socket.username, data);
-  // });
-  // client.on('switchRoom', function(newroom){
-  //     // leave the current room (stored in session)
-  //     socket.leave(socket.room);
-  //     // join new room, received as function parameter
-  //     socket.join(newroom);
-  //     socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
-  //     // sent message to OLD room
-  //     socket.broadcast.to(socket.room).emit('updatechat', 'SERVER', socket.username+' has left this room');
-  //     // update socket session room title
-  //     socket.room = newroom;
-  //     socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
-  //     socket.emit('updaterooms', rooms, newroom);
-  //   });
-
-  // // when the user disconnects.. perform this
-  // client.on('disconnect', function(){
-  //   // remove the username from global usernames list
-  //   delete usernames[socket.username];
-  //   // update list of users in chat, client-side
-  //   io.sockets.emit('updateusers', usernames);
-  //   // echo globally that this client has left
-  //   socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
-  //   socket.leave(socket.room);
-  // });
   // PRIVATE SESSIONS ===================================================================
   // Student
   socket.on('addStudent', function(data) {
     if (data.user !== null) {
-      if (persist.students.length > 0) {
-        var room = persist.students.splice(0, 1); 
-        console.log("there is a student", room)
+      // Teacher available
+      if (persist.teachers.length > 0) {
+        // Splice teacher off teacher queue, then set teacher username to room 
+        socket.room = persist.teachers.splice(0, 1).toString(); 
+        // Inform teacher of incoming student 
+        socket.broadcast.to(socket.room).emit('onMessageAdded', data.user + " has joined the room as a student!"); 
       } else {
-        persist.teachers.push(data.user);
-        console.log(persist.teachers)
-        var room = data.user; 
-        console.log("no students", room)
+        // No teachers available, push student into student queue 
+        persist.students.push(data.user);
+        // // Set own username as room 
+        socket.room = data.user; 
       }
-      socket.room = room; 
-      socket.join(room);
+      socket.join(socket.room);
+      socket.emit('onMessageAdded', "You have connected to room: " + socket.room);  
     } else {
       console.log("username was null");
       return; 
     }
   });
+
   // Teacher
   socket.on('addTeacher', function(data) {
     if (data.user !== null) {
-      console.log(persist.teachers)
-      if (persist.teachers.length > 0) {
-        var room = persist.teachers[0]; 
-        console.log("there is teacher", room)
+      // Student available
+      if (persist.students.length > 0) {
+        // Splice student off student queue, then set student username to room 
+        socket.room = persist.students.splice(0, 1).toString(); 
+        // Inform student of incoming teacher 
+        socket.broadcast.to(socket.room).emit('onMessageAdded', data.user + " has joined the room as a teacher!"); 
       } else {
-        persist.students.push(data.user);
-        var room = data.user; 
-        console.log("no teachers", room)
+        // No student available, push teacher into teacher queue 
+        persist.teachers.push(data.user);
+        // // Set own username as room 
+        socket.room = data.user; 
       }
-      socket.room = room; 
-      socket.join(room);
+      socket.join(socket.room);
+      socket.emit('onMessageAdded', "You have connected to room: " + socket.room);  
     } else {
       console.log("username was null");
       return; 
     }
   });
-  // Chat
-  // var users = {};
-  // var sockets = {};
-  // // Register client with server
-  // socket.on('init', function(username) {
-  //   users[username] = socket.id; 
-  //   // Store reference to socket
-  //   sockets[socket.id] = { username: username, socket: socket};
+  socket.on('join', function(name) {
+    console.log(name);
 
-  // })
+  }); 
+  // Disconnect from private session
+  socket.on('disconnect', function() {
+    console.log("wtf")
+    console.log(socket.room)
+    socket.emit('onMessageAdded', "You have left room: " + socket.room);  
+    socket.leave(socket.room); 
+    delete socket.room; 
+  }); 
+
   socket.on('addMessage', function(data) {
     socket.broadcast.to(socket.room).emit('onMessageAdded', data); 
   }); 

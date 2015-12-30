@@ -2,13 +2,28 @@
 
 angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
 
-.controller('HeaderCTRL', function($scope, Choice, socket, $window) {  
+.controller('HeaderCTRL', function ($scope, Choice, socket, $window) {  
+  $scope.isTeacher = false; 
+  $scope.isStudent = false; 
+
   $scope.teacher = function () {
     Choice.teacher();
+    $scope.isTeacher = !$scope.isTeacher; 
   };
   $scope.student = function () {
     Choice.student(); 
+    $scope.isStudent = !$scope.isStudent; 
   };
+  $scope.disconnect = function () {
+    Choice.disconnect();
+    if ($scope.isTeacher) {
+      $scope.isTeacher = !$scope.isTeacher; 
+    } else {
+      $scope.isStudent = !$scope.isStudent;
+    } 
+  }; 
+  $scope.signout = function () {
+  }
 })
 .factory('Choice', function ($http, $location, socket, $window) {
   var data = {
@@ -26,8 +41,12 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
     socket.emit('addTeacher', data); 
   }; 
 
+  var disconnect = function () {
+    socket.emit('disconnect'); 
+  }
   return {
     student: student,
-    teacher: teacher
+    teacher: teacher,
+    disconnect: disconnect
   }; 
 }); 
