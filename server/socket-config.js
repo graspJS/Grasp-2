@@ -3,30 +3,31 @@ var persist = require('./server');
 module.exports = function(socket) {
   // CANVAS ===================================================== 
   socket.on('canvasChange', function(data) {
-    socket.broadcast.to(socket.room).emit('onCanvasChange', data);
+    socket.broadcast.to(socket.rooms[1]).emit('onCanvasChange', data);
   }); 
   socket.on('changePosition', function(data) {
-    socket.broadcast.to(socket.room).emit('updatePosition', data);
+    socket.broadcast.to(socket.rooms[1]).emit('updatePosition', data);
   }); 
 
   // PRIVATE SESSIONS ===================================================================
   // Student
-  socket.on('addStudent', function(data) {
-    if (data.user !== null) {
+  socket.on('addStudent', function(user) {
+    if (user !== null) {
       // Teacher available
       if (persist.teachers.length > 0) {
-        // Splice teacher off teacher queue, then set teacher username to room 
-        socket.room = persist.teachers.splice(0, 1).toString(); 
-        // Inform teacher of incoming student 
-        socket.broadcast.to(socket.room).emit('onMessageAdded', data.user + " has joined the room as a student!"); 
+        // Splice teacher off teacher queue, then student joins teacher's room 
+        var availableTeacher = persist.teachers.splice(0, 1).toString(); 
+        socket.join(availableTeacher); 
+        // Inform each party 
+        socket.emit('onMessageAdded', "You have joined teacher " + availableTeacher + "'s room!"); 
+        socket.broadcast.to(availableTeacher).emit('onMessageAdded', user + " has joined the room as a student!"); 
       } else {
         // No teachers available, push student into student queue 
-        persist.students.push(data.user);
-        // // Set own username as room 
-        socket.room = data.user; 
+        persist.students.push(user);
+        // Create empty room for student 
+        socket.join(user); 
+        socket.emit('onMessageAdded', "You have connected to room: " + user);
       }
-      socket.join(socket.room);
-      socket.emit('onMessageAdded', "You have connected to room: " + socket.room);  
     } else {
       console.log("username was null");
       return; 
@@ -34,41 +35,39 @@ module.exports = function(socket) {
   });
 
   // Teacher
-  socket.on('addTeacher', function(data) {
-    if (data.user !== null) {
+  socket.on('addTeacher', function(user) {
+    if (user !== null) {
       // Student available
       if (persist.students.length > 0) {
-        // Splice student off student queue, then set student username to room 
-        socket.room = persist.students.splice(0, 1).toString(); 
-        // Inform student of incoming teacher 
-        socket.broadcast.to(socket.room).emit('onMessageAdded', data.user + " has joined the room as a teacher!"); 
+        // Splice student off student queue, then teacher joins students's room 
+        var availableStudent = persist.students.splice(0, 1).toString(); 
+        socket.join(availableStudent); 
+        // Inform each party
+        socket.emit('onMessageAdded', "You have joined student " + availableStudent + "'s room!"); 
+        socket.broadcast.to(availableStudent).emit('onMessageAdded', user + " has joined the room as a teacher!"); 
       } else {
         // No student available, push teacher into teacher queue 
-        persist.teachers.push(data.user);
-        // // Set own username as room 
-        socket.room = data.user; 
-      }
-      socket.join(socket.room);
-      socket.emit('onMessageAdded', "You have connected to room: " + socket.room);  
+        persist.teachers.push(user);
+        // Create empty room for teacher 
+        socket.join(user); 
+        socket.emit('onMessageAdded', "You have connected to room: " + user);
+      } 
     } else {
       console.log("username was null");
       return; 
     }
   });
   socket.on('join', function(name) {
-    console.log(name);
-
+    socket.emit('onMessageAdded', "Welcome to GraspJS! Feel free to play around, or join a teacher/student queue!"); 
   }); 
   // Disconnect from private session
-  socket.on('disconnect', function() {
-    console.log("wtf")
-    console.log(socket.room)
-    socket.emit('onMessageAdded', "You have left room: " + socket.room);  
-    socket.leave(socket.room); 
-    delete socket.room; 
+  socket.on('leave', function() {
+    socket.emit('onMessageAdded', "You have left room: " + socket.rooms[1]);
+    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', "YOU ARE ALONE");  
+    socket.leave(socket.rooms.pop()); 
   }); 
-
+  // Chat
   socket.on('addMessage', function(data) {
-    socket.broadcast.to(socket.room).emit('onMessageAdded', data); 
+    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', data); 
   }); 
 }; 
