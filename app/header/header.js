@@ -25,20 +25,15 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
   $scope.signout = function () {
   }
 })
-.factory('Choice', function ($http, $location, socket, $window) {
-  var data = {
-    user: $window.localStorage.getItem('username'),
-    isTeacher: $window.localStorage.getItem('isTeacher')
-  };  
-
+.factory('Choice', function ($http, $location, socket, $window) { 
   var student = function () {
     $window.localStorage.setItem('isTeacher', false);
-    socket.emit('addStudent', data); 
+    socket.emit('addStudent', $window.localStorage.getItem('username')); 
   }; 
 
   var teacher = function () {
     $window.localStorage.setItem('isTeacher', true);
-    socket.emit('addTeacher', data); 
+    socket.emit('addTeacher', $window.localStorage.getItem('username')); 
   }; 
 
   var disconnect = function () {

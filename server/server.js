@@ -41,6 +41,7 @@ exports.students = [];
 
 io.sockets.on('connection', function(socket) {
   socketConfig(socket);
+  console.log(Object.getOwnPropertyNames(socket.rooms))
 });
 
 // API ============================================
