@@ -29,140 +29,102 @@
   padding: 0;
 }
 
-.codeBlock {
-  font-family: "Verdana";
-  font-weight: bold;
-  width: 100px;
-  font-size: 12px;
-  background-color: #99ffeb;
-  border-style: groove;
-  border-width: 5px;
-  padding: 5px 5px 5px 5px;
-  text-align: center;
-  margin: 10px;
-}
-
-.codeBlockDropped {
-  font-family: "Verdana";
-  font-weight: bold;
-  width: 150px;
-  font-size: 12px;
-  background-color: #66ccff;
-  padding: 5px 5px 5px 5px;
-  text-align: center;
-  margin: 10px;
-  float: left;
+.toolboxArea {
+  z-index: 1001;
 }
 
 .canvasArea {
-  border-style: solid;
-  border-color: "grey"; 
-  border-width: 2px;
-  border-radius: 25px;
+  background-color: gray;
+  padding: 5px;
   position: absolute;
-  overflow: auto;
-  top: 70px; 
-  left: 150px;
-  width: 85%;
-  height: 500px;
-  background:
-  linear-gradient(limegreen, transparent),
-  linear-gradient(90deg, skyblue, transparent),
-  linear-gradient(-90deg, coral, transparent);
-background-blend-mode: screen;
-}
-
-#variableValue {
-  position: relative;
-  padding-top: 5px;
-  padding-left: 5px;
-  top: -5px;
-  left: -5px;
-  width: 150px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 12px;
-}
-
-#variableName {
-  position: relative;
-  padding-left: 5px;
-  top: -5px;
-  left: -5px;
-  width: 150px;
-  text-align: left;
-  font-weight: bold;
-  background-color: #e5ffe5;
-}
-
-#objectValue {
-  font-family: "Verdana";
-  font-weight: bold;
-  width: 100px;
-  font-size: 12px;
-  background-color: #66ccff;
-  padding: 5px 5px 5px 5px;
-  text-align: center;
-  margin: 10px;
-}
-
-#objectName {
-  position: relative;
-  padding-left: 5px;
-  top: -5px;
-  left: -5px;
-  width: 150px;
-  text-align: left;
-  font-weight: bold;
-  background-color: #e5ffe5;
-}
-
-#popArray {
-  text-align: right;
+  top: 60px;
+  width: 100%;
+  margin-left: 0px;
 }
 
 .codeArea {
-  position: absolute;
-  background: black;
-  top: 600px;
-  width: 100%;
-  height: 1000px;
-  color: #00ff00;
-  font-family: "Verdana";
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.codeBlockForm {
-  display: hidden;
-}
-
-.toolbox {
-  position: absolute;
-  border-radius: 25px;
-  border-style: solid;
-  border-width: 4px;
-  width: 130px;
-  height: 500px;
-  z-index: 9999;
-}
-
-#code {
   background-color: black;
-  border: 0;
-  color: #00ff00;
-}
-
-#addKeyValue {
-  float: right;
-}
-
-#trashbin {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
   position: absolute;
-  left: 1250px;
-  top: 385px;
-  height: 100px;
-  z-index: 8888
+  top: 60px;
+  left: 875px;
+  height: 550px;
+  width: 400px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #4dff4d;
+  padding: 5px;
+}
+
+.toolboxBlock {
+  background-color: #404040;
+  float: left;
+  margin: 2.5px;
+  padding: 0;
+  width: 110px;
+  height: 25px;
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.canvasRow {
+  height: 30px;
+  width: 100%;
+  float: left;
+}
+
+.canvasBlock {
+  background-color: #99ddff;
+  float: left;
+  margin: 2.5px;
+  padding: 0;
+  width: 110px;
+  height: 25px;
+  color: black;
+  text-align: center;
+}
+
+#canvasBlockTag {
+  float: left;
+  background-color: green;
+  width: 20px;
+  height: 25px;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  outline: 0;
+  margin-right: 5px;
+}
+
+#canvasBlockName {
+  text-align: left;
+  width: 100%;
+  font-size: 11px;
+  font-weight: bold;
+  color: black;
+}
+
+#dropDownMenu {
+  padding: 5px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  background-color: #404040;
+  position: absolute;
+  width: 150px;
+  margin-top: 10px;
+}
+
+#blockEditor {
+  position: absolute;
+  padding: 5px;
+  background-color: #404040;
+  width: 150px;
+  margin-left: 145px;
+  margin-top: -20px;
 }
 
 #trashbinIMG {
@@ -185,3 +147,6 @@ background-blend-mode: screen;
     float:left;
 }
 
+[ng-drop].drag-enter {
+  background-color: white;
+}
