@@ -6,8 +6,8 @@ module.exports = {
   users: {
      signin: function (request, callback) {
       db('users')
-      .whereRaw('LOWER(username) LIKE ?', '%'+request.body.username.toLowerCase()+'%').
-      andWhere({
+      .whereRaw('LOWER(username) LIKE ?', '%'+request.body.username.toLowerCase()+'%')
+      .andWhere({
         hashedpw: db.raw( "crypt('" + request.body.password + "', hashedpw)")
       })
       .select()
@@ -26,9 +26,8 @@ module.exports = {
           firstname: request.body.firstname,
           secondname: request.body.secondname,
           email: request.body.email,
-          hashedpw: db.raw( "crypt('"+ request.body.password + "', gen_salt('md5'))" )})
-        //   .then(function(ret){
-        // })
+          hashedpw: db.raw( "crypt('"+ request.body.password + "', gen_salt('md5'))" )
+          })
           .then(function (res) {
             var user = request.body.username;
             var token = jwt.encode(user, 'secret');
@@ -53,12 +52,12 @@ module.exports = {
           var user = jwt.decode(token, 'secret');
           db('users').where('username', user)
           .then(function (res) {
-            console.log("success"); 
-            callback(null, res)
+            console.log("success");
+            callback(null, res);
           })
           .catch(function (res) {
-            callback(res, null)
-          })
+            callback(res, null);
+          });
           }
       }
     }
