@@ -4,20 +4,21 @@ angular.module('Grasp.chat', ['ngRoute'])
 
 .controller('ChatCTRL', function($scope, socket, $window) {
   $scope.ngPopupOption = {
-    template:' ',
+    template:'',
     templateUrl:"chat/chat.html",
     resizable:true,
     draggable: true,
     width: 300,
-    height: 300,
+    height: 291,
     position:{
       top:200,
       left:200
     },
     title : "Chat",
+    pinned: true
   }
   $scope.username = $window.localStorage.getItem('username');
-  $scope.usernames = []; 
+  $scope.usernames = [];
   $scope.messages = [];
   socket.on('onMessageAdded', function(data) {
     // $scope.usernames.push(username);
