@@ -10,25 +10,24 @@ module.exports = function(socket) {
   }); 
 
   // CHAT ============================================================================
-  // On socket connection 
+  // On socket connection/disconnection 
   socket.on('join', function(name) {
     socket.emit('onMessageAdded', "Welcome to GraspJS! Feel free to play around, or join a teacher/student queue!"); 
   }); 
+  socket.on('disconnect', function() {
+    socket.emit('leave'); 
+  })
   // Chat
   socket.on('addMessage', function(data) {
-    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', data); 
+    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', data);
   }); 
   // Disconnect from private session
   socket.on('leave', function() {
     socket.emit('onMessageAdded', "You have left room: " + socket.rooms[1]);
     socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', "Session has ended.");
-    socket.broadcast.to(socket.rooms[1]).emit('kickUser');   
+    socket.broadcast.to(socket.rooms[1]).emit('leftUser'); 
     socket.leave(socket.rooms.pop());
-  }); 
-  // On one person's disconnect, kick out other user
-  socket.on('kickUser', function() {
-
-  }); 
+  });
 
   // PRIVATE SESSIONS ===================================================================
   // Student

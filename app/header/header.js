@@ -22,6 +22,10 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
       $scope.isStudent = !$scope.isStudent;
     } 
   }; 
+
+  socket.on('leftUser', function() {
+    $scope.leave(); 
+  })
 })
 .factory('Choice', function ($http, $location, socket, $window) { 
   var student = function () {

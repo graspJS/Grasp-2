@@ -17,7 +17,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   // handles any drop events on canvas
   $scope.onCanvasDrop = function(codeBlock, row) {
     // before adding to row, set coodeBlock's pointer to point at row
-    codeBlock.positionPointers.row = row;
+    // codeBlock.positionPointers.row = row;
 
     // add codeBlock at row
     row.push(codeBlock);
