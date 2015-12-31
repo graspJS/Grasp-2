@@ -9,6 +9,26 @@ module.exports = function(socket) {
     socket.broadcast.to(socket.rooms[1]).emit('updatePosition', data);
   }); 
 
+  // CHAT ============================================================================
+  // On socket connection/disconnection 
+  socket.on('join', function(name) {
+    socket.emit('onMessageAdded', "Welcome to GraspJS! Feel free to play around, or join a teacher/student queue!"); 
+  }); 
+  socket.on('disconnect', function() {
+    socket.emit('leave'); 
+  })
+  // Chat
+  socket.on('addMessage', function(data) {
+    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', data);
+  }); 
+  // Disconnect from private session
+  socket.on('leave', function() {
+    socket.emit('onMessageAdded', "You have left room: " + socket.rooms[1]);
+    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', "Session has ended.");
+    socket.broadcast.to(socket.rooms[1]).emit('leftUser'); 
+    socket.leave(socket.rooms.pop());
+  });
+
   // PRIVATE SESSIONS ===================================================================
   // Student
   socket.on('addStudent', function(user) {
@@ -57,17 +77,4 @@ module.exports = function(socket) {
       return; 
     }
   });
-  socket.on('join', function(name) {
-    socket.emit('onMessageAdded', "Welcome to GraspJS! Feel free to play around, or join a teacher/student queue!"); 
-  }); 
-  // Disconnect from private session
-  socket.on('leave', function() {
-    socket.emit('onMessageAdded', "You have left room: " + socket.rooms[1]);
-    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', "YOU ARE ALONE");  
-    socket.leave(socket.rooms.pop()); 
-  }); 
-  // Chat
-  socket.on('addMessage', function(data) {
-    socket.broadcast.to(socket.rooms[1]).emit('onMessageAdded', data); 
-  }); 
 }; 

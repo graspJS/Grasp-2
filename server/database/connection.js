@@ -1,7 +1,6 @@
 //sets up database connection
-
 if (process.env.database === undefined) {
-  var dbstuff = require('../../dbstuff.js')
+  var dbstuff = require('../../dbstuff.js'); 
 }
 var pg = require('knex')({
   client:'pg',
