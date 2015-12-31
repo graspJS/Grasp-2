@@ -38,15 +38,18 @@
   padding: 5px;
   position: absolute;
   top: 60px;
-  width: 750px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
   margin-left: 0px;
+  overflow: auto;
 }
 
 .codeArea {
   background-color: black;
+  right: 0px;
   position: fixed;
   top: 60px;
-  left: 875px;
   width: 400px;
   height: 100%;
   font-size: 12px;
@@ -169,7 +172,7 @@
   text-align: left;
 }*/
 
-[ng-drop].drag-enter {
+/*[ng-drop].drag-enter {
   background-color: white;
-}
+}*/
 
