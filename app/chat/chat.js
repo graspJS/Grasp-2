@@ -8,14 +8,14 @@ angular.module('Grasp.chat', ['ngRoute'])
     templateUrl:"chat/chat.html",
     resizable:true,
     draggable: true,
-    width: 300,
-    height: 291,
+    pinned: true, 
+    width: 350,
+    height: 300,
     position:{
-      top:200,
-      left:200
+      top:377,
+      left:0
     },
-    title : "Chat",
-    pinned: true
+    title : "Chat"
   }
   $scope.username = $window.localStorage.getItem('username');
   $scope.usernames = [];

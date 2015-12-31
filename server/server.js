@@ -1,3 +1,4 @@
+// SERVER SETUP =========================================
 // App 
 var express = require('express');
 var app = express();
@@ -18,25 +19,10 @@ app.use(bodyParser.json());
 // Serve client-side files
 app.use(express.static(__dirname + '/../app'));
 
-// SOCKET LISTENERS =======================================
-// rabbitMQ.on('ready', function() {
-//   console.log('Connected to RabbitMQ');
-//   io.sockets.on('connection', function (socket) {
-//     console.log('Socket connected: ' + socket.id);
-//     rabbitMQ.queue('offer', { autoDelete: false, durable: false, exclusive: false }, function(q) {    
-//       q.bind('#'); // Catch all messages    
-//       q.subscribe(function (message) {
-//         console.log(message);
-//         socket.emit('addMessage', message); 
-//         // //socket.broadcast.to(obj.id).emit('message', obj);
-//         // io.sockets.in(obj.id).emit('message', obj);
-//       });
-//     });
-//   });
-// });
 exports.teachers = []; 
 exports.students = [];
 
+// SOCKETS =============================================
 io.sockets.on('connection', function(socket) {
   socket.rooms = Array.prototype.slice.call(socket.rooms); 
   socketConfig(socket);
