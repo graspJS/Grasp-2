@@ -5,6 +5,7 @@ bower_components
 .DS_Store
 node_modules
 server/config.js
+dbstuff.js
 
 # Logs
 logs
