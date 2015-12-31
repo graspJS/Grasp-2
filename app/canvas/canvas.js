@@ -1,7 +1,6 @@
 angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPopup'])
 
 .controller('CanvasCTRL', function ($scope, socket, CanvasFactory) {
-  $scope.isCanvasDraggable = false;
   $scope.isCanvasDroppable = true;
 
   // code generated from the combination of blocks on canvas
@@ -24,13 +23,57 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     // add codeBlock at row
     
     row.push(codeBlock);
-    $scope.isCanvasDroppable = true;
 
     // add an extra empty row to the matrix if last row contains a codeBlock
     if ($scope.blockMatrix[$scope.blockMatrix.length-1].length > 0) {
       $scope.blockMatrix.push([]);
     }
+
+    // emit block matrix to update other user's matrix
+    socket.emit('canvasChange', $scope.blockMatrix);
   };
+
+  // handles drag movements, this is where we emit x and y positions
+  $scope.blockIsMoving = function(event, codeBlock) {
+    var id = codeBlock.generateUniqueID();
+    var obj = {
+      isDragging: true,
+      position: {x:event.tx, y:event.ty},
+      id: id
+    }; 
+    socket.emit('changePosition', obj);
+  };
+
+  $scope.blockIsDoneMoving = function(event, codeBlock) {
+    var id = codeBlock.generateUniqueID();
+    var obj = {
+      isDragging: false,
+      position: {x:event.tx, y:event.ty},
+      id: id
+    }; 
+    socket.emit('changePosition', obj);
+  }
+
+  // ------------- SOCKET HANDLERS -------------
+  // update blockMatrix when changes are made to it
+  socket.on('onCanvasChange', function(data) {
+    $scope.blockMatrix = data;
+  });
+
+  // update current position of block that's being dragged
+  socket.on('updatePosition', function(data) {
+    var element = angular.element(document.getElementById(data.id));
+    if (data.isDragging) {
+      element.css({
+        transform: 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        'z-index': 99999,
+        '-webkit-transform': 'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, ' + data.position.x + ', ' + data.position.y + ', 0, 1)',
+        '-ms-transform': 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')'
+      });
+    } else {
+      element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
+    }
+  });
 
 })
 
