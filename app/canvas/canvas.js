@@ -12,16 +12,12 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   // storage for blocks currently on the canvas arranged in a matrix
   $scope.blockMatrix = CanvasFactory.matrix;
 
-  // remove a block from the canvas
-  $scope.deleteBlock = function (row, block) {
-    var index = row.indexOf(block);
-    row.splice(index, 1);
-  }
-
   // handles any drop events on canvas
   $scope.onCanvasDrop = function(codeBlock, row) {
+    // before adding to row, set coodeBlock's pointer to point at row
+    codeBlock.positionPointers.row = row;
+
     // add codeBlock at row
-    
     row.push(codeBlock);
 
     // add an extra empty row to the matrix if last row contains a codeBlock
@@ -86,6 +82,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: '#',
                         name: 'no-name-number',
                         content: 0,
+                        options: {
+                          isDraggable: false,
+                          isDroppable: false
+                        },
+                        positionPointers: {
+                          row: undefined
+                        },
                         generateUniqueID: function() {
                           return this.name + this.content + "";
                         }
@@ -95,6 +98,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: '~',
                         name: 'no-name-string',
                         content: '-- empty string --',
+                        options: {
+                          isDraggable: false,
+                          isDroppable: false
+                        },
+                        positionPointers: {
+                          row: undefined
+                        },
                         generateUniqueID: function() {
                           return this.name + this.content + "";
                         }
@@ -104,6 +114,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: '[]',
                         name: 'no-name-array',
                         content: [],
+                        options: {
+                          isDraggable: false,
+                          isDroppable: false
+                        },
+                        positionPointers: {
+                          row: undefined
+                        },
                         generateUniqueID: function() {
                           return this.name + this.content + "";
                         }
@@ -113,6 +130,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: '{}',
                         name: 'no-name-object',
                         content: {},
+                        options: {
+                          isDraggable: false,
+                          isDroppable: false
+                        },
+                        positionPointers: {
+                          row: undefined
+                        },
                         generateUniqueID: function() {
                           return this.name + this.content + "";
                         }
@@ -122,6 +146,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: 'O',
                         name: 'loop',
                         content: [[],[],[],[],[]],
+                        options: {
+                          isDraggable: false,
+                          isDroppable: false
+                        },
+                        positionPointers: {
+                          row: undefined
+                        },
                         generateUniqueID: function() {
                           return this.name + this.content + "";
                         }
