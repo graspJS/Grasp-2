@@ -88,7 +88,7 @@
   <div>
       <div id="sidebar"  class="toolboxArea">
           <p class="centered">
-          <a href="profile.html"><img src="css/hand-flight.jpg" class="img-circle" width="80"></a>
+          <img src="css/hand-flight.jpg" class="img-circle" width="80">
           </p>
           <!-- TOOLBOX start-->
           <div ng-repeat="codeBlock in codeBlocks">
@@ -119,24 +119,32 @@
         <div ng-repeat="canvasBlock in row track by $index">
 
           <!-- a code block -->
-          <div class="canvasBlock">
+          <div class="canvasBlock" ng-drop="true" ng-drag="canvasBlock.options.isDraggable">
             <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">{{canvasBlock.tag}}</div>
             <div id="canvasBlockName">{{canvasBlock.name}}</div>
             
-            <!-- drop down menu of code block -->
+            <!-- drop down menu of code block start -->
             <div id="dropDownMenu" ng-if="showDropDownMenu">
 
-              <div ng-click="showBlockEditor = showBlockEditor ? false : true; showShit = false">Edit Block</div>
-              <div ng-if="showBlockEditor" id="blockEditor">
-                Name: <br>
-                <input id="canvasBlockNameInput" placeholder="{{canvasBlock.name}}"><br><br>
-                Value: <br>
-                <input id="canvasBlockContentInput" placeholder="{{canvasBlock.content}}"><br><br>
+              <!-- Info Option -->
+              <div id="blockOption" ng-click="showInfo = showInfo ? false : true">
+                Info
+                <div id="blockOptionMore" ng-if="showInfo">
+                  Name: {{canvasBlock.name}} <br>
+                  Value: {{canvasBlock.content}} <br>
+                  Type: {{canvasBlock.type}}
+                </div>
               </div>
 
-              <div ng-click="deleteBlock(row, canvasBlock)">Delete Block</div>
+
+              <!-- Modify Option -->
+              <div id="blockOption">Modify</div>
+
+              <!-- Delete Option -->
+              <div id="blockOption">Delete</div>
              
             </div>
+            <!-- drop down menu of code block end -->
 
           </div>
           
