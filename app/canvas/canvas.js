@@ -2,7 +2,9 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
 
 .controller('CanvasCTRL', function ($scope, socket, CanvasFactory) {
   $scope.isCanvasDroppable = true;
-
+  $scope.numberOfTeachers = 0; 
+  $scope.numberOfStudents = 0; 
+  
   // code generated from the combination of blocks on canvas
   $scope.code = "";
 

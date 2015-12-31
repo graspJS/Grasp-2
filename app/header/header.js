@@ -22,8 +22,6 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
       $scope.isStudent = !$scope.isStudent;
     } 
   }; 
-  $scope.signout = function () {
-  }
 })
 .factory('Choice', function ($http, $location, socket, $window) { 
   var student = function () {

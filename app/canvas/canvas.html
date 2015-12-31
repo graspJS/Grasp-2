@@ -14,8 +14,8 @@
       <!-- settings start -->
       <li class="dropdown" uib-dropdown>
         <a uib-dropdown-toggle class="dropdown-toggle" href="#">
-          <i class="fa fa-tasks"></i>
-          <span class="badge bg-theme">4</span>
+          <i class="fa fa-tasks"></i><div>CONNECT AS TEACHER</div>
+          <span class="badge bg-theme">{{numberOfTeachers}}</span>
         </a>
           <ul class="dropdown-menu extended tasks-bar">
             <div class="notify-arrow notify-arrow-green"></div>
@@ -44,8 +44,8 @@
       <!-- settings end -->
       <li class="dropdown" uib-dropdown>
         <a uib-dropdown-toggle class="dropdown-toggle" href="#">
-          <i class="fa fa-tasks"></i>
-          <span class="badge bg-theme">4</span>
+          <i class="fa fa-tasks"></i><div>CONNECT AS STUDENT</div>
+          <span class="badge bg-theme">{{numberOfStudents}}</span>
         </a>
           <ul class="dropdown-menu extended tasks-bar">
             <div class="notify-arrow notify-arrow-green"></div>
@@ -77,7 +77,7 @@
   </div>
   <div class="top-menu">
     <ul class="nav pull-right top-menu">
-      <li><a ng-controller="AuthCTRL" class="logout" ng-click="signout()">Logout</a></li>
+      <li><a ng-controller="AuthCTRL" id="logout" ng-click="signout()">Logout</a></li>
     </ul>
   </div>
 </header>
