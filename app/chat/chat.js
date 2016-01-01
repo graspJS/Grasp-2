@@ -26,7 +26,13 @@ angular.module('Grasp.chat', ['ngRoute'])
   }); 
 
   $scope.addMessage = function(message) {
-    message = $scope.username + " : " + message; 
+    var messagez = {
+      id: new Date().getTime(), 
+      title: 'New Message',
+      body: 'Pending'
+    }
+    var time = moment().format('LT')
+    message = $scope.username + " : " + time + " " + message
     $scope.messages.push(message);
     socket.emit('addMessage', message);
   }

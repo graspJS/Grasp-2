@@ -13,6 +13,10 @@
     "html5-boilerplate": "~5.2.0",
     "ngPopup": "ng-popup#~0.4.1",
     "angular-bootstrap": "~0.14.3",
-    "angular-route-styles": "*"
+    "angular-route-styles": "*",
+    "moment": "~2.10.6"
+  },
+  "devDependencies": {
+    "angular-material": "~0.11.4"
   }
 }
