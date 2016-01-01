@@ -38,10 +38,6 @@ module.exports = function(socket) {
         // Splice student off student queue, then teacher joins students's room 
         var availableStudent = persist.students.splice(0, 1).toString(); 
         socket.join(availableStudent); 
-        // Take teacher and student off client side visual badge
-        socket.broadcast.emit('newTeacher');
-        socket.emit('match'); 
-        socket.broadcast.emit('match');
         // Inform each party
         socket.emit('onMessageAdded', "You have joined student " + availableStudent + "'s room!"); 
         socket.broadcast.to(availableStudent).emit('onMessageAdded', user + " has joined the room as a teacher!"); 
@@ -51,9 +47,14 @@ module.exports = function(socket) {
         // Create empty room for teacher 
         socket.join(user); 
         socket.emit('onMessageAdded', "You have connected to room: " + user);
-        // Add to client side visual badge
-        socket.broadcast.emit('newTeacher');
       }
+      var queueLength = {
+        teachers: persist.teachers.length,
+        students: persist.students.length 
+      };
+      // Add to client side visual badge
+      socket.emit('updateBadge', queueLength);
+      socket.broadcast.emit('updateBadge', queueLength);
     } else {
       console.log("username was null");
       return; 
@@ -68,10 +69,6 @@ module.exports = function(socket) {
         // Splice teacher off teacher queue, then student joins teacher's room 
         var availableTeacher = persist.teachers.splice(0, 1).toString(); 
         socket.join(availableTeacher); 
-        // Take teacher and student off client side visual badge
-        socket.broadcast.emit('newStudent'); 
-        socket.emit('match'); 
-        socket.broadcast.emit('match');
         // Inform each party 
         socket.emit('onMessageAdded', "You have joined teacher " + availableTeacher + "'s room!"); 
         socket.broadcast.to(availableTeacher).emit('onMessageAdded', user + " has joined the room as a student!"); 
@@ -81,9 +78,14 @@ module.exports = function(socket) {
         // Create empty room for student 
         socket.join(user); 
         socket.emit('onMessageAdded', "You have connected to room: " + user);
-        // Add to client side visual badge
-        socket.broadcast.emit('newStudent');
       }
+      var queueLength = {
+        teachers: persist.teachers.length,
+        students: persist.students.length 
+      };
+      // Add to client side visual badge
+      socket.emit('updateBadge', queueLength);
+      socket.broadcast.emit('updateBadge', queueLength);
     } else {
       console.log("username was null");
       return; 

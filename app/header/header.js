@@ -11,12 +11,10 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
   $scope.teacher = function() {
     Choice.teacher();
     $scope.isTeacher = !$scope.isTeacher;
-    $scope.numberOfTeachers++;  
   };
   $scope.student = function() {
     Choice.student(); 
     $scope.isStudent = !$scope.isStudent;
-    $scope.numberOfStudents++;   
   };
   $scope.leave = function() {
     Choice.leave();
@@ -26,17 +24,13 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
       $scope.isStudent = !$scope.isStudent;
     }  
   };  
-  // Socket events for updating client side
-  socket.on('newTeacher', function() {
-    $scope.numberOfTeachers++; 
-  });
-  socket.on('newStudent', function() {
-    $scope.numberOfStudents++; 
-  });
-  socket.on('match', function() {
-    $scope.numberOfTeachers--; 
-    $scope.numberOfStudents--; 
+
+  socket.on('updateBadge', function(data) {
+    console.log(data)
+    $scope.numberOfTeachers = data.teachers; 
+    $scope.numberOfStudents = data.students; 
   }); 
+
   socket.on('leftUser', function() {
     $scope.leave(); 
   }); 
