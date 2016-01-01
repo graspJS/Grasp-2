@@ -140,8 +140,42 @@
   background-color: #404040;
   color: gray;
   position: absolute;
-  top: 0px;
-  left: 150px;
+  margin-top: -20px;
+  margin-left: 145px;
+}
+
+#modifyBlockBTN {
+  border-radius: 2px;
+  border: 2px solid white;
+  background-color: #404040;
+  width: 100%;
+  color: white;
+}
+
+#arrayContent {
+  height: 250px;
+  width: 135px;
+  background-color: white;
+  overflow: auto;
+}
+
+#blockInArray {
+  float: left;
+}
+
+#objectContent {
+  height: 250px;
+  width: 250px;
+  background-color: white;
+  overflow: auto;
+}
+
+#objectContentItem {
+  color: #404040;
+  border-bottom: 1px solid #404040;
+  font-size: 11px;
+  background-color: #FFD777;
+  padding: 5px;
 }
 
 #trashbinIMG {

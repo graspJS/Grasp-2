@@ -99,9 +99,7 @@
 
               <!-- CODEBLOCK start -->
               <div id="{{codeBlock.generateUniqueID()}}" class="toolboxBlock" ng-drop="true" ng-drag="true" ng-drag-move="blockIsMoving($event, $data)" ng-drag-success="blockIsDoneMoving($event, $data)" ng-drag-data="codeBlock">
-
                 <div>{{codeBlock.type}}</div>
-               
               </div>
               <!-- CODEBLOCK end -->
           </div>
@@ -120,32 +118,73 @@
       <div class="canvasRow" ng-drop="isCanvasDroppable" ng-drop-success="onCanvasDrop($data, row)">
 
         <!-- ng-repeat container of row -->
-        <div ng-repeat="canvasBlock in row track by $index">
+        <div ng-repeat="codeBlock in row track by $index">
 
           <!-- a code block -->
-          <div class="canvasBlock" ng-drop="true" ng-drag="canvasBlock.options.isDraggable">
-            <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">{{canvasBlock.tag}}</div>
-            <div id="canvasBlockName">{{canvasBlock.name}}</div>
+          <div class="canvasBlock" ng-drag="true" ng-drag-data="codeBlock">
+            <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">{{codeBlock.tag}}</div>
+            <div id="canvasBlockName">{{codeBlock.name}}</div>
             
             <!-- drop down menu of code block start -->
-            <div id="dropDownMenu" ng-if="showDropDownMenu">
+            <div id="dropDownMenu" ng-if="showDropDownMenu" ng-switch="codeBlock.type">
 
               <!-- Info Option -->
               <div id="blockOption" ng-click="showInfo = showInfo ? false : true">
                 Info
-                <div id="blockOptionMore" ng-if="showInfo">
-                  Name: {{canvasBlock.name}} <br>
-                  Value: {{canvasBlock.content}} <br>
-                  Type: {{canvasBlock.type}}
+              </div>
+              <div id="blockOptionMore" ng-if="showInfo">
+                Name: {{codeBlock.name}} <br>
+                Value: {{codeBlock.content}} <br>
+                Type: {{codeBlock.type}}
+              </div>
+
+              <!-- Modify Option -->
+              <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                Modify
+              </div>
+              <div id="blockOptionMore" ng-if="showModify">
+                <form ng-submit="modifyBlock(codeBlock, name, content)">
+                  <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                  <input type="text" style="margin-bottom: 5px;" ng-model="content" placeholder="{{codeBlock.content}}"> <br>
+                  <input id="modifyBlockBTN" type="submit" value="OK">
+                </form>
+              </div>
+
+              <!-- Array Content Option -->
+              <div ng-switch-when="array">
+                <div id="blockOption" ng-click="showArrayContent = showArrayContent ? false : true; toggleCanvasDraggable()">
+                  Content
+                </div>
+                <div id="blockOptionMore" ng-if="showArrayContent">
+                  <div id="arrayContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); emit()">
+                    <div ng-repeat="contentBlock in codeBlock.content track by $index">
+                      <div class="canvasBlock" id="blockInArray">
+                        <div id="canvasBlockTag">{{contentBlock.tag}}</div>
+                        <div id="canvasBlockName">{{contentBlock.name}}</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-
-              <!-- Modify Option -->
-              <div id="blockOption">Modify</div>
+              <!-- Object Content Option -->
+              <div ng-switch-when="object">
+                <div id="blockOption" ng-click="showObjectContent = showObjectContent ? false : true; toggleCanvasDraggable()">
+                  Content
+                </div>
+                <div id="blockOptionMore" ng-if="showObjectContent">
+                  <div id="objectContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); emit()">
+                    <div ng-repeat="(key, value) in codeBlock.content">
+                      <div id="objectContentItem">
+                        {{key}} : {{value}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!-- Delete Option -->
-              <div id="blockOption">Delete</div>
+              <div id="blockOption" ng-click="deleteBlock(codeBlock, row)">Delete</div>
              
             </div>
             <!-- drop down menu of code block end -->
