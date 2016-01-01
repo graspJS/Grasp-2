@@ -98,7 +98,7 @@
           <div ng-repeat="codeBlock in codeBlocks">
 
               <!-- CODEBLOCK start -->
-              <div id="{{codeBlock.generateUniqueID()}}" class="toolboxBlock" ng-drop="true" ng-drag="true" ng-drag-move="blockIsMoving($event, $data)" ng-drag-success="blockIsDoneMoving($event, $data)" ng-drag-data="codeBlock">
+              <div id="{{codeBlock.generateUniqueID()}}" class="toolboxBlock" ng-drop="isToolboxDroppable" ng-drag="isToolboxBlockDraggable" ng-drag-move="blockIsMoving($event, $data)" ng-drag-success="blockIsDoneMoving($event, $data)" ng-drag-data="codeBlock">
                 <div>{{codeBlock.type}}</div>
               </div>
               <!-- CODEBLOCK end -->
@@ -111,6 +111,10 @@
   <!-- CANVAS start -->
   <div class="canvasArea" id="main-content">
 
+    <div id="canvasControls">
+      <div id="toggle" ng-click="toggleCanvas()">CANVAS DRAG MODE</div>
+    </div>
+
     <!-- ng-repeat container of CANVAS -->
     <div ng-repeat="row in blockMatrix">
 
@@ -121,7 +125,7 @@
         <div ng-repeat="codeBlock in row track by $index">
 
           <!-- a code block -->
-          <div class="canvasBlock" ng-drag="true" ng-drag-data="codeBlock">
+          <div class="canvasBlock" ng-drop="true" ng-drag="isCanvasBlockDraggable" ng-drag-data="codeBlock">
             <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">{{codeBlock.tag}}</div>
             <div id="canvasBlockName">{{codeBlock.name}}</div>
             

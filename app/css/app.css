@@ -43,7 +43,6 @@
   left: 0px;
   margin-left: 0px;
   overflow: auto;
-  border: 5px solid #404040;
 }
 
 .codeArea {
@@ -57,7 +56,6 @@
   font-weight: bold;
   color: #4dff4d;
   padding: 5px;
-  border: 4px solid #C1A8F1;
 }
 
 .toolboxBlock {
@@ -133,6 +131,25 @@
 
 #blockOption {
   background-color: #404040;
+}
+
+#toggle {
+  float: left;
+  margin: 5px;
+  color: #404040;
+  font-weight: bold;
+  border: 1.5px solid #404040;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#canvasControls {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  margin-top: -5px;
+  margin-left: -5px;
+  border-bottom: 1px solid #404040;
 }
 
 #blockOptionMore {
