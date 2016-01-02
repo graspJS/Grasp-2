@@ -26,7 +26,6 @@ angular.module('Grasp.header', ['ngRoute', 'ui.bootstrap'])
   };  
 
   socket.on('updateBadge', function(data) {
-    console.log(data)
     $scope.numberOfTeachers = data.teachers; 
     $scope.numberOfStudents = data.students; 
   }); 

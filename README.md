@@ -20,7 +20,7 @@
 
 ## Usage
 
-Visit our page, currently hosted on AWS http://ec2-52-35-254-62.us-west-2.compute.amazonaws.com:3000/
+Visit our page, graspjs.co
 
 ## Technologies Used
 
@@ -33,8 +33,6 @@ Visit our page, currently hosted on AWS http://ec2-52-35-254-62.us-west-2.comput
 - [AWS Deployment](https://aws.amazon.com/)
 - [Mocha](https://mochajs.org)
 - [Karma](karma-runner.github.io)
-
-
 
 ## Requirements
 
