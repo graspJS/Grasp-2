@@ -29,6 +29,34 @@
   padding: 0;
 }
 
+#canvasLogoIMG {
+  position: fixed;
+  left: 10px;
+  top: 5px;
+  height: 50px;
+}
+
+#logo {
+  left: 80px;
+  top: -5px;
+  color: #191919;
+  position: fixed;
+}
+
+#connectControls {
+  position: fixed;
+  left: 300px;
+  top: 0px;
+}
+
+#teacherConnect {
+
+}
+
+#studentConnect {
+
+}
+
 .toolboxArea {
   z-index: 1001;
 }
@@ -43,11 +71,10 @@
   left: 0px;
   margin-left: 0px;
   overflow: auto;
-  border: 5px solid #404040;
 }
 
 .codeArea {
-  background-color: black;
+  background-color: #191919;
   right: 0px;
   position: fixed;
   top: 60px;
@@ -57,19 +84,24 @@
   font-weight: bold;
   color: #4dff4d;
   padding: 5px;
-  border: 4px solid #C1A8F1;
 }
 
 .toolboxBlock {
   background-color: #404040;
   float: left;
-  margin: 2.5px;
   padding: 0;
-  width: 110px;
-  height: 25px;
+  padding-top: 10px;
+  width: 125px;
+  height: 50px;
   color: white;
   text-align: center;
-  margin-bottom: 10px;
+  border: 1px solid white;
+}
+
+#toolboxBlockTag {
+  top: 50%;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .canvasRow {
@@ -105,7 +137,7 @@
   text-align: center;
   outline: 0;
   margin-right: 5px;
-  padding-top: 7px;
+  padding-top: 6px;
 }
 
 #canvasBlockName {
@@ -135,13 +167,86 @@
   background-color: #404040;
 }
 
-#blockOptionMore {
+.toggle {
+  float: left;
+  margin: 5px;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
   padding: 5px;
+}
+
+#canvasControls {
+  position: fixed;
+  bottom: 0px;
+  left: 125px;
+  width: 100%;
+  height: 40px;
+  background-color: #404040;
+}
+
+#blockOptionMore {
+  padding: 0px;
   background-color: #404040;
   color: gray;
   position: absolute;
-  top: 0px;
-  left: 150px;
+  margin-top: -20px;
+  margin-left: 145px;
+}
+
+#modifyBlockBTN {
+  border-radius: 2px;
+  border: 2px solid white;
+  background-color: #404040;
+  width: 100%;
+  color: white;
+}
+
+#arrayContent {
+  height: 250px;
+  width: 135px;
+  background-color: white;
+  overflow: auto;
+}
+
+#blockInArray {
+  float: left;
+}
+
+#objectContent {
+  height: 250px;
+  width: 250px;
+  background-color: white;
+  overflow: auto;
+}
+
+#objectContentItem {
+  color: #404040;
+  border-bottom: 1px solid #404040;
+  font-size: 11px;
+  background-color: #FFD777;
+  padding: 5px;
+}
+
+#loopContent {
+  height: 500px;
+  width: 500px;
+  padding: 5px;
+  background-color: white;
+}
+
+#functionContents {
+  height: 500px;
+  width: 500px;
+  padding: 5px;
+  background-color: white;
+}
+
+#functionArguments {
+  height: 500px;
+  width: 150px;
+  padding: 5px;
+  background-color: #404040;
 }
 
 #trashbinIMG {
@@ -185,11 +290,25 @@
   height: 100%;
 }
 
-/*.content {
-  text-align: left;
-}*/
+#landingPageContainer {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: #ffd777;
+}
 
-/*[ng-drop].drag-enter {
-  background-color: white;
-}*/
+#graspIMG {
+  height: 300px;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
 
+#lightIMG {
+  height: 250px;
+}
