@@ -111,21 +111,17 @@
   <!-- CANVAS start -->
   <div class="canvasArea" id="main-content">
 
-    <div id="canvasControls">
-      <div id="toggle" ng-click="toggleCanvas()">CANVAS DRAG MODE</div>
-    </div>
-
     <!-- ng-repeat container of CANVAS -->
     <div ng-repeat="row in blockMatrix">
 
       <!-- a row -->
-      <div class="canvasRow" ng-drop="isCanvasDroppable" ng-drop-success="onCanvasDrop($data, row)">
+      <div class="canvasRow" ng-drop="isCanvasDroppable" ng-drop-success="onCanvasDrop($data, row); generateCode(); emit()">
 
         <!-- ng-repeat container of row -->
         <div ng-repeat="codeBlock in row track by $index">
 
           <!-- a code block -->
-          <div class="canvasBlock" ng-drop="true" ng-drag="isCanvasBlockDraggable" ng-drag-data="codeBlock">
+          <div class="canvasBlock" ng-attr-id="{{codeBlock.generateUniqueID()}}" ng-drop="true" ng-drag="isCanvasBlockDraggable" ng-drag-data="codeBlock" ng-drag-move="blockIsMoving($event, $data)">
             <div id="canvasBlockTag" ng-click="showDropDownMenu = showDropDownMenu ? false : true">{{codeBlock.tag}}</div>
             <div id="canvasBlockName">{{codeBlock.name}}</div>
             
@@ -142,25 +138,70 @@
                 Type: {{codeBlock.type}}
               </div>
 
-              <!-- Modify Option -->
-              <div id="blockOption" ng-click="showModify = showModify ? false : true">
-                Modify
-              </div>
-              <div id="blockOptionMore" ng-if="showModify">
-                <form ng-submit="modifyBlock(codeBlock, name, content)">
-                  <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
-                  <input type="text" style="margin-bottom: 5px;" ng-model="content" placeholder="{{codeBlock.content}}"> <br>
-                  <input id="modifyBlockBTN" type="submit" value="OK">
-                </form>
+              <!-- Number Custom Options -->
+              <div ng-switch-when="number">
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input type="text" style="margin-bottom: 5px;" ng-model="content" placeholder="{{codeBlock.content}}"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
               </div>
 
-              <!-- Array Content Option -->
+              <!-- String Custom Options -->
+              <div ng-switch-when="string">
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input type="text" style="margin-bottom: 5px;" ng-model="content" placeholder="{{codeBlock.content}}"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
+              </div>
+
+              <!-- Boolean Custom Options -->
+              <div ng-switch-when="bool">
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
+              </div>
+
+              <!-- Array Custom Options -->
               <div ng-switch-when="array">
-                <div id="blockOption" ng-click="showArrayContent = showArrayContent ? false : true; toggleCanvasDraggable()">
+
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
+
+                <!-- CONTENT -->
+                <div id="blockOption" ng-click="showArrayContent = showArrayContent ? false : true">
                   Content
                 </div>
                 <div id="blockOptionMore" ng-if="showArrayContent">
-                  <div id="arrayContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); emit()">
+                  <div id="arrayContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); generateCode(); emit()">
                     <div ng-repeat="contentBlock in codeBlock.content track by $index">
                       <div class="canvasBlock" id="blockInArray">
                         <div id="canvasBlockTag">{{contentBlock.tag}}</div>
@@ -171,13 +212,25 @@
                 </div>
               </div>
 
-              <!-- Object Content Option -->
+              <!-- Object Custom Options -->
               <div ng-switch-when="object">
-                <div id="blockOption" ng-click="showObjectContent = showObjectContent ? false : true; toggleCanvasDraggable()">
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
+
+                <!-- CONTENT -->
+                <div id="blockOption" ng-click="showObjectContent = showObjectContent ? false : true">
                   Content
                 </div>
                 <div id="blockOptionMore" ng-if="showObjectContent">
-                  <div id="objectContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); emit()">
+                  <div id="objectContent" ng-drop="true" ng-drop-success="codeBlock.addBlock($data); generateCode(); emit()">
                     <div ng-repeat="(key, value) in codeBlock.content">
                       <div id="objectContentItem">
                         {{key}} : {{value}}
@@ -187,8 +240,87 @@
                 </div>
               </div>
 
+              <!-- Loop Custom Options -->
+              <div ng-switch-when="loop">
+                <!-- CONTENT -->
+                <div id="blockOption" ng-click="showLoopContent = showLoopContent ? false : true">
+                  Content
+                </div>
+                <div id="blockOptionMore" ng-if="showLoopContent">
+                  <div id="loopContent">
+
+                    <div ng-repeat="loopRow in codeBlock.content">
+
+                      <div class="canvasRow" ng-drop="true" ng-drop-success="codeBlock.addContent(loopRow, $data); generateCode(); emit()">
+                        <div ng-repeat="loopBlock in loopRow track by $index">
+                          <div class="canvasBlock">
+                            <div id="canvasBlockTag">{{loopBlock.tag}}</div>
+                            <div id="canvasBlockName">{{loopBlock.name}}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- Function Custom Options -->
+              <div ng-switch-when="function">
+                <!-- Modify Option -->
+                <div id="blockOption" ng-click="showModify = showModify ? false : true">
+                  Modify
+                </div>
+                <div id="blockOptionMore" ng-if="showModify">
+                  <form ng-submit="modifyBlock(codeBlock, name, content); generateCode(); emit()">
+                    <input type="text" style="margin-bottom: 5px;" placeholder="{{codeBlock.name}}" ng-model="name"> <br>
+                    <input id="modifyBlockBTN" type="submit" value="OK">
+                  </form>
+                </div>
+
+                <!-- CONTENT -->
+                <div id="blockOption" ng-click="showFunctionArguments = showFunctionArguments ? false : true">
+                  Arguments
+                </div>
+                <div id="blockOptionMore" ng-if="showFunctionArguments">
+                  <div id="functionArguments" ng-drop="true" ng-drop-success="codeBlock.addArgument($data); generateCode(); emit()">
+
+                    <div ng-repeat="argumentBlock in codeBlock.arguments track by $index">
+                      <div class="canvasBlock">
+                        <div id="canvasBlockTag">{{argumentBlock.tag}}</div>
+                        <div id="canvasBlockName">{{argumentBlock.name}}</div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div id="blockOption" ng-click="showFunctionContent = showFunctionContent ? false : true">
+                  Content
+                </div>
+                <div id="blockOptionMore" ng-if="showFunctionContent">
+                  <div id="functionContents">
+
+                    <div ng-repeat="functionRow in codeBlock.content">
+
+                      <div class="canvasRow" ng-drop="true" ng-drop-success="codeBlock.addContent(functionRow, $data); generateCode(); emit()">
+                        <div ng-repeat="functionBlock in functionRow track by $index">
+                          <div class="canvasBlock">
+                            <div id="canvasBlockTag">{{functionBlock.tag}}</div>
+                            <div id="canvasBlockName">{{functionBlock.name}}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
               <!-- Delete Option -->
-              <div id="blockOption" ng-click="deleteBlock(codeBlock, row)">Delete</div>
+              <div id="blockOption" ng-click="deleteBlock(codeBlock, row); generateCode(); emit();">Delete</div>
              
             </div>
             <!-- drop down menu of code block end -->
@@ -201,12 +333,19 @@
 
     </div>
 
+    <!-- CANVAS CONTROLS -->
+    <div id="canvasControls">
+      <div id="normalMode" class="toggle" ng-click="normalMode()">NORMAL MODE</div>
+      <div id="canvasDragMode" class="toggle" ng-click="canvasDragMode()">MINI CANVAS MODE</div>
+      <div id="canvasRearrangeMode" class="toggle" ng-click="canvasRearrangeMode()">REARRANGE MODE</div>
+    </div>
+
   </div>
   <!--CANVAS END-->
 
   <!-- CODE AREA start -->
   <div class="codeArea">
-    <pre style="background: black; border: 0px;">{{code}}</pre>
+    <pre style="background: #191919; border: 0px; color: white;">{{code}}</pre>
   </div>
   <!-- CODE AREA end -->
 
