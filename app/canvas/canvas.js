@@ -10,6 +10,10 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   $scope.isCanvasDragModeOn = false;
   $scope.isCanvasRearrangeModeOn = false;
 
+  $scope.generateUniqueID = function(codeBlock) {
+    return codeBlock.name + codeBlock.content + codeBlock.isItInToolbox + "";
+  }
+
   // code generated from the combination of blocks on canvas
   $scope.code = "";
 
@@ -34,9 +38,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     if ($scope.blockMatrix[$scope.blockMatrix.length-1].length > 0) {
       $scope.blockMatrix.push([]);
     }
-
-    // emit block matrix to update other user's matrix
-    socket.emit('canvasChange', $scope.blockMatrix.slice());
   };
 
   var toggleCanvasControls = function() {
@@ -143,6 +144,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   // update blockMatrix when changes are made to it
   socket.on('onCanvasChange', function(data) {
     $scope.blockMatrix = data;
+    console.log($scope.blockMatrix[0][0]);
     $scope.generateCode();
   });
 
@@ -171,6 +173,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: '#',
                         name: 'no-name-number',
                         content: 0,
+                        // id: this.name + this.content + this.isItInToolbox + "",
                         isItInToolbox: true,
                         generateUniqueID: function() {
                           return this.name + this.content + this.isItInToolbox;
@@ -191,6 +194,9 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         tag: 'ß',
                         name: 'no-name-boolean',
                         content: false,
+                        toggleBool: function() {
+                          this.content = !this.content;
+                        },
                         isItInToolbox: true,
                         generateUniqueID: function() {
                           return this.name + this.content + this.isItInToolbox;
@@ -230,7 +236,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         content: [[],[],[],[],[]],
                         addContent: function(row, codeBlock) {
                           row.push(cloneBlock(codeBlock));
-                          if (content[content.length-1].length > 0) {
+                          if (this.content[this.content.length-1].length > 0) {
                             content.push([]);
                           }
                         },
@@ -248,12 +254,15 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         content: [[],[],[],[],[]],
                         addArgument: function(codeBlock) {
                           this.arguments.push(codeBlock);
-                          if (content[content.length-1].length > 0) {
+                          if (this.arguments[this.arguments.length-1].length > 0) {
                             content.push([]);
                           }
                         },
                         addContent: function(row, codeBlock) {
                           row.push(codeBlock);
+                          if (this.content[this.content.length-1].length > 0) {
+                            content.push([]);
+                          }
                         },
                         isItInToolbox: true,
                         generateUniqueID: function() {
