@@ -280,6 +280,7 @@
     overflow: scroll;
     float:left;
     padding: 1%;
+    background-color: white;
 }
 
 #chatboxForm input {

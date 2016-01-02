@@ -31,9 +31,11 @@ angular.module('Grasp.chat', ['ngRoute'])
       title: 'New Message',
       body: 'Pending'
     }
-    var time = moment().format('LT')
-    message = $scope.username + " : " + time + " " + message
+    var time = moment().format('LT');
+    var message = $scope.username + " : " + time + " " + message
     $scope.messages.push(message);
+    document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
+    document.getElementById("m").value = "";
     socket.emit('addMessage', message);
   }
 });
