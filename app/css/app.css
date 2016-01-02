@@ -188,7 +188,6 @@
 
 #blockOptionMore {
   padding: 0px;
-  background-color: #404040;
   color: gray;
   position: absolute;
   margin-top: -20px;
@@ -206,8 +205,11 @@
 #arrayContent {
   height: 250px;
   width: 135px;
-  background-color: white;
+  background-color: #f2f2f2;
   overflow: auto;
+  border: 2px solid #404040;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
 }
 
 #blockInArray {
@@ -217,8 +219,11 @@
 #objectContent {
   height: 250px;
   width: 250px;
-  background-color: white;
+  background-color: #f2f2f2;
   overflow: auto;
+  border: 2px solid #404040;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
 }
 
 #objectContentItem {
@@ -233,14 +238,20 @@
   height: 500px;
   width: 500px;
   padding: 5px;
-  background-color: white;
+  background-color: #f2f2f2;
+  border: 2px solid #404040;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
 }
 
 #functionContents {
   height: 500px;
   width: 500px;
   padding: 5px;
-  background-color: white;
+  background-color: #f2f2f2;
+  border: 2px solid #404040;
+  border-radius: 5px;
+  border-top-left-radius: 0px;
 }
 
 #functionArguments {
@@ -337,4 +348,12 @@
 
 [ng-drag].drag-over {
     border: solid 1px red;
+}
+
+#screenshotIMG {
+  z-index: 0;
+  left: 0px;
+  top: 85px;
+  position: absolute;
+  opacity: 0.1;
 }

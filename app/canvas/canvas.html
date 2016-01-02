@@ -96,7 +96,7 @@
           <div ng-repeat="codeBlock in codeBlocks">
 
               <!-- CODEBLOCK start -->
-              <div id="{{generateUniqueID()}}" class="toolboxBlock" ng-drop="isToolboxDroppable" ng-drag="isToolboxBlockDraggable" ng-drag-move="blockIsMoving($event, $data)" ng-mouseup="blockIsDoneMoving($event, codeBlock)" ng-drag-data="codeBlock">
+              <div id="{{codeBlock.generateUniqueID()}}" class="toolboxBlock" ng-drop="isToolboxDroppable" ng-drag="isToolboxBlockDraggable" ng-drag-move="blockIsMoving($event, $data)" ng-mouseup="blockIsDoneMoving($event, codeBlock)" ng-drag-data="codeBlock">
                 <div id="toolboxBlockTag">{{codeBlock.tag}}</div>
                 <!-- <div id="toolboxBlockType">{{codeBlock.type}}</div> -->
               </div>
