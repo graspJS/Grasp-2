@@ -171,7 +171,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'number',
                         tag: '#',
-                        name: 'no-name-number',
+                        name: 'number',
                         content: 0,
                         // id: this.name + this.content + this.isItInToolbox + "",
                         isItInToolbox: true,
@@ -182,8 +182,8 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'string',
                         tag: '~',
-                        name: 'no-name-string',
-                        content: '-- empty string --',
+                        name: 'string',
+                        content: '',
                         isItInToolbox: true,
                         generateUniqueID: function() {
                           return this.name + this.content + this.isItInToolbox;
@@ -192,7 +192,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'bool',
                         tag: 'ß',
-                        name: 'no-name-boolean',
+                        name: 'boolean',
                         content: false,
                         toggleBool: function() {
                           this.content = !this.content;
@@ -205,7 +205,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'array',
                         tag: '[]',
-                        name: 'no-name-array',
+                        name: 'array',
                         content: [],
                         addBlock: function(codeBlock) {
                           this.content.push(codeBlock);
@@ -218,7 +218,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'object',
                         tag: '{}',
-                        name: 'no-name-object',
+                        name: 'object',
                         content: {},
                         addBlock: function(codeBlock) {
                           this.content[codeBlock.name] = codeBlock.content;
@@ -248,7 +248,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                       {
                         type: 'function',
                         tag: 'ƒ',
-                        name: 'no-name-function',
+                        name: 'someFunction',
                         loopCount: '',
                         arguments: [],
                         content: [[],[],[],[],[]],
@@ -273,13 +273,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
 
   // different types of codeBlock converters
   var convertNumber = function(codeBlock) {
-    return codeBlock.name + " = " + codeBlock.content + ";";
+    return "var " + codeBlock.name + " = " + codeBlock.content + ";";
   };
   var convertString = function(codeBlock) {
-    return codeBlock.name + " = \"" + codeBlock.content + "\";";
+    return "var " + codeBlock.name + " = \"" + codeBlock.content + "\";";
   };
   var convertBool = function(codeBlock) {
-    return codeBlock.name + " = " + codeBlock.content + ";";
+    return "var " + codeBlock.name + " = " + codeBlock.content + ";";
   };
   var convertArray = function(codeBlock) {
     var elements = [];
@@ -290,7 +290,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
         elements.push(codeBlock.content[i].name);
       }
     }
-    return codeBlock.name + " = [ " + elements.join(", ") + " ];";
+    return "var " + codeBlock.name + " = [ " + elements.join(", ") + " ];";
   };
   var convertObject = function(codeBlock) {
     var keyValuePairs = [];
@@ -298,7 +298,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
       keyValuePairs.push("  " + key + ": " + codeBlock.content[key]);
     }
 
-    return codeBlock.name + " = " + "{ \n" + keyValuePairs.join("\n") + "\n};";
+    return "var " + codeBlock.name + " = " + "{ \n" + keyValuePairs.join("\n") + "\n};";
   };
   var convertLoop = function(codeBlock, depth) {
     var space = "";
@@ -316,7 +316,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     for (var i = 0; i < codeBlock.arguments.length; i++) {
       args.push(codeBlock.arguments[i].name);
     }
-    return codeBlock.name + " = function( " + args.join(', ') + " ) {\n" + generateCode(codeBlock.content, depth + 1) + space + "};\n";
+    return "var " + codeBlock.name + " = function( " + args.join(', ') + " ) {\n" + generateCode(codeBlock.content, depth + 1) + space + "};\n";
   };
 
   // converts codeBlock into javascript code in the form of string
