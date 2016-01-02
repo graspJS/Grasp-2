@@ -6,8 +6,8 @@
       <li id="messagetxt">{{message}}</li>
     </ul>
   </div>
-    <form id="chatboxForm">
-      <input id="m" autocomplete="off" ng-model="text"/><button ng-click="addMessage(text)">Send</button>
+    <form id="chatboxForm" ng-submit="addMessage(text)">
+      <input id="m" autocomplete="off" ng-model="text"/>
     </form>
 </div>
 </div>
