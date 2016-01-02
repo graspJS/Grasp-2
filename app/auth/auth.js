@@ -86,7 +86,7 @@ angular.module('Grasp.Auth', ['ngRoute'])
 
   var signout = function () {
     $window.localStorage.clear();
-    $location.path('/signin');
+    $location.path('/welcome');
   };
 
   var loggedIn = function () {
