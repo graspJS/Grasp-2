@@ -5,10 +5,13 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   $scope.isCanvasBlockDraggable = false;
   $scope.isToolboxDroppable = true;
   $scope.isToolboxBlockDraggable = true;
+  $scope.isDropContainerDroppable = false;
 
   $scope.isNormalMode = true;
   $scope.isCanvasDragModeOn = false;
   $scope.isCanvasRearrangeModeOn = false;
+
+  var hasRearrangedOnBlock = false;
 
   $scope.generateUniqueID = function(codeBlock) {
     return codeBlock.name + codeBlock.content + codeBlock.isItInToolbox + "";
@@ -27,17 +30,63 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   // storage for blocks currently on the canvas arranged in a matrix
   $scope.blockMatrix = CanvasFactory.matrix;
 
+  /*
+    1 - dragging onto empty row [GOOD]
+    2 - dragging onto different populated row, but empty space [GOOD]
+    3 - dragging onto same row, at empty space [GOOD]
+    4 - dragging onto same row, on block [BAD]
+  */
+
   // handles any drop events on canvas
   $scope.onCanvasDrop = function(codeBlock, row) {
-    // add codeBlock at row
     var clonedBlock = CanvasFactory.cloneBlock(codeBlock);
     clonedBlock.isItInToolbox = false;
-    row.push(clonedBlock);
+
+    if ($scope.isCanvasRearrangeModeOn) {
+      var oldRowIndex = -1;
+      var oldIndex = -1;
+
+      for (var rowIndex = 0; rowIndex < $scope.blockMatrix.length; rowIndex++) {
+        oldIndex = $scope.blockMatrix[rowIndex].indexOf(codeBlock);
+        if (oldIndex !== -1) {
+          oldRowIndex = rowIndex;
+          break;
+        }
+      }
+
+      if ($scope.blockMatrix.indexOf(row) === oldRowIndex) {
+        //
+      } else {
+        row.push(clonedBlock);
+        $scope.blockMatrix[oldRowIndex].splice(oldIndex, 1);
+      }
+
+    } else {
+      row.push(clonedBlock);
+    }
 
     // add an extra empty row to the matrix if last row contains a codeBlock
     if ($scope.blockMatrix[$scope.blockMatrix.length-1].length > 0) {
       $scope.blockMatrix.push([]);
     }
+  };
+
+  $scope.onCanvasRearrange = function(codeBlock, row, newIndex) {
+    var clonedBlock = CanvasFactory.cloneBlock(codeBlock);
+
+    var oldRowIndex = -1;
+    var oldIndex = -1;
+
+    for (var rowIndex = 0; rowIndex < $scope.blockMatrix.length; rowIndex++) {
+      oldIndex = $scope.blockMatrix[rowIndex].indexOf(codeBlock);
+      if (oldIndex !== -1) {
+        oldRowIndex = rowIndex;
+        break;
+      }
+    }
+    
+    $scope.blockMatrix[oldRowIndex].splice(oldIndex, 1);
+    row.splice(newIndex, 0, clonedBlock);
   };
 
   var toggleCanvasControls = function() {
@@ -73,6 +122,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     $scope.isCanvasBlockDraggable = false;
     $scope.isToolboxDroppable = true;
     $scope.isToolboxBlockDraggable = true;
+    $scope.isDropContainerDroppable = false;
 
     toggleCanvasControls();
   }
@@ -86,6 +136,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     $scope.isCanvasBlockDraggable = true;
     $scope.isToolboxDroppable = false;
     $scope.isToolboxBlockDraggable = false;
+    $scope.isDropContainerDroppable = false;
 
     toggleCanvasControls();
   }
@@ -99,6 +150,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
     $scope.isCanvasBlockDraggable = true;
     $scope.isToolboxDroppable = false;
     $scope.isToolboxBlockDraggable = false;
+    $scope.isDropContainerDroppable = true;
 
     toggleCanvasControls();
   }
@@ -108,9 +160,10 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   }
 
   // Modify block
-  $scope.modifyBlock = function(canvasBlock, name, content) {
+  $scope.modifyBlock = function(canvasBlock, name, content, loopCount) {
     canvasBlock.name = name || canvasBlock.name;
     canvasBlock.content = content || canvasBlock.content;
+    canvasBlock.loopCount = loopCount || canvasBlock.loopCount;
   }
 
   // Delete block from canvas
@@ -121,7 +174,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
 
   // handles drag movements, this is where we emit x and y positions
   $scope.blockIsMoving = function(event, codeBlock) {
-    var id = codeBlock.generateUniqueID();
+    var id = $scope.generateUniqueID(codeBlock);
     var obj = {
       isDragging: true,
       position: {x:event.tx, y:event.ty},
@@ -131,12 +184,12 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   };
 
   $scope.blockIsDoneMoving = function(event, codeBlock) {
-    var id = codeBlock.generateUniqueID();
+    var id = $scope.generateUniqueID(codeBlock);
     var obj = {
       isDragging: false,
       position: {x:event.tx, y:event.ty},
       id: id
-    }; 
+    };
     socket.emit('changePosition', obj);
   }
 
@@ -144,12 +197,12 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
   // update blockMatrix when changes are made to it
   socket.on('onCanvasChange', function(data) {
     $scope.blockMatrix = data;
-    console.log($scope.blockMatrix[0][0]);
     $scope.generateCode();
   });
 
   // update current position of block that's being dragged
   socket.on('updatePosition', function(data) {
+    console.log(data.isDragging);
     var element = angular.element(document.getElementById(data.id));
     if (data.isDragging) {
       element.css({
@@ -159,6 +212,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
         '-ms-transform': 'matrix(1, 0, 0, 1, ' + data.position.x + ', ' + data.position.y + ')'
       });
     } else {
+      console.log('fire')
       element.css({transform:'', 'z-index':'', '-webkit-transform':'', '-ms-transform':''});
     }
   });
@@ -232,7 +286,7 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         type: 'loop',
                         tag: 'O',
                         name: 'loop',
-                        loopCount: '',
+                        loopCount: '0',
                         content: [[],[],[],[],[]],
                         addContent: function(row, codeBlock) {
                           row.push(cloneBlock(codeBlock));
@@ -249,7 +303,6 @@ angular.module('Grasp.Canvas', ['Canvas.socket', 'ngDraggable', 'ngRoute', 'ngPo
                         type: 'function',
                         tag: 'ƒ',
                         name: 'someFunction',
-                        loopCount: '',
                         arguments: [],
                         content: [[],[],[],[],[]],
                         addArgument: function(codeBlock) {
