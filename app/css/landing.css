@@ -126,7 +126,6 @@ a:after {
    ========================================================================== */
 
 #headerwrap {
-  background: url(../images/grasp.png) no-repeat center top;
   margin-top: -10px;
   padding-top:20px;
   text-align:center;
@@ -163,6 +162,21 @@ a:after {
   text-transform: uppercase;
 }
 
+#graspIMG {
+  height: 150px;
+  top: 85px;
+    margin: 0;
+    position: relative;
+    z-index: 9999;
+    text-align: center;
+    left: 50%;
+   margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+#brandName {
+  top: 150px;
+}
 /* Dark Grey Wrap */
 #dg {
   background: #e0e0e0;
