@@ -25,6 +25,10 @@ angular.module('Grasp', [
       templateUrl: 'auth/signup.html',
       controller: 'AuthCTRL'
     })
+    .when('/welcome', {
+      templateUrl: 'landingPage/landingPage.html',
+      controller: 'LandingPageCTRL'
+    })
     .otherwise({redirectTo: '/canvas'});
     $httpProvider.interceptors.push('AttachTokens');
 }])

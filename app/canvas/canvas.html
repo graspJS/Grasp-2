@@ -5,14 +5,15 @@
   </div>
   <header ng-controller="HeaderCTRL" class="header black-bg">
     <!--logo start-->
+    <img id="canvasLogoIMG" src="images/grasp.png">
     <a href="#/canvas" id="logo"><b>GRASP</b></a>
     <!--logo end-->
     <!--navbar--> 
   <div class="nav notify-row" id="top_menu">
     <!--  notification start -->
-    <ul class="nav top-menu">
+    <ul class="nav top-menu" id="connectControls">
       <!-- settings start -->
-      <li class="dropdown" uib-dropdown>
+      <li class="dropdown" id="teacherConnect" uib-dropdown>
         <a ng-if="isTeacher" class="dropdown-toggle" ng-click="leave()">
           <i class="fa fa-tasks"></i><div>DISCONNECT AS TEACHER</div>
         </a>
@@ -44,7 +45,7 @@
           </ul>
       </li>
       <!-- settings end -->
-      <li class="dropdown" uib-dropdown>
+      <li class="dropdown"  id="studentConnect" uib-dropdown>
       <a ng-if="isStudent" class="dropdown-toggle" ng-click="leave()">
         <i class="fa fa-tasks"></i><div>DISCONNECT AS STUDENT</div>
       </a>
@@ -91,15 +92,13 @@
   <!-- TOOLBOX start -->
   <div>
       <div id="sidebar"  class="toolboxArea">
-          <p class="centered">
-          <img src="css/hand-flight.jpg" class="img-circle" width="80">
-          </p>
           <!-- TOOLBOX start-->
           <div ng-repeat="codeBlock in codeBlocks">
 
               <!-- CODEBLOCK start -->
               <div id="{{codeBlock.generateUniqueID()}}" class="toolboxBlock" ng-drop="isToolboxDroppable" ng-drag="isToolboxBlockDraggable" ng-drag-move="blockIsMoving($event, $data)" ng-drag-success="blockIsDoneMoving($event, $data)" ng-drag-data="codeBlock">
-                <div>{{codeBlock.type}}</div>
+                <div id="toolboxBlockTag">{{codeBlock.tag}}</div>
+                <!-- <div id="toolboxBlockType">{{codeBlock.type}}</div> -->
               </div>
               <!-- CODEBLOCK end -->
           </div>
