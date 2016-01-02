@@ -13,7 +13,10 @@
     <ul class="nav top-menu">
       <!-- settings start -->
       <li class="dropdown" uib-dropdown>
-        <a uib-dropdown-toggle class="dropdown-toggle" href="#">
+        <a ng-if="isTeacher" class="dropdown-toggle" ng-click="leave()">
+          <i class="fa fa-tasks"></i><div>DISCONNECT AS TEACHER</div>
+        </a>
+        <a ng-if="!isTeacher && !isStudent" uib-dropdown-toggle class="dropdown-toggle" href="#">
           <i class="fa fa-tasks"></i><div>CONNECT AS TEACHER</div>
           <span class="badge bg-theme">{{numberOfTeachers}}</span>
         </a>
@@ -26,7 +29,7 @@
                 <a href="index.html#">
                   <div class="task-info">
                     <div class="desc">Waiting Students</div>
-                    <div class="percent">40%</div>
+                    <div class="percent">{{numberOfStudents}}</div>
                   </div>
                   <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
@@ -37,13 +40,15 @@
               </li>
             <li class="external">
               <a ng-if="!isTeacher && !isStudent" ng-click="teacher()">I want to teach!</a>
-              <a ng-if="isTeacher" ng-click="leave()">Disconnect as Teacher</a> 
             </li>
           </ul>
       </li>
       <!-- settings end -->
       <li class="dropdown" uib-dropdown>
-        <a uib-dropdown-toggle class="dropdown-toggle" href="#">
+      <a ng-if="isStudent" class="dropdown-toggle" ng-click="leave()">
+        <i class="fa fa-tasks"></i><div>DISCONNECT AS STUDENT</div>
+      </a>
+        <a ng-if="!isTeacher && !isStudent" uib-dropdown-toggle class="dropdown-toggle" href="#">
           <i class="fa fa-tasks"></i><div>CONNECT AS STUDENT</div>
           <span class="badge bg-theme">{{numberOfStudents}}</span>
         </a>
@@ -56,7 +61,7 @@
                 <a href="index.html#">
                   <div class="task-info">
                     <div class="desc">Available Teachers</div>
-                    <div class="percent">80%</div>
+                    <div class="percent">{{numberOfTeachers}}</div>
                   </div>
                   <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -67,7 +72,6 @@
               </li>
             <li class="external">
               <a ng-if="!isStudent && !isTeacher" ng-click="student()">I want to learn!</a>
-              <a ng-if="isStudent" ng-click="leave()">Disconnect as Student</a>
             </li>
           </ul>
       </li>
@@ -81,7 +85,7 @@
     </ul>
   </div>
 </header>
-<!-- header end -->
+<!-- HEADER end -->
 
 
   <!-- TOOLBOX start -->

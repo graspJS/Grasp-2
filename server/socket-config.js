@@ -30,6 +30,37 @@ module.exports = function(socket) {
   });
 
   // PRIVATE SESSIONS ===================================================================
+  // Teacher
+  socket.on('addTeacher', function(user) {
+    if (user !== null) {
+      // Student available
+      if (persist.students.length > 0) {
+        // Splice student off student queue, then teacher joins students's room 
+        var availableStudent = persist.students.splice(0, 1).toString(); 
+        socket.join(availableStudent); 
+        // Inform each party
+        socket.emit('onMessageAdded', "You have joined student " + availableStudent + "'s room!"); 
+        socket.broadcast.to(availableStudent).emit('onMessageAdded', user + " has joined the room as a teacher!"); 
+      } else {
+        // No student available, push teacher into teacher queue 
+        persist.teachers.push(user);
+        // Create empty room for teacher 
+        socket.join(user); 
+        socket.emit('onMessageAdded', "You have connected to room: " + user);
+      }
+      var queueLength = {
+        teachers: persist.teachers.length,
+        students: persist.students.length 
+      };
+      // Add to client side visual badge
+      socket.emit('updateBadge', queueLength);
+      socket.broadcast.emit('updateBadge', queueLength);
+    } else {
+      console.log("username was null");
+      return; 
+    }
+  });
+
   // Student
   socket.on('addStudent', function(user) {
     if (user !== null) {
@@ -48,30 +79,13 @@ module.exports = function(socket) {
         socket.join(user); 
         socket.emit('onMessageAdded', "You have connected to room: " + user);
       }
-    } else {
-      console.log("username was null");
-      return; 
-    }
-  });
-
-  // Teacher
-  socket.on('addTeacher', function(user) {
-    if (user !== null) {
-      // Student available
-      if (persist.students.length > 0) {
-        // Splice student off student queue, then teacher joins students's room 
-        var availableStudent = persist.students.splice(0, 1).toString(); 
-        socket.join(availableStudent); 
-        // Inform each party
-        socket.emit('onMessageAdded', "You have joined student " + availableStudent + "'s room!"); 
-        socket.broadcast.to(availableStudent).emit('onMessageAdded', user + " has joined the room as a teacher!"); 
-      } else {
-        // No student available, push teacher into teacher queue 
-        persist.teachers.push(user);
-        // Create empty room for teacher 
-        socket.join(user); 
-        socket.emit('onMessageAdded', "You have connected to room: " + user);
-      } 
+      var queueLength = {
+        teachers: persist.teachers.length,
+        students: persist.students.length 
+      };
+      // Add to client side visual badge
+      socket.emit('updateBadge', queueLength);
+      socket.broadcast.emit('updateBadge', queueLength);
     } else {
       console.log("username was null");
       return; 
