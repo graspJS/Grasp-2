@@ -34,7 +34,7 @@ angular.module('Grasp', [
     })
     .when('/about', {
       templateUrl: 'about/about.html',
-      controller: 'LandingPageCTRL',
+      controller: 'AboutCTRL',
       css: 'css/landing.css'
     })
     .otherwise({redirectTo: '/welcome'});
